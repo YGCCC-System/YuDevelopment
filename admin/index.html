@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
 <title>Yu Development — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#EFEDE6; --ink:#14161A; --ink-3:#61656D; --rule:#C6C3B7;
-    --accent:#1F3A5C; --accent-2:#6FA0C9; --ok:#1f7a3d; --err:#a33; --card:#fff;
-    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-    --mono:ui-monospace,Menlo,Consolas,monospace;
+    --paper:#EFEDE6; --paper-2:#E5E2D8; --ink:#14161A; --ink-3:#61656D; --rule:#C6C3B7;
+    --accent:#1F3A5C; --accent-2:#6FA0C9; --accent-deep:#15283B; --ok:#1f7a3d; --err:#a33; --card:#fff;
+    --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    --mono:"Geist Mono",ui-monospace,Menlo,Consolas,monospace;
   }
   *,*::before,*::after{ box-sizing:border-box; }
   body{ margin:0; font-family:var(--sans); background:var(--paper); color:var(--ink); }
@@ -23,20 +26,39 @@
   header.bar .status{ font-size:13px; color:var(--ink-3); }
   button{ font:inherit; cursor:pointer; border:1px solid var(--rule); background:#fff; color:var(--ink);
     padding:8px 14px; border-radius:8px; }
-  button.primary{ background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600; }
+  button.primary{ background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600;
+    transition:background .2s, border-color .2s; }
+  button.primary:hover:not(:disabled){ background:var(--accent-deep); border-color:var(--accent-deep); }
   button.primary:disabled{ opacity:.5; cursor:not-allowed; }
   button.mini{ padding:3px 9px; font-size:12px; border-radius:6px; }
   button.danger{ color:var(--err); border-color:#e3b7b7; }
 
   main{ max-width:980px; margin:0 auto; padding:24px clamp(16px,4vw,40px) 120px; }
 
-  /* gate */
-  #gate{ max-width:380px; margin:14vh auto; background:#fff; border:1px solid var(--rule);
-    border-radius:14px; padding:28px; }
-  #gate h1{ font-size:18px; margin:0 0 6px; }
-  #gate p{ color:var(--ink-3); font-size:13px; margin:0 0 18px; }
+  /* gate — matches site brand */
+  #gate{ min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--paper); padding:24px; gap:20px;
+    background-image:radial-gradient(120% 80% at 50% -10%, rgba(111,160,201,.10), transparent 60%); }
+  .gate-card{ width:100%; max-width:408px; background:#fff; border:1px solid var(--rule);
+    border-radius:16px; padding:42px 38px;
+    box-shadow:0 1px 0 rgba(20,22,26,.03), 0 28px 56px -34px rgba(20,22,26,.35); }
+  .gate-brand{ font-weight:600; font-size:16px; text-transform:uppercase; letter-spacing:.24em;
+    color:#34383E; white-space:nowrap; }
+  .gate-rule{ height:1px; background:var(--rule); margin:18px 0 24px; }
+  .gate-eyebrow{ font-family:var(--mono); font-weight:500; font-size:11px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--accent); margin:0 0 12px; }
+  .gate-card h1{ font-size:27px; font-weight:600; letter-spacing:-.022em; line-height:1.1; margin:0 0 8px; color:var(--ink); }
+  .gate-card p{ color:var(--ink-3); font-size:14px; line-height:1.55; margin:0 0 24px; }
+  .gate-card input[type=password]{ height:48px; border-radius:10px; font-size:15px; }
+  .gate-card .primary{ width:100%; height:48px; margin-top:14px; border-radius:10px; font-size:15px;
+    letter-spacing:.01em; }
+  .gate-err{ color:var(--err); font-size:13px; min-height:18px; margin:12px 0 0; }
+  .gate-foot{ font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-3); opacity:.65; }
   input[type=password],input[type=text],textarea{ width:100%; font:inherit; padding:9px 11px;
     border:1px solid var(--rule); border-radius:8px; background:#fff; color:var(--ink); }
+  input[type=password]:focus,input[type=text]:focus,textarea:focus{ outline:none; border-color:var(--accent-2);
+    box-shadow:0 0 0 3px rgba(111,160,201,.22); }
   textarea{ resize:vertical; min-height:38px; line-height:1.5; }
 
   /* sections */
@@ -79,14 +101,19 @@
 <body>
 
 <div id="gate">
-  <h1>Admin sign-in</h1>
-  <p>Enter the admin password to edit site content.</p>
-  <form id="gateForm">
-    <input id="pw" type="password" placeholder="Password" autocomplete="current-password" />
-    <div style="height:12px"></div>
-    <button class="primary" style="width:100%" type="submit">Sign in</button>
-    <p id="gateErr" class="hint" style="color:var(--err)"></p>
-  </form>
+  <div class="gate-card">
+    <div class="gate-brand">Yu Development</div>
+    <div class="gate-rule"></div>
+    <div class="gate-eyebrow">Content Admin</div>
+    <h1>Sign in</h1>
+    <p>Enter the admin password to edit the site content.</p>
+    <form id="gateForm">
+      <input id="pw" type="password" placeholder="Password" autocomplete="current-password" />
+      <button class="primary" type="submit">Sign in &rarr;</button>
+      <p id="gateErr" class="gate-err"></p>
+    </form>
+  </div>
+  <div class="gate-foot">Yu Development · Authorized access only</div>
 </div>
 
 <div id="app" class="hidden">
