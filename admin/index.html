@@ -76,7 +76,29 @@
     color:var(--muted-2); text-align:center; margin-top:18px; }
 
   /* ============ APP SHELL ============ */
-  .topbar{ position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:14px;
+  .split{ display:flex; height:100vh; overflow:hidden; }
+  .preview-pane{ flex:1 1 54%; min-width:0; display:flex; flex-direction:column;
+    background:#0b0f1a; border-right:1px solid var(--line); }
+  .editor-pane{ flex:1 1 46%; min-width:0; display:flex; flex-direction:column; height:100vh; }
+  .split.no-preview .preview-pane{ display:none; }
+  .split.no-preview .editor-pane{ flex-basis:100%; }
+  .pv-show{ display:none; }
+  .split.no-preview .pv-show{ display:inline-flex; align-items:center; justify-content:center;
+    width:30px; height:30px; padding:0; border-radius:8px; }
+
+  .pv-bar{ display:flex; align-items:center; gap:9px; height:44px; padding:0 12px;
+    border-bottom:1px solid var(--line); background:var(--bg-2); }
+  .pv-bar .pv-dot{ width:9px; height:9px; border-radius:50%; background:#2c3a57; flex:0 0 auto; }
+  .pv-url{ font-family:var(--mono); font-size:12px; color:var(--text-2); white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; }
+  .pv-grow{ margin-left:auto; }
+  .pv-btn{ width:30px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;
+    font-size:14px; border-radius:8px; background:transparent; border:1px solid transparent; color:var(--text-2); }
+  .pv-btn:hover{ background:var(--card); color:var(--text); }
+  .pv-frame-wrap{ flex:1; min-height:0; background:#0b0f1a; position:relative; }
+  #preview{ position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff; }
+
+  .topbar{ flex:0 0 auto; display:flex; align-items:center; gap:14px;
     height:58px; padding:0 clamp(16px,3vw,28px); background:rgba(10,14,24,.86);
     backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
   .topbar .brand{ display:flex; align-items:center; gap:9px; }
@@ -93,7 +115,7 @@
   .menu button{ width:100%; text-align:left; border:none; background:transparent; padding:8px 10px; border-radius:7px; }
   .menu button:hover{ background:var(--card-2); }
 
-  .tabs{ position:sticky; top:58px; z-index:20; display:flex; flex-wrap:wrap; gap:2px;
+  .tabs{ flex:0 0 auto; z-index:20; display:flex; flex-wrap:wrap; gap:2px;
     padding:8px clamp(12px,3vw,24px); background:var(--bg); border-bottom:1px solid var(--line); }
   .tab{ display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border-radius:8px;
     font-size:13px; font-weight:500; color:var(--text-2); background:transparent; border:1px solid transparent;
@@ -102,7 +124,8 @@
   .tab:hover{ color:var(--text); background:var(--card); }
   .tab.active{ color:#fff; background:var(--accent-soft); border-color:rgba(59,130,246,.4); }
 
-  main{ max-width:1080px; margin:0 auto; padding:26px clamp(16px,3vw,28px) 120px; }
+  main{ flex:1 1 auto; min-height:0; overflow-y:auto; padding:26px clamp(16px,3vw,28px) 60px; }
+  main>*{ max-width:760px; margin-left:auto; margin-right:auto; }
   .sec-title{ font-size:23px; font-weight:700; letter-spacing:-.01em; margin:0; }
   .sec-desc{ color:var(--muted); font-size:13.5px; margin:6px 0 22px; }
 
@@ -154,9 +177,11 @@
     font-size:13.5px; opacity:0; transition:opacity .2s,transform .2s; pointer-events:none; box-shadow:0 16px 40px -18px #000; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
   .toast.ok{ border-color:rgba(52,211,153,.5); } .toast.err{ border-color:rgba(242,109,109,.5); }
-  .savebar{ position:fixed; left:0; right:0; bottom:0; z-index:25; display:flex; align-items:center; gap:14px;
+  .savebar{ flex:0 0 auto; display:flex; align-items:center; gap:14px;
     padding:12px clamp(16px,3vw,28px); background:rgba(10,14,24,.92); backdrop-filter:blur(10px);
     border-top:1px solid var(--line); }
+  @media (max-width:880px){ .split{ } .preview-pane{ flex-basis:42%; } }
+  @media (max-width:680px){ .preview-pane{ display:none; } .editor-pane{ flex-basis:100%; } .split.show-preview-mobile .preview-pane{ display:flex; } }
   .savebar .left{ margin-right:auto; font-size:13px; color:var(--muted); }
 </style>
 </head>
@@ -181,39 +206,68 @@
 
 <!-- ============ APP ============ -->
 <div id="app" class="hidden">
-  <header class="topbar">
-    <div class="brand"><span class="mark">YGCCC</span><span class="badge">YUD-AD</span></div>
-    <span class="spacer"></span>
-    <span class="save-state" id="saveState">Saved</span>
-    <button class="primary mini" id="save" disabled>Save</button>
-    <div class="avatar" id="avatar" title="Account">A</div>
-  </header>
-  <nav class="tabs" id="tabs"></nav>
-  <main id="main"></main>
-  <div class="savebar hidden" id="savebar">
-    <span class="left" id="dirtyText">Unsaved changes</span>
-    <button class="ghost mini" id="discard">Discard</button>
-    <button class="primary mini" id="save2">Save changes</button>
+  <div class="split" id="split">
+    <!-- LEFT: live preview -->
+    <section class="preview-pane" id="previewPane">
+      <div class="pv-bar">
+        <span class="pv-dot"></span>
+        <span class="pv-url" id="pvUrl">/</span>
+        <span class="pv-grow"></span>
+        <button class="pv-btn" id="pvReload" title="Reload preview">↻</button>
+        <button class="pv-btn" id="pvOpen" title="Open in new tab">↗</button>
+        <button class="pv-btn" id="pvHide" title="Hide preview">⟨</button>
+      </div>
+      <div class="pv-frame-wrap"><iframe id="preview" title="Live preview" src="/" data-url="/"></iframe></div>
+    </section>
+
+    <!-- RIGHT: editor -->
+    <section class="editor-pane">
+      <header class="topbar">
+        <button class="pv-show" id="pvShow" title="Show preview">⟩</button>
+        <div class="brand"><span class="mark">YGCCC</span><span class="badge">YUD-AD</span></div>
+        <span class="spacer"></span>
+        <span class="save-state" id="saveState">Saved</span>
+        <button class="primary mini" id="save" disabled>Save</button>
+        <div class="avatar" id="avatar" title="Account">A</div>
+      </header>
+      <nav class="tabs" id="tabs"></nav>
+      <main id="main"></main>
+      <div class="savebar hidden" id="savebar">
+        <span class="left" id="dirtyText">Unsaved changes</span>
+        <button class="ghost mini" id="discard">Discard</button>
+        <button class="primary mini" id="save2">Save changes</button>
+      </div>
+    </section>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-/* ---------- config: tabs -> data paths ---------- */
+/* ---------- preview page targets (same-origin site pages) ---------- */
+const PAGES = {
+  home:     '/',
+  services: '/Yu%20Development%20v12.html#whatwedo',
+  news:     '/Yu%20Development%20-%20News.html',
+  projects: '/Yu%20Development%20-%20Projects.html',
+  team:     '/Yu%20Development%20-%20Team.html',
+  contact:  '/Yu%20Development%20-%20Contact.html',
+};
+
+/* ---------- config: tabs -> data paths + preview page ---------- */
 const TABS = [
-  { key:'navigation', label:'Navigation', icon:'🔗', path:'navigation', desc:'Site navigation links shown in the header.' },
-  { key:'brand',      label:'Brand',      icon:'🏢', path:'brand',      desc:'Brand name, tagline, contact email and copyright.' },
-  { key:'hero',       label:'Hero',       icon:'🔥', path:'home.hero',  desc:'Homepage hero — headline, description and background.' },
-  { key:'services',   label:'Services',   icon:'🧾', path:'home.armA',  desc:'Arm A — Development Services.' },
-  { key:'equity',     label:'Equity',     icon:'📊', path:'home.armB',  desc:'Arm B — Internal Development.' },
-  { key:'capabilities',label:'Capabilities',icon:'⚡',path:'home.capabilities', desc:'End-to-end capabilities grid.' },
-  { key:'homecta',    label:'Home CTA',   icon:'📣', path:'home.cta',   desc:'Call-to-action block on the homepage.' },
-  { key:'about',      label:'About',      icon:'🖼️', path:'about',      desc:'About page — hero, model, milestones, values.' },
-  { key:'portfolio',  label:'Portfolio',  icon:'🟨', path:'portfolio',  desc:'Projects and development pipeline.' },
-  { key:'people',     label:'People',     icon:'👥', path:'people',     desc:'Team members and culture.' },
-  { key:'invest',     label:'Invest',     icon:'🪙', path:'invest',     desc:'Investor page — strategies and advantages.' },
-  { key:'contact',    label:'Contact',    icon:'✉️', path:'contact',    desc:'Contact details and intro copy.' },
+  { key:'navigation', label:'Navigation', icon:'🔗', path:'navigation', preview:PAGES.home,     desc:'Site navigation links shown in the header.' },
+  { key:'brand',      label:'Brand',      icon:'🏢', path:'brand',      preview:PAGES.home,     desc:'Brand name, tagline, contact email and copyright.' },
+  { key:'hero',       label:'Hero',       icon:'🔥', path:'home.hero',  preview:PAGES.home,     desc:'Homepage hero — headline, description and background.' },
+  { key:'services',   label:'Services',   icon:'🧾', path:'home.armA',  preview:PAGES.services, desc:'Arm A — Development Services.' },
+  { key:'equity',     label:'Equity',     icon:'📊', path:'home.armB',  preview:PAGES.services, desc:'Arm B — Internal Development.' },
+  { key:'capabilities',label:'Capabilities',icon:'⚡',path:'home.capabilities', preview:PAGES.home, desc:'End-to-end capabilities grid.' },
+  { key:'homecta',    label:'Home CTA',   icon:'📣', path:'home.cta',   preview:PAGES.contact,  desc:'Call-to-action block on the homepage.' },
+  { key:'about',      label:'About',      icon:'🖼️', path:'about',      preview:PAGES.home,     desc:'About page — hero, model, milestones, values.' },
+  { key:'portfolio',  label:'Portfolio',  icon:'🟨', path:'portfolio',  preview:PAGES.projects, desc:'Projects and development pipeline.' },
+  { key:'people',     label:'People',     icon:'👥', path:'people',     preview:PAGES.team,     desc:'Team members and culture.' },
+  { key:'invest',     label:'Invest',     icon:'🪙', path:'invest',     preview:PAGES.home,     desc:'Investor page — strategies and advantages.' },
+  { key:'contact',    label:'Contact',    icon:'✉️', path:'contact',    preview:PAGES.contact,  desc:'Contact details and intro copy.' },
 ];
 
 const PW_KEY = 'yudev_admin_pw';
@@ -293,13 +347,30 @@ function buildTabs(){
   TABS.forEach(t=>{
     const b=document.createElement('button'); b.className='tab'+(t.key===activeTab?' active':'');
     b.innerHTML='<span class="ic">'+t.icon+'</span>'+t.label;
-    b.onclick=()=>{ activeTab=t.key; [...nav.children].forEach(c=>c.classList.remove('active')); b.classList.add('active'); renderTab(t.key); window.scrollTo(0,0); };
+    b.onclick=()=>{ activeTab=t.key; [...nav.children].forEach(c=>c.classList.remove('active')); b.classList.add('active'); renderTab(t.key); };
     nav.appendChild(b);
   });
 }
 
+/* ---------- live preview ---------- */
+function setPreview(url){
+  if(!url) return;
+  const frame=$('#preview');
+  const cur=frame.getAttribute('data-url');
+  $('#pvUrl').textContent=decodeURIComponent(url);
+  if(cur===url) return;            // already on this page — don't reload
+  frame.setAttribute('data-url',url);
+  frame.src=url;
+}
+function reloadPreview(){ const f=$('#preview'); try{ f.contentWindow.location.reload(); }catch(e){ f.src=f.src; } }
+$('#pvReload').onclick=reloadPreview;
+$('#pvOpen').onclick=()=>window.open($('#preview').getAttribute('data-url')||'/','_blank');
+$('#pvHide').onclick=()=>$('#split').classList.add('no-preview');
+$('#pvShow').onclick=()=>$('#split').classList.remove('no-preview');
+
 function renderTab(key){
   const tab=TABS.find(t=>t.key===key)||TABS[0];
+  setPreview(tab.preview);
   const main=$('#main'); main.innerHTML='';
   const h=document.createElement('h1'); h.className='sec-title'; h.textContent=tab.label; main.appendChild(h);
   const d=document.createElement('p'); d.className='sec-desc'; d.textContent=tab.desc; main.appendChild(d);
@@ -453,7 +524,7 @@ async function doSave(){
     const d=await r.json();
     if(r.status===401){ toast('Wrong password — sign in again','err'); sessionStorage.removeItem(PW_KEY); setTimeout(()=>location.reload(),1200); return; }
     if(!r.ok) throw new Error(d.error||('HTTP '+r.status));
-    setDirty(false); $('#saveState').textContent='Saved'; toast('Saved to Sanity ✓','ok');
+    setDirty(false); $('#saveState').textContent='Saved'; toast('Saved to Sanity ✓','ok'); reloadPreview();
   }catch(err){ $('#saveState').textContent='Save failed'; toast('Save failed: '+err.message,'err'); setDirty(true); }
 }
 
