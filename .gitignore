@@ -12,3 +12,6 @@ Thumbs.db
 .DS_Store
 
 .vercel
+
+# Claude Code local settings
+.claude/settings.local.json
