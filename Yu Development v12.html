@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yu Development — Hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:    #EFEDE6;
+    --paper-2:  #E5E2D8;
+    --ink:      #14161A;
+    --ink-2:    #2F3238;
+    --ink-3:    #61656D;
+    --rule:     #C6C3B7;
+    --accent:      #1F3A5C;  /* trustworthy navy */
+    --accent-2:    #6FA0C9;  /* light blue */
+    --accent-deep: #15283B;
+    --nav-ink:     #34383E;
+    --sans:  "Geist", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono:  "Geist Mono", ui-monospace, Menlo, monospace;
+    --serif: "Newsreader", Georgia, serif;
+  }
+  *,*::before,*::after{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; height:100%; background:#0C0E0A; overscroll-behavior:none; }
+
+  /* ============================================================
+     01 ANCHORED HERO — full viewport, standalone
+     ============================================================ */
+  .hf{
+    position:relative; width:100%; height:100vh; min-height:560px; overflow:hidden;
+    background:var(--paper); color:var(--ink);
+    font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  }
+  .hf img{ display:block; }
+
+  .hf-photo{ position:absolute; inset:0; }
+  .hf-photo img{ width:100%; height:100%; object-fit:cover; }
+
+  .hf-scrim{ position:absolute; inset:0; pointer-events:none; z-index:1; }
+  .s-bottom{ background:linear-gradient(180deg, rgba(8,12,18,.42) 0%, rgba(8,12,18,0) 24%, rgba(8,12,18,0) 46%, rgba(8,12,18,.66) 100%); }
+
+  /* Nav ------------------------------------------------------- */
+  .hf-nav{
+    position:fixed; top:0; left:0; right:0; z-index:40;
+    display:flex; align-items:center; height:92px; padding:0 56px; color:#fff;
+    transition:background .3s ease, border-color .3s ease, color .3s ease;
+    border-bottom:1px solid transparent;
+  }
+  .hf-nav.navy{
+    background:#ffffff;
+    border-bottom:2px solid #B2AD9E;
+    color:var(--nav-ink);
+  }
+  .hf-nav.navy .hf-wordmark{ color:var(--nav-ink); }
+  .hf-nav.navy .hf-links a{ color:var(--nav-ink); }
+  .hf-nav.navy .hf-links a:hover{ color:#8A8E96; }
+  .hf-nav.navy .hf-links a.active{ color:var(--ink); }
+  .hf-wordmark{
+    font-weight:600; font-size:18px; text-transform:uppercase;
+    letter-spacing:0.24em; white-space:nowrap;
+  }
+  .hf-links{ display:flex; align-items:center; gap:28px; margin-left:auto; font-size:15px; font-weight:500; }
+  .hf-links a{ position:relative; cursor:pointer; color:rgba(255,255,255,.86); text-decoration:none; transition:color .2s; }
+  .hf-links a:hover{ color:rgba(255,255,255,.55); }
+  .hf-links a.active{ color:#fff; }
+  /* Type ------------------------------------------------------ */
+  .hf-eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.16em;
+    text-transform:uppercase; color:rgba(255,255,255,.9);
+  }
+  .hf-h1{
+    font-weight:500; line-height:1.04; letter-spacing:-0.024em;
+    text-wrap:balance; margin:0; color:#fff;
+    font-size:clamp(40px,5vw,72px); max-width:18ch;
+  }
+  .hf-sub{
+    margin:10px 0 0; color:rgba(255,255,255,.9);
+    font-family:var(--sans); font-weight:400; font-size:clamp(18px,1.8vw,24px); line-height:1.45; letter-spacing:-0.005em;
+  }
+
+  /* Scroll cue ------------------------------------------------ */
+  .hf-cue{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    text-decoration:none; cursor:pointer; padding-bottom:4px;
+  }
+  .hf-cue-label{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.28em; text-transform:uppercase;
+    color:rgba(255,255,255,.78); transition:color .25s ease;
+    writing-mode:vertical-rl;
+  }
+  .hf-cue:hover .hf-cue-label{ color:#fff; }
+  .hf-cue-line{
+    position:relative; width:1px; height:54px; overflow:hidden;
+    background:rgba(255,255,255,.22);
+  }
+  .hf-cue-line::after{
+    content:""; position:absolute; left:0; top:0; width:1px; height:40%;
+    background:linear-gradient(rgba(255,255,255,0), #fff);
+    animation:hfcue 1.9s cubic-bezier(.6,.0,.3,1) infinite;
+  }
+  @keyframes hfcue{
+    0%{ transform:translateY(-110%); }
+    60%{ transform:translateY(160%); }
+    100%{ transform:translateY(160%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hf-cue-line::after{ animation:none; transform:translateY(60%); }
+  }
+
+  /* Bottom cluster -------------------------------------------- */
+  .hf-bottom{
+    position:absolute; left:56px; right:56px; bottom:52px; z-index:2;
+    display:flex; align-items:flex-end; justify-content:space-between; gap:48px;
+  }
+  .hf-bottom .hf-eyebrow{ margin-bottom:18px; }
+
+  @media (max-width: 760px){
+    .hf-nav{ padding:0 28px; }
+    .hf-links{ display:none; }
+    .hf-bottom{ left:28px; right:28px; bottom:36px; flex-direction:column; align-items:flex-start; gap:24px; }
+    .hf-h1{ font-size:40px; max-width:18ch; }
+    .hf-cue{ display:none; }
+  }
+
+  /* ============================================================
+     SIMPLE STATEMENT SECTION
+     ============================================================ */
+  .statement-simple{
+    background:var(--paper);
+    padding:clamp(96px, 16vh, 200px) 0;
+    text-align:center;
+  }
+  .statement-simple .eyebrow{
+    justify-content:center;
+    margin-bottom:clamp(28px, 4vw, 48px);
+  }
+  .statement-line{
+    margin:0 auto; max-width:18ch;
+    font-family:var(--sans); font-weight:500;
+    font-size:clamp(40px, 6.6vw, 104px);
+    line-height:1.05; letter-spacing:-0.025em; text-wrap:balance;
+    color:var(--ink);
+  }
+  .statement-line .accent{ color:var(--accent); }
+</style>
+<link rel="stylesheet" href="v12-styles.css" />
+</head>
+<body class="v12">
+
+<div class="hf hf--onphoto" data-screen-label="Hero">
+  <div class="hf-photo">
+    <img src="media/hero-aerial.png" alt="Aerial view of a Yu Development community, completed buildings beside a site under preparation." />
+  </div>
+  <div class="hf-scrim s-bottom"></div>
+
+  <header class="hf-nav">
+    <span class="hf-wordmark">Yu Development</span>
+    <nav class="hf-links">
+      <a href="#" style="font-weight: 600; font-size: 14px">Team</a>
+      <a href="#projects" style="font-weight: 600; font-size: 14px">Projects</a>
+      <a href="#whatwedo" style="font-weight: 600; font-size: 14px">Services</a>
+      <a href="#news" style="font-weight: 600; font-size: 14px">News</a>
+      <a href="#" style="font-weight: 600; font-size: 14px">Investors</a>
+      <a href="#contact" style="font-weight: 600; font-size: 14px">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hf-bottom">
+    <div>
+      <h1 class="hf-h1">Housing that Works for Working People</h1>
+      <p class="hf-sub">Attainable housing for the Southeast&rsquo;s underbuilt markets.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ WHY WE EXIST + STATS (editorial) ============================ -->
+<section class="about-band" id="statementTrack" data-screen-label="Why we exist">
+  <div class="wrap">
+    <h2 class="about-headline" style="font-size: 44px">A housing partner for the <span class="accent" style="color: rgb(0, 0, 0); font-size: 44px">Southeast&rsquo;s growing cities.</span></h2>
+
+    <div class="about-rule"></div>
+
+    <div class="about-cols">
+      <p>Yu Development builds attainable rental housing in the Southeast&rsquo;s fastest-growing, most underbuilt markets, with homes priced to what working families actually earn, in the places the jobs are.</p>
+      <p>We own and operate the majority of our communities long term.</p>
+    </div>
+
+    <div class="about-rule"></div>
+
+    <div class="about-stats">
+      <div class="statgrid">
+        <div class="stat">
+          <div class="fig" data-count="9" data-plain="1">9</div>
+          <div class="lab">Communities delivered</div>
+        </div>
+        <div class="stat">
+          <div class="fig" data-count="948">948</div>
+          <div class="lab">Homes delivered</div>
+        </div>
+        <div class="stat">
+          <div class="fig" data-count="90" data-prefix="$" data-suffix="M" data-plain="1">$90M</div>
+          <div class="lab">Invested</div>
+        </div>
+        <div class="stat">
+          <div class="fig">2018</div>
+          <div class="lab">Since</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-rule"></div>
+  </div>
+</section>
+
+<!-- ============================ SELECTED PROJECTS (portfolio) ============================ -->
+<section class="story white" id="projects" data-screen-label="Selected Projects">
+  <div class="wrap">
+    <div class="sec-head-row">
+      <div>
+        <h2 class="sec-h" style="font-size: 33px">Communities already in the ground.</h2>
+      </div>
+      <a class="sec-link" href="#" style="border-bottom:none; text-decoration:none; color:#1A6DD2">View full portfolio &rarr;</a>
+    </div>
+    <div class="proj-grid">
+      <a class="pcard" href="#">
+        <div class="pshot"><img src="media/project-douglas.png" alt="Aerial view of a Yu Development community in Douglas, Georgia." /></div>
+        <div class="pm"><span class="lcol"><span class="nm">Platform Douglas</span><span class="u">126 units</span></span><span class="loc">Douglas, GA</span></div>
+      </a>
+      <a class="pcard" href="#">
+        <div class="pshot"><img src="media/project-flint-river.png" alt="Aerial view of Platform Flint River in Bainbridge, Georgia." /></div>
+        <div class="pm"><span class="lcol"><span class="nm">Platform Flint River</span><span class="u">192 units</span></span><span class="loc">Bainbridge, GA</span></div>
+      </a>
+      <a class="pcard" href="#">
+        <div class="pshot"><img src="media/project-dothan.png" alt="Aerial view of Platform Dothan in Dothan, Alabama." /></div>
+        <div class="pm"><span class="lcol"><span class="nm">Platform Dothan</span><span class="u">208 units</span></span><span class="loc">Dothan, AL</span></div>
+      </a>
+      <a class="pcard" href="#">
+        <div class="pshot"><img src="media/project-americus.png" alt="Aerial view of Platform Americus in Americus, Georgia." /></div>
+        <div class="pm"><span class="lcol"><span class="nm">Platform Americus</span><span class="u">80 units</span></span><span class="loc">Americus, GA</span></div>
+      </a>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ WHO LIVES HERE / BUILD ============================ -->
+<section class="story paper" data-screen-label="Who Lives Here" style="padding-top:clamp(36px,4vw,56px);">
+  <div class="wrap">
+    <div class="split2 build-2col">
+      <div class="build-copy">
+        <div>
+          <h2 class="sec-h" style="font-size: 50px; font-weight: 500">Rental communities, priced for the people who keep a city running.</h2>
+          <div class="about-rule" style="margin:clamp(28px,3.5vw,44px) 0 0;"></div>
+        </div>
+        <p class="build-note" style="font-size: 17px">Homes affordable to households earning around 72% of area median income, with every unit under 80%.</p>
+      </div>
+      <div class="fx-d1">
+        <div class="who-label">Who lives here</div>
+        <div class="who-stat"><span class="who-fig" data-count="68" data-suffix="%" data-plain="1">68%</span><span class="who-figlab">essential workers</span></div>
+        <ul class="who">
+          <li>Teachers &amp; school staff</li>
+          <li>Nurses &amp; healthcare workers</li>
+          <li>First responders &amp; public-safety workers</li>
+          <li>Plant &amp; food-production workers</li>
+          <li>Local workers &amp; their families</li>
+        </ul>
+      </div>
+    </div>
+    <div class="build-shot" style="margin-top:clamp(40px,5vw,64px);"><img src="media/build-interior.png" alt="Interior of a Yu Development rental home — open living room and kitchen with modern finishes." style="height: 576px" /></div>
+  </div>
+</section>
+
+<!-- ============================ LOCAL ECONOMY STATEMENT ============================ -->
+<section class="local-stmt" data-screen-label="Local economy">
+  <div class="wrap">
+    <p class="local-line"><span class="local-fig" data-count="64" data-suffix="%" style="font-size: 69px">64%</span> of working residents are employed in the same county they live in. Their wages and spending stay in the local economy.</p>
+  </div>
+</section>
+
+<!-- ============================ 7 · INSIGHTS ============================ -->
+<section class="section insights" id="news" data-screen-label="News" style="padding-bottom:clamp(36px,4vw,56px);">
+  <div class="head">
+    <div>
+      <h2 class="fx" style="font-size: 33px">News &amp; updates</h2>
+    </div>
+  </div>
+  <div class="news-grid wrap">
+    <a class="ncard fx" href="#">
+      <image-slot id="v12-news1" shape="rect" placeholder="Article image"></image-slot>
+      <div class="date">June 4, 2026</div>
+      <h3>What &ldquo;attainable&rdquo; actually means in 2026</h3>
+    </a>
+    <a class="ncard fx fx-d1" href="#">
+      <image-slot id="v12-news2" shape="rect" placeholder="Article image"></image-slot>
+      <div class="date">May 14, 2026</div>
+      <h3>Why we underwrite to working rents, not exit prices</h3>
+    </a>
+    <a class="ncard fx fx-d2" href="#">
+      <image-slot id="v12-news3" shape="rect" placeholder="Article image"></image-slot>
+      <div class="date">April 9, 2026</div>
+      <h3>The Southeast&rsquo;s underbuilt middle, by the numbers</h3>
+    </a>
+  </div>
+</section>
+
+<!-- ============================ 9 · CONTACT ============================ -->
+<section class="section contact" id="contact" data-screen-label="Contact">
+  <div class="wrap">
+    <h2>Building in your community, or interested in our work?</h2>
+    <div class="cta">
+      <a class="sec-link" href="mailto:hello@yudevelopment.com" style="border-bottom:none; text-decoration:none; font-size:clamp(22px,2.4vw,32px); color:#1A6DD2">Get in touch &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<footer class="v12foot">
+  <div class="foot-wrap">
+    <div class="top">
+      <div class="col">
+        <span class="foot-wordmark">Yu Development</span>
+        <p class="blurb">A private development firm building attainable rental housing across the Southeast United States.</p>
+      </div>
+      <div class="col col-site">
+        <div class="site-links">
+          <a href="#">Team</a>
+          <a href="#projects">Projects</a>
+          <a href="#whatwedo">Services</a>
+          <a href="#news">News</a>
+          <a href="#">Investors</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div class="col col-careers">
+        <a href="#" class="foot-careers" style="font-size:18px; font-weight:700">Careers&nbsp;&nearr;</a>
+      </div>
+      <div class="col col-office">
+        <p>Atlanta, Georgia</p>
+        <p><a href="mailto:hello@yudevelopment.com">hello@yudevelopment.com</a></p>
+        <p><a href="tel:+14703807339">470-380-7339</a></p>
+      </div>
+    </div>
+
+    <div class="mega">Yu Development</div>
+
+    <div class="legal">
+      <span>&copy; 2026 Yu Development, LLC</span>
+      <span class="legal-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script src="image-slot.js"></script>
+<script src="v12-scroll.js"></script>
+
+</body>
+</html>
