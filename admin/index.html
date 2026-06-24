@@ -128,6 +128,12 @@
   main>*{ max-width:760px; margin-left:auto; margin-right:auto; }
   .sec-title{ font-size:23px; font-weight:700; letter-spacing:-.01em; margin:0; }
   .sec-desc{ color:var(--muted); font-size:13.5px; margin:6px 0 22px; }
+  .section-head{ font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--text); margin:26px 0 12px; padding-top:18px; border-top:1px solid var(--line);
+    display:flex; align-items:center; gap:9px; }
+  .section-head::before{ content:""; width:4px; height:14px; border-radius:2px; background:var(--accent); }
+  .empty-note{ color:var(--muted); font-size:13px; padding:14px 16px; border:1px dashed var(--line-2);
+    border-radius:10px; background:var(--panel); }
 
   /* fields */
   .field{ margin:0 0 16px; }
@@ -254,20 +260,22 @@ const PAGES = {
   contact:  '/Yu%20Development%20-%20Contact.html',
 };
 
-/* ---------- config: tabs -> data paths + preview page ---------- */
+/* ---------- config: page tabs (mirror the site nav) -> content sections ---------- */
 const TABS = [
-  { key:'navigation', label:'Navigation', icon:'🔗', path:'navigation', preview:PAGES.home,     desc:'Site navigation links shown in the header.' },
-  { key:'brand',      label:'Brand',      icon:'🏢', path:'brand',      preview:PAGES.home,     desc:'Brand name, tagline, contact email and copyright.' },
-  { key:'hero',       label:'Hero',       icon:'🔥', path:'home.hero',  preview:PAGES.home,     desc:'Homepage hero — headline, description and background.' },
-  { key:'services',   label:'Services',   icon:'🧾', path:'home.armA',  preview:PAGES.services, desc:'Arm A — Development Services.' },
-  { key:'equity',     label:'Equity',     icon:'📊', path:'home.armB',  preview:PAGES.services, desc:'Arm B — Internal Development.' },
-  { key:'capabilities',label:'Capabilities',icon:'⚡',path:'home.capabilities', preview:PAGES.home, desc:'End-to-end capabilities grid.' },
-  { key:'homecta',    label:'Home CTA',   icon:'📣', path:'home.cta',   preview:PAGES.contact,  desc:'Call-to-action block on the homepage.' },
-  { key:'about',      label:'About',      icon:'🖼️', path:'about',      preview:PAGES.home,     desc:'About page — hero, model, milestones, values.' },
-  { key:'portfolio',  label:'Portfolio',  icon:'🟨', path:'portfolio',  preview:PAGES.projects, desc:'Projects and development pipeline.' },
-  { key:'people',     label:'People',     icon:'👥', path:'people',     preview:PAGES.team,     desc:'Team members and culture.' },
-  { key:'invest',     label:'Invest',     icon:'🪙', path:'invest',     preview:PAGES.home,     desc:'Investor page — strategies and advantages.' },
-  { key:'contact',    label:'Contact',    icon:'✉️', path:'contact',    preview:PAGES.contact,  desc:'Contact details and intro copy.' },
+  { key:'home', label:'Home', icon:'🏠', preview:PAGES.home, desc:'Homepage — hero, brand, about and call-to-action.',
+    sections:[ {label:'Hero', path:'home.hero'}, {label:'Brand', path:'brand'}, {label:'About', path:'about'}, {label:'Home CTA', path:'home.cta'} ] },
+  { key:'team', label:'Team', icon:'👥', preview:PAGES.team, desc:'Team page — hero, culture and members.',
+    sections:[ {label:'', path:'people'} ] },
+  { key:'projects', label:'Projects', icon:'🟨', preview:PAGES.projects, desc:'Projects and development pipeline.',
+    sections:[ {label:'', path:'portfolio'} ] },
+  { key:'services', label:'Services', icon:'🧾', preview:PAGES.services, desc:'What we do — services, equity and capabilities.',
+    sections:[ {label:'Development Services', path:'home.armA'}, {label:'Internal Development', path:'home.armB'}, {label:'Capabilities', path:'home.capabilities'} ] },
+  { key:'news', label:'News', icon:'📰', preview:PAGES.news, desc:'News page.',
+    sections:[ {label:'News', path:'news'} ] },
+  { key:'investors', label:'Investors', icon:'🪙', preview:PAGES.home, desc:'Investor page — strategies and advantages.',
+    sections:[ {label:'', path:'invest'} ] },
+  { key:'contact', label:'Contact', icon:'✉️', preview:PAGES.contact, desc:'Contact details and intro copy.',
+    sections:[ {label:'', path:'contact'} ] },
 ];
 
 const PW_KEY = 'yudev_admin_pw';
@@ -371,14 +379,27 @@ $('#pvShow').onclick=()=>$('#split').classList.remove('no-preview');
 function renderTab(key){
   const tab=TABS.find(t=>t.key===key)||TABS[0];
   setPreview(tab.preview);
-  const main=$('#main'); main.innerHTML='';
+  const main=$('#main'); main.innerHTML=''; main.scrollTop=0;
   const h=document.createElement('h1'); h.className='sec-title'; h.textContent=tab.label; main.appendChild(h);
   const d=document.createElement('p'); d.className='sec-desc'; d.textContent=tab.desc; main.appendChild(d);
   if(!DATA) return;
-  const p=pathArr(tab.path);
-  const obj=getByPath(DATA,p);
-  if(obj==null){ ensurePath(DATA,p); }
-  renderFields(getByPath(DATA,p)||{}, p, main);
+  const sections=tab.sections||[];
+  const multi=sections.length>1;
+  sections.forEach(sec=>{
+    const p=pathArr(sec.path);
+    const val=getByPath(DATA,p);
+    if(multi && sec.label){
+      const sh=document.createElement('div'); sh.className='section-head'; sh.textContent=sec.label; main.appendChild(sh);
+    }
+    if(val==null){
+      const note=document.createElement('div'); note.className='empty-note';
+      note.textContent='No editable content for “'+(sec.label||tab.label)+'” yet.';
+      main.appendChild(note); return;
+    }
+    if(Array.isArray(val)){ main.appendChild(arrayField(sec.label||tab.label, val, p)); }
+    else if(typeof val==='object'){ renderFields(val, p, main); }
+    else { main.appendChild(scalarField(sec.label||tab.label, val, p)); }
+  });
 }
 
 /* render the fields of an object (no wrapping group) */
