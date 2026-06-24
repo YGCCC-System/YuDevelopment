@@ -1,6 +1,12 @@
 # Dependencies (regenerable from package.json)
 node_modules/
 
+# Secrets / local env (NEVER commit the Sanity write token)
+.env
+.env.local
+.env*.local
+.vercel
+
 # OS / editor cruft
 Thumbs.db
 .DS_Store

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Yu Development — Admin</title>
+<style>
+  :root{
+    --paper:#EFEDE6; --ink:#14161A; --ink-3:#61656D; --rule:#C6C3B7;
+    --accent:#1F3A5C; --accent-2:#6FA0C9; --ok:#1f7a3d; --err:#a33; --card:#fff;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    --mono:ui-monospace,Menlo,Consolas,monospace;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; font-family:var(--sans); background:var(--paper); color:var(--ink); }
+  a{ color:var(--accent); }
+
+  header.bar{ position:sticky; top:0; z-index:10; display:flex; align-items:center; gap:16px;
+    background:#fff; border-bottom:1px solid var(--rule); padding:14px clamp(16px,4vw,40px); }
+  header.bar .title{ font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:14px; }
+  header.bar .spacer{ margin-left:auto; }
+  header.bar .status{ font-size:13px; color:var(--ink-3); }
+  button{ font:inherit; cursor:pointer; border:1px solid var(--rule); background:#fff; color:var(--ink);
+    padding:8px 14px; border-radius:8px; }
+  button.primary{ background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600; }
+  button.primary:disabled{ opacity:.5; cursor:not-allowed; }
+  button.mini{ padding:3px 9px; font-size:12px; border-radius:6px; }
+  button.danger{ color:var(--err); border-color:#e3b7b7; }
+
+  main{ max-width:980px; margin:0 auto; padding:24px clamp(16px,4vw,40px) 120px; }
+
+  /* gate */
+  #gate{ max-width:380px; margin:14vh auto; background:#fff; border:1px solid var(--rule);
+    border-radius:14px; padding:28px; }
+  #gate h1{ font-size:18px; margin:0 0 6px; }
+  #gate p{ color:var(--ink-3); font-size:13px; margin:0 0 18px; }
+  input[type=password],input[type=text],textarea{ width:100%; font:inherit; padding:9px 11px;
+    border:1px solid var(--rule); border-radius:8px; background:#fff; color:var(--ink); }
+  textarea{ resize:vertical; min-height:38px; line-height:1.5; }
+
+  /* sections */
+  details.sec{ background:var(--card); border:1px solid var(--rule); border-radius:12px;
+    margin:0 0 14px; overflow:hidden; }
+  details.sec>summary{ cursor:pointer; list-style:none; padding:14px 18px; font-weight:700;
+    text-transform:capitalize; letter-spacing:.02em; background:#fbfaf6; }
+  details.sec>summary::-webkit-details-marker{ display:none; }
+  details.sec>summary:hover{ background:#f4f2ea; }
+  .sec-body{ padding:8px 18px 18px; }
+
+  .field{ margin:12px 0; }
+  .field>label{ display:block; font-size:12px; font-weight:600; color:var(--ink-3);
+    text-transform:capitalize; letter-spacing:.02em; margin:0 0 5px; }
+  fieldset{ border:1px solid var(--rule); border-radius:10px; margin:12px 0; padding:6px 14px 14px; }
+  fieldset>legend{ font-size:12px; font-weight:700; text-transform:capitalize; color:var(--ink);
+    padding:0 6px; }
+  .arr-item{ position:relative; border:1px dashed var(--rule); border-radius:10px;
+    padding:8px 12px 12px; margin:10px 0; background:#fcfbf7; }
+  .arr-item>.arr-head{ display:flex; align-items:center; gap:10px; margin:2px 0 4px; }
+  .arr-item>.arr-head .ix{ font:600 11px/1 var(--mono); color:var(--ink-3); }
+  .arr-head .spacer{ margin-left:auto; }
+  .img-widget{ display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; }
+  .img-widget img{ width:120px; height:80px; object-fit:cover; border:1px solid var(--rule);
+    border-radius:8px; background:#eee; }
+  .img-widget .col{ flex:1 1 220px; min-width:200px; }
+  .hint{ font-size:11px; color:var(--ink-3); margin-top:4px; }
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:50;
+    background:var(--ink); color:#fff; padding:10px 18px; border-radius:10px; font-size:14px;
+    opacity:0; transition:opacity .2s; pointer-events:none; max-width:90vw; }
+  .toast.show{ opacity:1; }
+  .toast.ok{ background:var(--ok); } .toast.err{ background:var(--err); }
+  .savebar{ position:fixed; left:0; right:0; bottom:0; z-index:20; display:flex; gap:12px;
+    align-items:center; justify-content:flex-end; background:#fff; border-top:1px solid var(--rule);
+    padding:12px clamp(16px,4vw,40px); }
+  .savebar .left{ margin-right:auto; font-size:13px; color:var(--ink-3); }
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <h1>Admin sign-in</h1>
+  <p>Enter the admin password to edit site content.</p>
+  <form id="gateForm">
+    <input id="pw" type="password" placeholder="Password" autocomplete="current-password" />
+    <div style="height:12px"></div>
+    <button class="primary" style="width:100%" type="submit">Sign in</button>
+    <p id="gateErr" class="hint" style="color:var(--err)"></p>
+  </form>
+</div>
+
+<div id="app" class="hidden">
+  <header class="bar">
+    <span class="title">Yu Development · Content</span>
+    <span class="status" id="status"></span>
+    <span class="spacer"></span>
+    <button class="mini" id="reload">Reload</button>
+    <button class="mini" id="viewSite" onclick="window.open('/','_blank')">View site ↗</button>
+    <button class="mini danger" id="logout">Sign out</button>
+  </header>
+  <main id="editor"></main>
+  <div class="savebar">
+    <span class="left" id="dirty">No unsaved changes</span>
+    <button class="primary" id="save" disabled>Save changes</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PW_KEY = 'yudev_admin_pw';
+let DATA = null;       // the live content object (mutated in place)
+let dirty = false;
+const $ = (s, r=document) => r.querySelector(s);
+
+function toast(msg, kind){ const t=$('#toast'); t.textContent=msg; t.className='toast show '+(kind||''); setTimeout(()=>t.className='toast',2600); }
+function pw(){ return sessionStorage.getItem(PW_KEY) || ''; }
+function setDirty(v){ dirty=v; $('#save').disabled=!v; $('#dirty').textContent=v?'Unsaved changes':'No unsaved changes'; }
+
+window.addEventListener('beforeunload', (e)=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
+
+/* ---------- auth gate ---------- */
+$('#gateForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const val = $('#pw').value;
+  sessionStorage.setItem(PW_KEY, val);
+  $('#gateErr').textContent = 'Checking…';
+  // Validate by attempting a no-op-ish save guard: we just load content, then the
+  // password is verified on first real save. To give immediate feedback, ping save
+  // with empty content (server rejects wrong pw before touching data).
+  const ok = await verifyPw(val);
+  if(ok){ $('#gate').classList.add('hidden'); $('#app').classList.remove('hidden'); load(); }
+  else { sessionStorage.removeItem(PW_KEY); $('#gateErr').textContent='Wrong password.'; }
+});
+async function verifyPw(val){
+  try{
+    const r = await fetch('/api/save', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: val }) });
+    // 400 = pw accepted but missing content (expected). 401 = wrong pw.
+    return r.status !== 401;
+  }catch{ return true; } // network/local-dev: let them in, real save will surface errors
+}
+$('#logout').onclick = ()=>{ sessionStorage.removeItem(PW_KEY); location.reload(); };
+$('#reload').onclick = ()=>{ if(!dirty || confirm('Discard unsaved changes?')) load(); };
+
+/* ---------- load ---------- */
+async function load(){
+  $('#status').textContent = 'Loading…';
+  try{
+    const r = await fetch('/api/content?fresh=1');
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    DATA = await r.json();
+    if(!DATA || typeof DATA!=='object') DATA = {};
+    render();
+    setDirty(false);
+    $('#status').textContent = 'Loaded';
+  }catch(err){
+    $('#status').textContent = 'Load failed';
+    toast('Could not load content: '+err.message+' (is /api running? use `vercel dev` locally)', 'err');
+  }
+}
+
+/* ---------- path helpers ---------- */
+function getByPath(obj, path){ return path.reduce((o,k)=> (o==null?o:o[k]), obj); }
+function setByPath(obj, path, val){
+  let o=obj; for(let i=0;i<path.length-1;i++){ o=o[path[i]]; }
+  o[path[path.length-1]] = val;
+}
+function newKey(){ return 'k'+Math.abs(Math.floor((performance.now()*1000))).toString(36)+Math.floor(performance.now()%1000).toString(36)+(keyCtr++); }
+let keyCtr=0;
+
+function isImageKey(k){ return /^(image|logo|photo|avatar|thumbnail|thumb|cover|banner|hero|background|bg|icon)$/i.test(k); }
+function looksLikeImageUrl(v){ return typeof v==='string' && /^https?:\/\/.+\.(png|jpe?g|webp|gif|svg|avif)(\?.*)?$/i.test(v); }
+function isLongText(k,v){ return (typeof v==='string') && (v.length>80 || v.includes('\n') || /description|paragraph|blurb|text|body|bio|content|tagline|summary/i.test(k)); }
+
+/* ---------- rendering ---------- */
+function render(){
+  const root = $('#editor'); root.innerHTML='';
+  const keys = Object.keys(DATA).filter(k=>!k.startsWith('_')).sort();
+  for(const k of keys){
+    const sec = document.createElement('details'); sec.className='sec';
+    const sum = document.createElement('summary'); sum.textContent = k; sec.appendChild(sum);
+    const body = document.createElement('div'); body.className='sec-body';
+    renderValue(DATA[k], [k], body, k);
+    sec.appendChild(body);
+    root.appendChild(sec);
+  }
+}
+
+// Render a value (string/number/bool/array/object) into container.
+function renderValue(value, path, container, keyName){
+  if(value===null || value===undefined){
+    // treat as editable string
+    renderScalar('', path, container, keyName); return;
+  }
+  if(Array.isArray(value)){ renderArray(value, path, container, keyName); return; }
+  if(typeof value==='object'){ renderObject(value, path, container, keyName); return; }
+  renderScalar(value, path, container, keyName);
+}
+
+function renderObject(obj, path, container, keyName){
+  const fs = document.createElement('fieldset');
+  const lg = document.createElement('legend'); lg.textContent = keyName || ''; fs.appendChild(lg);
+  const keys = Object.keys(obj).filter(k=>!k.startsWith('_'));
+  for(const k of keys){ renderValue(obj[k], path.concat(k), fs, k); }
+  container.appendChild(fs);
+}
+
+function renderArray(arr, path, container, keyName){
+  // image-url array (gallery) or string array vs object array
+  const fs = document.createElement('fieldset');
+  const lg = document.createElement('legend'); lg.textContent = (keyName||'')+' ('+arr.length+')'; fs.appendChild(lg);
+
+  const list = document.createElement('div');
+  fs.appendChild(list);
+
+  function redraw(){
+    list.innerHTML='';
+    arr.forEach((item, i)=>{
+      const wrap = document.createElement('div'); wrap.className='arr-item';
+      const head = document.createElement('div'); head.className='arr-head';
+      const ix = document.createElement('span'); ix.className='ix';
+      ix.textContent = '#'+(i+1)+(item && item.name ? ' · '+item.name : (item && item.title ? ' · '+item.title : ''));
+      head.appendChild(ix);
+      const sp = document.createElement('span'); sp.className='spacer'; head.appendChild(sp);
+      const up = document.createElement('button'); up.className='mini'; up.textContent='↑'; up.title='Move up';
+      up.onclick=()=>{ if(i>0){ [arr[i-1],arr[i]]=[arr[i],arr[i-1]]; setDirty(true); redraw(); lg.textContent=(keyName||'')+' ('+arr.length+')'; } };
+      const dn = document.createElement('button'); dn.className='mini'; dn.textContent='↓'; dn.title='Move down';
+      dn.onclick=()=>{ if(i<arr.length-1){ [arr[i+1],arr[i]]=[arr[i],arr[i+1]]; setDirty(true); redraw(); } };
+      const del = document.createElement('button'); del.className='mini danger'; del.textContent='Remove';
+      del.onclick=()=>{ if(confirm('Remove item #'+(i+1)+'?')){ arr.splice(i,1); setDirty(true); redraw(); lg.textContent=(keyName||'')+' ('+arr.length+')'; } };
+      head.appendChild(up); head.appendChild(dn); head.appendChild(del);
+      wrap.appendChild(head);
+
+      if(item!==null && typeof item==='object' && !Array.isArray(item)){
+        const keys = Object.keys(item).filter(k=>!k.startsWith('_'));
+        for(const k of keys){ renderValue(item[k], path.concat(i, k), wrap, k); }
+      } else {
+        // scalar / image url item
+        renderValue(item, path.concat(i), wrap, keyName ? keyName.replace(/s$/,'') : 'item');
+      }
+      list.appendChild(wrap);
+    });
+  }
+  redraw();
+
+  const add = document.createElement('button'); add.className='mini'; add.textContent='+ Add '+(keyName||'item');
+  add.style.marginTop='8px';
+  add.onclick=()=>{
+    const template = arr.find(x=>x && typeof x==='object' && !Array.isArray(x));
+    let item;
+    if(template){ item={}; for(const k of Object.keys(template)){ if(k.startsWith('_')) continue; const v=template[k]; item[k]=Array.isArray(v)?[]:(v&&typeof v==='object'?{}:''); } item._key=newKey(); }
+    else if(arr.length && typeof arr[0]==='string'){ item=''; }
+    else { item=''; }
+    arr.push(item); setDirty(true); redraw(); lg.textContent=(keyName||'')+' ('+arr.length+')';
+  };
+  fs.appendChild(add);
+  container.appendChild(fs);
+}
+
+function renderScalar(value, path, container, keyName){
+  const field = document.createElement('div'); field.className='field';
+  const label = document.createElement('label'); label.textContent = keyName || ''; field.appendChild(label);
+
+  const isImg = isImageKey(keyName) || looksLikeImageUrl(value);
+  if(isImg){
+    field.appendChild(imageWidget(value, path, label));
+    container.appendChild(field); return;
+  }
+
+  let input;
+  if(isLongText(keyName, value)){
+    input = document.createElement('textarea');
+    input.rows = Math.min(8, Math.max(2, String(value||'').split('\n').length));
+  } else {
+    input = document.createElement('input'); input.type='text';
+  }
+  input.value = (value==null?'':value);
+  input.addEventListener('input', ()=>{ setByPath(DATA, path, input.value); setDirty(true); });
+  field.appendChild(input);
+  container.appendChild(field);
+}
+
+function imageWidget(value, path, labelEl){
+  const w = document.createElement('div'); w.className='img-widget';
+  const img = document.createElement('img'); img.alt='preview';
+  img.src = value || ''; img.style.display = value ? '' : 'none';
+  const col = document.createElement('div'); col.className='col';
+  const url = document.createElement('input'); url.type='text'; url.value=value||''; url.placeholder='Image URL';
+  url.addEventListener('input', ()=>{ setByPath(DATA,path,url.value); img.src=url.value; img.style.display=url.value?'':'none'; setDirty(true); });
+  const file = document.createElement('input'); file.type='file'; file.accept='image/*'; file.style.marginTop='8px'; file.style.fontSize='12px';
+  const status = document.createElement('div'); status.className='hint';
+  file.addEventListener('change', async ()=>{
+    const f = file.files[0]; if(!f) return;
+    status.textContent='Uploading '+f.name+'…';
+    try{
+      const r = await fetch('/api/upload?password='+encodeURIComponent(pw())+'&filename='+encodeURIComponent(f.name),
+        { method:'POST', headers:{'Content-Type': f.type||'application/octet-stream'}, body:f });
+      const d = await r.json();
+      if(!r.ok || !d.url) throw new Error(d.error||('HTTP '+r.status));
+      url.value=d.url; setByPath(DATA,path,d.url); img.src=d.url; img.style.display=''; setDirty(true);
+      status.textContent='Uploaded ✓';
+    }catch(err){ status.textContent='Upload failed: '+err.message; }
+  });
+  col.appendChild(url); col.appendChild(file); col.appendChild(status);
+  w.appendChild(img); w.appendChild(col);
+  return w;
+}
+
+/* ---------- save ---------- */
+$('#save').onclick = async ()=>{
+  $('#save').disabled=true; $('#status').textContent='Saving…';
+  try{
+    const r = await fetch('/api/save', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: pw(), content: DATA }) });
+    const d = await r.json();
+    if(r.status===401){ toast('Wrong password — sign in again','err'); sessionStorage.removeItem(PW_KEY); setTimeout(()=>location.reload(),1200); return; }
+    if(!r.ok) throw new Error(d.error||('HTTP '+r.status));
+    setDirty(false); $('#status').textContent='Saved'; toast('Saved to Sanity ✓','ok');
+  }catch(err){ $('#status').textContent='Save failed'; toast('Save failed: '+err.message,'err'); setDirty(true); }
+};
+
+/* ---------- boot ---------- */
+if(pw()){ $('#gate').classList.add('hidden'); $('#app').classList.remove('hidden'); load(); }
+</script>
+</body>
+</html>
