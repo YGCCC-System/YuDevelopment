@@ -11,6 +11,15 @@
  * (e.g. local `live-server`). If both fail, the static fallback markup remains.
  */
 (function () {
+  // Hidden admin hotkey: Ctrl + Alt + .  -> open /admin
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.altKey && !e.shiftKey && !e.metaKey &&
+        (e.key === '.' || e.code === 'Period')) {
+      e.preventDefault();
+      window.location.href = '/admin';
+    }
+  });
+
   var PROJECT_ID = 'ymrsfmvq', DATASET = 'production';
   var GROQ = '*[_id == "siteContent"][0]';
   var CDN = 'https://' + PROJECT_ID + '.apicdn.sanity.io/v2021-10-21/data/query/' +
