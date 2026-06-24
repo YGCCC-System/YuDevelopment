@@ -96,7 +96,9 @@
     font-size:14px; border-radius:8px; background:transparent; border:1px solid transparent; color:var(--text-2); }
   .pv-btn:hover{ background:var(--card); color:var(--text); }
   .pv-frame-wrap{ flex:1; min-height:0; background:#0b0f1a; position:relative; }
-  #preview{ position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff; }
+  #preview{ position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff;
+    transition:opacity .25s ease; }
+  #preview.loading{ opacity:.35; }
 
   .topbar{ flex:0 0 auto; display:flex; align-items:center; gap:14px;
     height:58px; padding:0 clamp(16px,3vw,28px); background:rgba(10,14,24,.86);
@@ -119,13 +121,18 @@
     padding:8px clamp(12px,3vw,24px); background:var(--bg); border-bottom:1px solid var(--line); }
   .tab{ display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border-radius:8px;
     font-size:13px; font-weight:500; color:var(--text-2); background:transparent; border:1px solid transparent;
-    cursor:pointer; white-space:nowrap; }
+    cursor:pointer; white-space:nowrap; transition:background .18s ease, color .18s ease, border-color .18s ease; }
+  .tab .ic{ transition:transform .18s ease; }
+  .tab.active .ic{ transform:scale(1.12); }
   .tab .ic{ font-size:13.5px; line-height:1; filter:saturate(1.1); }
   .tab:hover{ color:var(--text); background:var(--card); }
   .tab.active{ color:#fff; background:var(--accent-soft); border-color:rgba(59,130,246,.4); }
 
-  main{ flex:1 1 auto; min-height:0; overflow-y:auto; padding:26px clamp(16px,3vw,28px) 60px; }
-  main>*{ max-width:760px; margin-left:auto; margin-right:auto; }
+  main{ flex:1 1 auto; min-height:0; overflow-y:auto; scroll-behavior:smooth; padding:26px clamp(16px,3vw,28px) 60px; }
+  .tab-content{ max-width:760px; margin:0 auto; }
+  @keyframes tabIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+  .tab-content.anim{ animation:tabIn .26s cubic-bezier(.2,.7,.2,1) both; }
+  @media (prefers-reduced-motion:reduce){ .tab-content.anim{ animation:none; } main{ scroll-behavior:auto; } }
   .sec-title{ font-size:23px; font-weight:700; letter-spacing:-.01em; margin:0; }
   .sec-desc{ color:var(--muted); font-size:13.5px; margin:6px 0 22px; }
   .section-head{ font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
@@ -262,17 +269,17 @@ const PAGES = {
 
 /* ---------- config: page tabs (mirror the site nav) -> content sections ---------- */
 const TABS = [
-  { key:'home', label:'Home', icon:'🏠', preview:PAGES.home, desc:'Homepage — hero, brand, about and call-to-action.',
-    sections:[ {label:'Hero', path:'home.hero'}, {label:'Brand', path:'brand'}, {label:'About', path:'about'}, {label:'Home CTA', path:'home.cta'} ] },
-  { key:'team', label:'Team', icon:'👥', preview:PAGES.team, desc:'Team page — hero, culture and members.',
+  { key:'home', label:'Home', icon:'🏠', preview:PAGES.home, desc:'Homepage — hero, statement, stats and call-to-action.',
+    sections:[ {label:'Hero', path:'home.hero'}, {label:'Statement & Stats', path:'home.statement'}, {label:'Call to Action', path:'home.cta'}, {label:'Brand & Footer', path:'brand'} ] },
+  { key:'team', label:'Team', icon:'👥', preview:PAGES.team, desc:'Team page — heading and members.',
     sections:[ {label:'', path:'people'} ] },
-  { key:'projects', label:'Projects', icon:'🟨', preview:PAGES.projects, desc:'Projects and development pipeline.',
+  { key:'projects', label:'Projects', icon:'🟨', preview:PAGES.projects, desc:'Projects shown on the site.',
     sections:[ {label:'', path:'portfolio'} ] },
-  { key:'services', label:'Services', icon:'🧾', preview:PAGES.services, desc:'What we do — services, equity and capabilities.',
-    sections:[ {label:'Development Services', path:'home.armA'}, {label:'Internal Development', path:'home.armB'}, {label:'Capabilities', path:'home.capabilities'} ] },
-  { key:'news', label:'News', icon:'📰', preview:PAGES.news, desc:'News page.',
-    sections:[ {label:'News', path:'news'} ] },
-  { key:'investors', label:'Investors', icon:'🪙', preview:PAGES.home, desc:'Investor page — strategies and advantages.',
+  { key:'services', label:'Services', icon:'🧾', preview:PAGES.services, desc:'What we do — who we build for and local impact.',
+    sections:[ {label:'', path:'services'} ] },
+  { key:'news', label:'News', icon:'📰', preview:PAGES.news, desc:'News & updates articles.',
+    sections:[ {label:'', path:'news'} ] },
+  { key:'investors', label:'Investors', icon:'🪙', preview:PAGES.home, desc:'Investor enquiries.',
     sections:[ {label:'', path:'invest'} ] },
   { key:'contact', label:'Contact', icon:'✉️', preview:PAGES.contact, desc:'Contact details and intro copy.',
     sections:[ {label:'', path:'contact'} ] },
@@ -368,6 +375,8 @@ function setPreview(url){
   $('#pvUrl').textContent=decodeURIComponent(url);
   if(cur===url) return;            // already on this page — don't reload
   frame.setAttribute('data-url',url);
+  frame.classList.add('loading');
+  frame.onload=()=>frame.classList.remove('loading');
   frame.src=url;
 }
 function reloadPreview(){ const f=$('#preview'); try{ f.contentWindow.location.reload(); }catch(e){ f.src=f.src; } }
@@ -380,8 +389,11 @@ function renderTab(key){
   const tab=TABS.find(t=>t.key===key)||TABS[0];
   setPreview(tab.preview);
   const main=$('#main'); main.innerHTML=''; main.scrollTop=0;
-  const h=document.createElement('h1'); h.className='sec-title'; h.textContent=tab.label; main.appendChild(h);
-  const d=document.createElement('p'); d.className='sec-desc'; d.textContent=tab.desc; main.appendChild(d);
+  const wrap=document.createElement('div'); wrap.className='tab-content'; main.appendChild(wrap);
+  // re-trigger entrance animation
+  wrap.classList.remove('anim'); void wrap.offsetWidth; wrap.classList.add('anim');
+  const h=document.createElement('h1'); h.className='sec-title'; h.textContent=tab.label; wrap.appendChild(h);
+  const d=document.createElement('p'); d.className='sec-desc'; d.textContent=tab.desc; wrap.appendChild(d);
   if(!DATA) return;
   const sections=tab.sections||[];
   const multi=sections.length>1;
@@ -389,16 +401,16 @@ function renderTab(key){
     const p=pathArr(sec.path);
     const val=getByPath(DATA,p);
     if(multi && sec.label){
-      const sh=document.createElement('div'); sh.className='section-head'; sh.textContent=sec.label; main.appendChild(sh);
+      const sh=document.createElement('div'); sh.className='section-head'; sh.textContent=sec.label; wrap.appendChild(sh);
     }
     if(val==null){
       const note=document.createElement('div'); note.className='empty-note';
       note.textContent='No editable content for “'+(sec.label||tab.label)+'” yet.';
-      main.appendChild(note); return;
+      wrap.appendChild(note); return;
     }
-    if(Array.isArray(val)){ main.appendChild(arrayField(sec.label||tab.label, val, p)); }
-    else if(typeof val==='object'){ renderFields(val, p, main); }
-    else { main.appendChild(scalarField(sec.label||tab.label, val, p)); }
+    if(Array.isArray(val)){ wrap.appendChild(arrayField(sec.label||tab.label, val, p)); }
+    else if(typeof val==='object'){ renderFields(val, p, wrap); }
+    else { wrap.appendChild(scalarField(sec.label||tab.label, val, p)); }
   });
 }
 

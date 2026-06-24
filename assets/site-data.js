@@ -47,7 +47,7 @@
   }
 
   function cardHtml(p) {
-    var sub = p.scope || p.type || '';
+    var sub = p.units || p.scope || p.type || '';
     var alt = p.name + (p.location ? ' — ' + p.location : '');
     return '<a class="pcard" href="#" data-slug="' + esc(p.slug || '') + '">' +
       '<div class="pshot"><img src="' + esc(p.image || '') + '" alt="' + esc(alt) + '" /></div>' +
