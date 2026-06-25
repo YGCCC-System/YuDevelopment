@@ -1,6 +1,12 @@
 # Dependencies (regenerable from package.json)
 node_modules/
 
+# Next.js build output
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
 # Secrets / local env (NEVER commit the Sanity write token)
 .env
 .env.local

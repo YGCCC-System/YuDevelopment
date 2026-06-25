@@ -192,6 +192,9 @@
     '.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;' +
     '  justify-content:center;gap:6px;text-align:center;padding:12px;box-sizing:border-box;' +
     '  cursor:pointer;user-select:none}' +
+    // readonly: pure display. No browse-on-click, no drop affordance, no hint.
+    ':host([readonly]) .empty{cursor:default}' +
+    ':host([readonly]) .empty .sub{display:none}' +
     '.empty svg{opacity:.45}' +
     '.empty .cap{max-width:90%;font-weight:500;letter-spacing:.01em}' +
     '.empty .sub{font-size:11px}' +
@@ -226,7 +229,7 @@
 
   class ImageSlot extends HTMLElement {
     static get observedAttributes() {
-      return ['shape', 'radius', 'mask', 'fit', 'position', 'placeholder', 'src', 'id'];
+      return ['shape', 'radius', 'mask', 'fit', 'position', 'placeholder', 'src', 'id', 'readonly'];
     }
 
     constructor() {
@@ -267,7 +270,13 @@
       this._subFn = () => this._render();
       // Shadow-DOM listeners live with the shadow DOM — bound once here so
       // disconnect/reconnect (e.g. React remount) doesn't stack handlers.
-      this._empty.addEventListener('click', () => this._input.click());
+      this._empty.addEventListener('click', () => {
+        // On the live website there is no write bridge, so the slot is pure
+        // display — clicking must not open a file picker. Editing happens only
+        // in the authoring runtime (and content edits go through /admin).
+        if (this.hasAttribute('readonly') || !this._canEdit()) return;
+        this._input.click();
+      });
       root.addEventListener('click', (e) => {
         const act = e.target && e.target.getAttribute && e.target.getAttribute('data-act');
         if (act === 'replace') { this._exitReframe(true); this._input.click(); }
@@ -442,9 +451,20 @@
 
     attributeChangedCallback() { if (this.shadowRoot) this._render(); }
 
+    // True only inside the authoring runtime that exposes a sidecar write
+    // bridge. On the deployed website this is always false, so slots are
+    // display-only and never open a file picker.
+    _canEdit() {
+      return !!(window.omelette && window.omelette.writeFile);
+    }
+
     // handleEvent — one listener object for all four drag events keeps the
     // add/remove symmetric and the depth counter correct.
     handleEvent(e) {
+      // readonly slots — and any slot on the live site (no write bridge) — are
+      // display-only: ignore every drag/drop so the browser falls back to its
+      // default (no upload, no overlay).
+      if (this.hasAttribute('readonly') || !this._canEdit()) return;
       if (e.type === 'dragenter' || e.type === 'dragover') {
         // Without preventDefault the browser never fires 'drop'.
         e.preventDefault();
@@ -593,7 +613,7 @@
       this._ring.style.display = mask ? 'none' : '';
 
       // Controls and reframe entry gate on this so share links stay read-only.
-      const editable = !!(window.omelette && window.omelette.writeFile);
+      const editable = this._canEdit();
       this.toggleAttribute('data-editable', editable);
       this._sub.style.display = editable ? '' : 'none';
 

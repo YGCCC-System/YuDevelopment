@@ -46,11 +46,18 @@
     return null;
   }
 
+  // Sanity stores image paths relative ("media/foo.png"); make them root-
+  // absolute so they resolve from any route (e.g. /projects).
+  function imgSrc(src) {
+    if (!src) return '';
+    if (/^https?:\/\//i.test(src) || src.charAt(0) === '/') return src;
+    return '/' + src.replace(/^\.?\//, '');
+  }
   function cardHtml(p) {
     var sub = p.units || p.scope || p.type || '';
     var alt = p.name + (p.location ? ' — ' + p.location : '');
     return '<a class="pcard" href="#" data-slug="' + esc(p.slug || '') + '">' +
-      '<div class="pshot"><img src="' + esc(p.image || '') + '" alt="' + esc(alt) + '" /></div>' +
+      '<div class="pshot"><img src="' + esc(imgSrc(p.image)) + '" alt="' + esc(alt) + '" /></div>' +
       '<div class="pm"><span class="lcol"><span class="nm">' + esc(p.name) + '</span>' +
       '<span class="u">' + esc(sub) + '</span></span>' +
       '<span class="loc">' + esc(p.location || '') + '</span></div></a>';

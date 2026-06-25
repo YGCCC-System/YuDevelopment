@@ -257,14 +257,15 @@
 <div class="toast" id="toast"></div>
 
 <script>
-/* ---------- preview page targets (same-origin site pages) ---------- */
+/* ---------- preview page targets (live Next.js routes) ---------- */
 const PAGES = {
-  home:     '/',
-  services: '/Yu%20Development%20v12.html#whatwedo',
-  news:     '/Yu%20Development%20-%20News.html',
-  projects: '/Yu%20Development%20-%20Projects.html',
-  team:     '/Yu%20Development%20-%20Team.html',
-  contact:  '/Yu%20Development%20-%20Contact.html',
+  home:      '/',
+  services:  '/#whatwedo',   // homepage "what we do" section
+  news:      '/news',
+  projects:  '/projects',
+  team:      '/team',
+  investors: '/investors',
+  contact:   '/contact',
 };
 
 /* ---------- config: page tabs (mirror the site nav) -> content sections ---------- */
@@ -279,7 +280,7 @@ const TABS = [
     sections:[ {label:'', path:'services'} ] },
   { key:'news', label:'News', icon:'📰', preview:PAGES.news, desc:'News & updates articles.',
     sections:[ {label:'', path:'news'} ] },
-  { key:'investors', label:'Investors', icon:'🪙', preview:PAGES.home, desc:'Investor enquiries.',
+  { key:'investors', label:'Investors', icon:'🪙', preview:PAGES.investors, desc:'Investor enquiries.',
     sections:[ {label:'', path:'invest'} ] },
   { key:'contact', label:'Contact', icon:'✉️', preview:PAGES.contact, desc:'Contact details and intro copy.',
     sections:[ {label:'', path:'contact'} ] },
@@ -353,6 +354,9 @@ function pretty(k){ return String(k).replace(/([a-z0-9])([A-Z])/g,'$1 $2').repla
   .replace(/\b\w/g,c=>c.toUpperCase()).replace(/\bCta\b/g,'CTA').replace(/\bUrl\b/g,'URL').replace(/\bId\b/g,'ID'); }
 function isImageKey(k){ return /^(image|logo|photo|avatar|thumbnail|thumb|cover|banner|backgroundimage|bg|icon)$/i.test(k); }
 function looksImageUrl(v){ return typeof v==='string' && /^https?:\/\/.+\.(png|jpe?g|webp|gif|svg|avif)(\?.*)?$/i.test(v); }
+function looksVideoUrl(v){ return typeof v==='string' && /\.(mp4|webm|mov|m4v|ogv)(\?.*)?$/i.test(v); }
+// Keys whose media field should also accept a video (e.g. the home hero background).
+function isMediaKey(k){ return /^(backgroundimage|background|bg|cover|banner|hero|media)$/i.test(k); }
 function isLong(k,v){ return (typeof v==='string') && (v.length>70 || v.includes('\n') || /description|paragraph|blurb|text|body|bio|tagline|summary|event/i.test(k)); }
 function summaryOf(item,i){ if(item&&typeof item==='object'){ return item.name||item.label||item.title||item.year||item.scope||('Item '+(i+1)); } return String(item||('Item '+(i+1))); }
 
@@ -421,9 +425,9 @@ function renderFields(obj,path,container){
   let i=0;
   while(i<keys.length){
     const k=keys[i], v=obj[k];
-    const scalarShort = (v==null||['string','number','boolean'].includes(typeof v)) && !isImageKey(k) && !isLong(k,v) && !looksImageUrl(v);
+    const scalarShort = (v==null||['string','number','boolean'].includes(typeof v)) && !isImageKey(k) && !isLong(k,v) && !looksImageUrl(v) && !looksVideoUrl(v);
     const nk=keys[i+1], nv=obj[nk];
-    const nextShort = nk && (nv==null||['string','number','boolean'].includes(typeof nv)) && !isImageKey(nk) && !isLong(nk,nv) && !looksImageUrl(nv);
+    const nextShort = nk && (nv==null||['string','number','boolean'].includes(typeof nv)) && !isImageKey(nk) && !isLong(nk,nv) && !looksImageUrl(nv) && !looksVideoUrl(nv);
     if(scalarShort && nextShort){
       const row=document.createElement('div'); row.className='row2';
       row.appendChild(scalarField(k,v,path.concat(k)));
@@ -434,7 +438,9 @@ function renderFields(obj,path,container){
 }
 
 function renderValue(value,path,container,key){
-  if(isImageKey(key)||looksImageUrl(value)){ container.appendChild(imageField(key,value,path)); return; }
+  if(isImageKey(key)||looksImageUrl(value)||looksVideoUrl(value)){
+    container.appendChild(imageField(key,value,path,isMediaKey(key)||looksVideoUrl(value))); return;
+  }
   if(Array.isArray(value)){ container.appendChild(arrayField(key,value,path)); return; }
   if(value&&typeof value==='object'){
     const g=document.createElement('div'); g.className='group';
@@ -455,17 +461,34 @@ function scalarField(key,value,path){
   f.appendChild(input); return f;
 }
 
-function imageField(key,value,path){
+function imageField(key,value,path,allowVideo){
   const f=document.createElement('div'); f.className='field';
   const l=document.createElement('label'); l.className='lbl'; l.textContent=pretty(key); f.appendChild(l);
   const w=document.createElement('div'); w.className='img-widget';
+  // Preview: an <img> and a muted-looping <video> share the same .thumb box;
+  // whichever matches the current value is shown.
   const img=document.createElement('img'); img.className='thumb';
-  function setThumb(u){ if(u){ img.src=u; img.classList.remove('empty'); img.textContent=''; } else { img.removeAttribute('src'); img.classList.add('empty'); img.textContent='no image'; } }
+  const vid=document.createElement('video'); vid.className='thumb'; vid.muted=true; vid.loop=true;
+  vid.autoplay=true; vid.playsInline=true; vid.setAttribute('playsinline',''); vid.style.display='none';
+  function setThumb(u){
+    if(u && looksVideoUrl(u)){
+      vid.src=u; vid.style.display=''; img.style.display='none';
+      img.classList.remove('empty'); img.textContent=''; vid.play&&vid.play().catch(()=>{});
+    } else if(u){
+      img.src=u; img.style.display=''; vid.style.display='none'; vid.removeAttribute('src');
+      img.classList.remove('empty'); img.textContent='';
+    } else {
+      img.removeAttribute('src'); img.style.display=''; vid.style.display='none'; vid.removeAttribute('src');
+      img.classList.add('empty'); img.textContent=allowVideo?'no media':'no image';
+    }
+  }
   setThumb(value);
   const col=document.createElement('div'); col.className='col';
-  const url=document.createElement('input'); url.type='text'; url.value=value||''; url.placeholder='Image URL';
+  const url=document.createElement('input'); url.type='text'; url.value=value||'';
+  url.placeholder=allowVideo?'Image or video URL':'Image URL';
   url.addEventListener('input',()=>{ setByPath(DATA,path,url.value); setThumb(url.value); setDirty(true); });
-  const file=document.createElement('input'); file.type='file'; file.accept='image/*'; file.className='file';
+  const file=document.createElement('input'); file.type='file';
+  file.accept=allowVideo?'image/*,video/*':'image/*'; file.className='file';
   const stat=document.createElement('div'); stat.className='upstat';
   file.addEventListener('change',async ()=>{
     const fl=file.files[0]; if(!fl) return; stat.textContent='Uploading '+fl.name+'…';
@@ -477,7 +500,7 @@ function imageField(key,value,path){
     }catch(err){ stat.textContent='Upload failed: '+err.message; }
   });
   col.appendChild(url); col.appendChild(file); col.appendChild(stat);
-  w.appendChild(img); w.appendChild(col); f.appendChild(w); return f;
+  w.appendChild(img); w.appendChild(vid); w.appendChild(col); f.appendChild(w); return f;
 }
 
 /* arrays */
