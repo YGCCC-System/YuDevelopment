@@ -1,25 +1,16 @@
 import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import { getSiteContent, projectImage, type Article } from '@/lib/content';
+import { getSiteContent, projectImage, FEATURED_NEWS } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: 'Yu Development — News',
 };
 
-const NEWS_FALLBACK: Article[] = [
-  { date: 'June 4, 2026', title: 'What “attainable” actually means in 2026' },
-  { date: 'May 14, 2026', title: 'Why we underwrite to working rents, not exit prices' },
-  { date: 'April 9, 2026', title: 'The Southeast’s underbuilt middle, by the numbers' },
-  { date: 'March 18, 2026', title: 'What a decade-long hold changes about design' },
-  { date: 'February 6, 2026', title: 'Vertically integrated, and why it matters here' },
-  { date: 'January 22, 2026', title: 'Building where the jobs are growing fastest' },
-];
-
 const css = `
   :root{
     --paper:#EFEDE6; --paper-2:#E5E2D8; --ink:#14161A; --ink-2:#2F3238; --ink-3:#61656D;
-    --rule:#C6C3B7; --accent:#1F3A5C; --accent-2:#6FA0C9; --accent-deep:#15283B;
+    --rule:#C6C3B7; --accent:#6E7B43; --accent-2:#8B9A5B; --accent-deep:#586235;
     --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
     --mono:"Geist Mono",ui-monospace,Menlo,monospace;
   }
@@ -82,8 +73,9 @@ export default async function NewsPage() {
   const content = await getSiteContent();
   const news = content?.news;
   const heading = news?.title || 'News & Updates';
-  const articles = (news?.articles ?? []).filter((a) => a && a.title && String(a.title).trim());
-  const list = articles.length ? articles : NEWS_FALLBACK;
+  const originals = (news?.articles ?? []).filter((a) => a && a.title && String(a.title).trim());
+  // Featured external-source articles first, then the full original article list.
+  const list = [...FEATURED_NEWS, ...originals];
 
   return (
     <>
@@ -102,8 +94,15 @@ export default async function NewsPage() {
               return (
                 <div className="ncard" key={a._key || i}>
                   {img ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                    a.link ? (
+                      <a href={a.link} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img loading="lazy" decoding="async" src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                      </a>
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img loading="lazy" decoding="async" src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                    )
                   ) : (
                     <image-slot id={`news-${i + 1}`} shape="rect" placeholder="Article image"></image-slot>
                   )}

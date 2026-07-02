@@ -41,7 +41,46 @@ export type Cta = { title?: string; linkLabel?: string; linkHref?: string };
 
 export type Member = { _key?: string; name?: string; role?: string; image?: string };
 
-export type Article = { _key?: string; date?: string; title?: string; image?: string };
+// Per-member overrides (headshots / titles) merged onto the CMS team list —
+// Sanity has no photos wired here. Keyed by member name, lower-cased & trimmed.
+const TEAM_OVERRIDES: Record<string, { image?: string; role?: string }> = {
+  'george yu': { image: '/media/george.png', role: 'Founder' },
+  'nathan pritzker': { image: '/media/nathan.jpg', role: 'Associate' },
+};
+
+// Overlay the photo/title overrides onto a team list without dropping anyone.
+export function withTeamPhotos(members: Member[]): Member[] {
+  return members.map((m) => {
+    const o = m.name ? TEAM_OVERRIDES[m.name.trim().toLowerCase()] : undefined;
+    return o ? { ...m, image: o.image ?? m.image, role: o.role ?? m.role } : m;
+  });
+}
+
+export type Article = { _key?: string; date?: string; title?: string; image?: string; link?: string };
+
+// Curated News & Updates cards. Sanity has no `link` field and no write token
+// here, so these featured external-source articles are defined in code and take
+// precedence over the CMS list. Clicking a card image opens the source link.
+export const FEATURED_NEWS: Article[] = [
+  {
+    date: 'Federal Reserve Bank of Atlanta',
+    title: 'Southeastern Rental Affordability Tracker',
+    image: '/media/news-rental-tracker.jpg',
+    link: 'https://www.atlantafed.org/research-and-data/data/southeastern-rental-affordability-tracker',
+  },
+  {
+    date: 'Federal Reserve Bank of Atlanta',
+    title: 'Commercial Real Estate Market Index',
+    image: '/media/news-cre-index.jpg',
+    link: 'https://www.atlantafed.org/research-and-data/data/commercial-real-estate-market-index',
+  },
+  {
+    date: 'FRED · St. Louis Fed',
+    title: 'U.S. Rental Vacancy Rate',
+    image: '/media/news-rental-vacancy.jpg',
+    link: 'https://fred.stlouisfed.org/series/RRVRUSQ156N',
+  },
+];
 
 export type Brand = {
   name?: string;

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import ProjectCards from '@/components/ProjectCards';
-import { getSiteContent, projectImage, isVideoUrl } from '@/lib/content';
+import { getSiteContent, projectImage, isVideoUrl, FEATURED_NEWS } from '@/lib/content';
+import ExpertiseTabs from '@/components/ExpertiseTabs';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Hero',
@@ -25,9 +26,9 @@ const css = `
     --ink-2:    #2F3238;
     --ink-3:    #61656D;
     --rule:     #C6C3B7;
-    --accent:      #1F3A5C;  /* trustworthy navy */
-    --accent-2:    #6FA0C9;  /* light blue */
-    --accent-deep: #15283B;
+    --accent:      #6E7B43;  /* olive — the guide's only accent */
+    --accent-2:    #8B9A5B;  /* olive light */
+    --accent-deep: #586235;
     --nav-ink:     #34383E;
     --sans:  "Geist", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
     --mono:  "Geist Mono", ui-monospace, Menlo, monospace;
@@ -61,7 +62,7 @@ const css = `
   }
   .hf-nav.navy{
     background:#ffffff;
-    border-bottom:2px solid #B2AD9E;
+    border-bottom:2px solid #C6C3B7;
     color:var(--nav-ink);
   }
   .hf-nav.navy .hf-wordmark{ color:var(--nav-ink); }
@@ -71,6 +72,7 @@ const css = `
   .hf-wordmark{
     font-weight:600; font-size:18px; text-transform:uppercase;
     letter-spacing:0.24em; white-space:nowrap;
+    color:inherit; text-decoration:none; cursor:pointer;
   }
   .hf-links{ display:flex; align-items:center; gap:28px; margin-left:auto; font-size:15px; font-weight:500; }
   .hf-links a{ position:relative; cursor:pointer; color:rgba(255,255,255,.86); text-decoration:none; transition:color .2s; }
@@ -120,17 +122,17 @@ const css = `
     .hf-cue-line::after{ animation:none; transform:translateY(60%); }
   }
 
-  /* Bottom cluster -------------------------------------------- */
+  /* Title cluster — anchored to the top, just under the nav ----- */
   .hf-bottom{
-    position:absolute; left:56px; right:56px; bottom:52px; z-index:2;
-    display:flex; align-items:flex-end; justify-content:space-between; gap:48px;
+    position:absolute; left:56px; right:56px; top:180px; z-index:2;
+    display:flex; align-items:flex-start; justify-content:space-between; gap:48px;
   }
   .hf-bottom .hf-eyebrow{ margin-bottom:18px; }
 
   @media (max-width: 760px){
     .hf-nav{ padding:0 28px; }
     .hf-links{ display:none; }
-    .hf-bottom{ left:28px; right:28px; bottom:36px; flex-direction:column; align-items:flex-start; gap:24px; }
+    .hf-bottom{ left:28px; right:28px; top:104px; flex-direction:column; align-items:flex-start; gap:24px; }
     .hf-h1{ font-size:40px; max-width:18ch; }
     .hf-cue{ display:none; }
   }
@@ -168,8 +170,8 @@ export default async function HomePage() {
     .slice(0, 4);
 
   const hero = content?.home?.hero;
-  const heroBg = projectImage(hero?.backgroundImage) || '/media/hero-aerial.png';
-  const heroIsVideo = isVideoUrl(hero?.backgroundImage);
+  const heroBg = projectImage(hero?.backgroundImage) || '/media/hero.mp4';
+  const heroIsVideo = isVideoUrl(heroBg);
   const heroTitle = hero?.title || 'Housing that Works for Working People';
   const heroSubtitle = hero?.subtitle || 'Attainable housing for the Southeast’s underbuilt markets.';
 
@@ -193,26 +195,11 @@ export default async function HomePage() {
   const projectsHeading = content?.home?.projectsHeading || 'Communities already in the ground.';
 
   const svc = content?.services ?? {};
-  const svcHeadline = svc.headline || 'Rental communities, priced for the people who keep a city running.';
-  const svcNote = svc.note || 'Homes affordable to households earning around 72% of area median income, with every unit under 80%.';
-  const svcAudienceLabel = svc.audienceLabel || 'Who lives here';
-  const svcAudienceFig = parseFig(svc.audienceFigure || '68%');
-  const svcAudienceFigLabel = svc.audienceFigureLabel || 'essential workers';
-  const svcGroups = svc.audienceGroups?.length
-    ? svc.audienceGroups
-    : ['Teachers & school staff', 'Nurses & healthcare workers', 'First responders & public-safety workers', 'Plant & food-production workers', 'Local workers & their families'];
   const svcLocalFig = parseFig(svc.localEconomyFigure || '64%');
   const svcLocalText = svc.localEconomyText || 'of working residents are employed in the same county they live in. Their wages and spending stay in the local economy.';
 
   const newsTitle = content?.news?.title || 'News & updates';
-  const newsArticles = (content?.news?.articles ?? []).filter((a) => a && a.title && String(a.title).trim()).slice(0, 3);
-  const newsList = newsArticles.length
-    ? newsArticles
-    : [
-        { date: 'June 4, 2026', title: 'What “attainable” actually means in 2026' },
-        { date: 'May 14, 2026', title: 'Why we underwrite to working rents, not exit prices' },
-        { date: 'April 9, 2026', title: 'The Southeast’s underbuilt middle, by the numbers' },
-      ];
+  const newsList = FEATURED_NEWS.slice(0, 3);
 
   const cta = content?.home?.cta ?? {};
   const ctaTitle = cta.title || 'Building in your community, or interested in our work?';
@@ -233,7 +220,7 @@ export default async function HomePage() {
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <link rel="stylesheet" href="/v12-styles.css" />
 
-      <div className="v12">
+      <div className="v12" id="top">
         <div className="hf hf--onphoto" data-screen-label="Hero">
           <div className="hf-photo">
             {heroIsVideo ? (
@@ -242,17 +229,19 @@ export default async function HomePage() {
               <img
                 src={heroBg}
                 alt="Aerial view of a Yu Development community, completed buildings beside a site under preparation."
+                decoding="async"
+                fetchPriority="high"
               />
             )}
           </div>
           <div className="hf-scrim s-bottom"></div>
 
           <header className="hf-nav">
-            <span className="hf-wordmark">Yu Development</span>
+            <a className="hf-wordmark" href="#top">Yu Development</a>
             <nav className="hf-links">
               <a href="/team" style={{ fontWeight: 600, fontSize: '14px' }}>Team</a>
-              <a href="#projects" style={{ fontWeight: 600, fontSize: '14px' }}>Projects</a>
-              <a href="#whatwedo" style={{ fontWeight: 600, fontSize: '14px' }}>Services</a>
+              <a href="/projects" style={{ fontWeight: 600, fontSize: '14px' }}>Projects</a>
+              <a href="#expertise" style={{ fontWeight: 600, fontSize: '14px' }}>Services</a>
               <a href="#news" style={{ fontWeight: 600, fontSize: '14px' }}>News</a>
               <a href="/investors" style={{ fontWeight: 600, fontSize: '14px' }}>Investors</a>
               <a href="#contact" style={{ fontWeight: 600, fontSize: '14px' }}>Contact</a>
@@ -270,7 +259,7 @@ export default async function HomePage() {
         {/* ============================ WHY WE EXIST + STATS (editorial) ============================ */}
         <section className="about-band" id="statementTrack" data-screen-label="Why we exist">
           <div className="wrap">
-            <h2 className="about-headline" style={{ fontSize: '44px' }}>{statementHeadline}</h2>
+            <h2 className="about-headline">{statementHeadline}</h2>
 
             <div className="about-rule"></div>
 
@@ -309,68 +298,42 @@ export default async function HomePage() {
           <div className="wrap">
             <div className="sec-head-row">
               <div>
-                <h2 className="sec-h" style={{ fontSize: '33px' }}>{projectsHeading}</h2>
+                <h2 className="sec-h">{projectsHeading}</h2>
               </div>
-              <a className="sec-link" href="/projects" style={{ borderBottom: 'none', textDecoration: 'none', color: '#1A6DD2' }}>View full portfolio &rarr;</a>
             </div>
             <div className="proj-grid">
               {projects.length ? (
                 <ProjectCards projects={projects} />
               ) : (
                 <>
-                  <a className="pcard" href="#">
-                    <div className="pshot"><img src="/media/project-douglas.png" alt="Aerial view of a Yu Development community in Douglas, Georgia." /></div>
+                  <a className="pcard" href="https://www.apartments.com/platform-douglas-douglas-ga/m0s6cwh/" target="_blank" rel="noopener noreferrer">
+                    <div className="pshot"><img loading="lazy" decoding="async" src="/media/project-douglas.png" alt="Aerial view of a Yu Development community in Douglas, Georgia." /></div>
                     <div className="pm"><span className="lcol"><span className="nm">Platform Douglas</span><span className="u">126 units</span></span><span className="loc">Douglas, GA</span></div>
                   </a>
-                  <a className="pcard" href="#">
-                    <div className="pshot"><img src="/media/project-flint-river.png" alt="Aerial view of Platform Flint River in Bainbridge, Georgia." /></div>
+                  <a className="pcard" href="https://www.apartments.com/platform-flint-river-bainbridge-ga/vy9r43f/" target="_blank" rel="noopener noreferrer">
+                    <div className="pshot"><img loading="lazy" decoding="async" src="/media/project-flint-river.png" alt="Aerial view of Platform Flint River in Bainbridge, Georgia." /></div>
                     <div className="pm"><span className="lcol"><span className="nm">Platform Flint River</span><span className="u">192 units</span></span><span className="loc">Bainbridge, GA</span></div>
                   </a>
-                  <a className="pcard" href="#">
-                    <div className="pshot"><img src="/media/project-dothan.png" alt="Aerial view of Platform Dothan in Dothan, Alabama." /></div>
+                  <a className="pcard" href="https://www.apartments.com/platform-dothan-dothan-al/xc8d3rp/" target="_blank" rel="noopener noreferrer">
+                    <div className="pshot"><img loading="lazy" decoding="async" src="/media/project-dothan.png" alt="Aerial view of Platform Dothan in Dothan, Alabama." /></div>
                     <div className="pm"><span className="lcol"><span className="nm">Platform Dothan</span><span className="u">208 units</span></span><span className="loc">Dothan, AL</span></div>
                   </a>
-                  <a className="pcard" href="#">
-                    <div className="pshot"><img src="/media/project-americus.png" alt="Aerial view of Platform Americus in Americus, Georgia." /></div>
+                  <a className="pcard" href="https://www.apartments.com/platform-americus-americus-ga/vmg3fke/" target="_blank" rel="noopener noreferrer">
+                    <div className="pshot"><img loading="lazy" decoding="async" src="/media/project-americus.png" alt="Aerial view of Platform Americus in Americus, Georgia." /></div>
                     <div className="pm"><span className="lcol"><span className="nm">Platform Americus</span><span className="u">80 units</span></span><span className="loc">Americus, GA</span></div>
                   </a>
                 </>
               )}
             </div>
+            <div className="proj-cta">
+              <a className="sec-link" href="/projects" style={{ borderBottom: 'none', textDecoration: 'none', color: '#6E7B43' }}>View full portfolio &rarr;</a>
+            </div>
           </div>
         </section>
 
         {/* ============================ WHO LIVES HERE / BUILD ============================ */}
-        <section className="story paper" id="whatwedo" data-screen-label="Who Lives Here" style={{ paddingTop: 'clamp(36px,4vw,56px)' }}>
-          <div className="wrap">
-            <div className="split2 build-2col">
-              <div className="build-copy">
-                <div>
-                  <h2 className="sec-h" style={{ fontSize: '50px', fontWeight: 500 }}>{svcHeadline}</h2>
-                  <div className="about-rule" style={{ margin: 'clamp(28px,3.5vw,44px) 0 0' }}></div>
-                </div>
-                <p className="build-note" style={{ fontSize: '17px' }}>{svcNote}</p>
-              </div>
-              <div className="fx-d1">
-                <div className="who-label">{svcAudienceLabel}</div>
-                <div className="who-stat">
-                  {svcAudienceFig.count !== null ? (
-                    <span className="who-fig" data-count={svcAudienceFig.count} data-suffix={svcAudienceFig.suffix} data-plain="1">{svcAudienceFig.text}</span>
-                  ) : (
-                    <span className="who-fig">{svcAudienceFig.text}</span>
-                  )}
-                  <span className="who-figlab">{svcAudienceFigLabel}</span>
-                </div>
-                <ul className="who">
-                  {svcGroups.map((g, i) => (
-                    <li key={i}>{g}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="build-shot" style={{ marginTop: 'clamp(40px,5vw,64px)' }}><img src="/media/build-interior.png" alt="Interior of a Yu Development rental home — open living room and kitchen with modern finishes." style={{ height: '576px' }} /></div>
-          </div>
-        </section>
+        {/* ============================ SERVICES (full-page capability tabs) ============================ */}
+        <ExpertiseTabs />
 
         {/* ============================ LOCAL ECONOMY STATEMENT ============================ */}
         <section className="local-stmt" data-screen-label="Local economy">
@@ -399,8 +362,15 @@ export default async function HomePage() {
               return (
                 <div className={`ncard fx${i === 1 ? ' fx-d1' : i === 2 ? ' fx-d2' : ''}`} key={('_key' in a && a._key) || i}>
                   {img ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                    a.link ? (
+                      <a href={a.link} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img loading="lazy" decoding="async" src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                      </a>
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img loading="lazy" decoding="async" src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                    )
                   ) : (
                     <image-slot id={`v12-news${i + 1}`} shape="rect" placeholder="Article image"></image-slot>
                   )}
@@ -417,7 +387,7 @@ export default async function HomePage() {
           <div className="wrap">
             <h2>{ctaTitle}</h2>
             <div className="cta">
-              <a className="sec-link" href={ctaHref} style={{ borderBottom: 'none', textDecoration: 'none', fontSize: 'clamp(22px,2.4vw,32px)', color: '#1A6DD2' }}>{ctaLabel} &rarr;</a>
+              <a className="sec-link" href={ctaHref} style={{ borderBottom: 'none', textDecoration: 'none', fontSize: 'clamp(22px,2.4vw,32px)', color: '#6E7B43' }}>{ctaLabel} &rarr;</a>
             </div>
           </div>
         </section>
@@ -433,7 +403,7 @@ export default async function HomePage() {
                 <div className="site-links">
                   <a href="/team">Team</a>
                   <a href="#projects">Projects</a>
-                  <a href="#whatwedo">Services</a>
+                  <a href="#expertise">Services</a>
                   <a href="#news">News</a>
                   <a href="/investors">Investors</a>
                   <a href="#contact">Contact</a>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import { getSiteContent, projectImage, type Member } from '@/lib/content';
+import { getSiteContent, projectImage, withTeamPhotos, type Member } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Team',
@@ -20,7 +20,7 @@ const TEAM_FALLBACK: Member[] = [
 const css = `
   :root{
     --paper:#EFEDE6; --paper-2:#E5E2D8; --ink:#14161A; --ink-2:#2F3238; --ink-3:#61656D;
-    --rule:#C6C3B7; --accent:#1F3A5C; --accent-2:#6FA0C9; --accent-deep:#15283B;
+    --rule:#C6C3B7; --accent:#6E7B43; --accent-2:#8B9A5B; --accent-deep:#586235;
     --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
     --mono:"Geist Mono",ui-monospace,Menlo,monospace;
   }
@@ -81,7 +81,7 @@ export default async function TeamPage() {
   const people = content?.people;
   const heading = people?.title || 'Our Team';
   const members = (people?.members ?? []).filter((m) => m && m.name && String(m.name).trim());
-  const list = members.length ? members : TEAM_FALLBACK;
+  const list = withTeamPhotos(members.length ? members : TEAM_FALLBACK);
 
   return (
     <>
@@ -101,7 +101,7 @@ export default async function TeamPage() {
                   <div className="photo" aria-hidden="true">
                     {img ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={img} alt={m.name || ''} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                      <img loading="lazy" decoding="async" src={img} alt={m.name || ''} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                     ) : null}
                   </div>
                   <p className="nm">{m.name}</p>

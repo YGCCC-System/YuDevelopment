@@ -1,0 +1,11 @@
+/* Global styles.
+ *
+ * <image-slot> placeholders are display-only on the public site (they only
+ * become interactive inside the authoring runtime, which isn't present here).
+ * The component registers a non-passive `wheel` listener on its host, which
+ * forces main-thread wheel handling and can stall page scrolling while the
+ * cursor is over an empty placeholder. Making the placeholders transparent to
+ * pointer/scroll input lets the wheel pass straight through to the page. */
+image-slot {
+  pointer-events: none;
+}

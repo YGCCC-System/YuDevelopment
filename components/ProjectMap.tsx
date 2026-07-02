@@ -50,7 +50,7 @@ export default function ProjectMap() {
         const popup = new mapboxgl.Popup({ offset: 18, closeButton: false }).setHTML(
           `<strong>${s.name}</strong><br/>${s.sub}`,
         );
-        new mapboxgl.Marker({ color: '#1F3A5C' })
+        new mapboxgl.Marker({ color: '#6E7B43' })
           .setLngLat([s.lng, s.lat])
           .setPopup(popup)
           .addTo(map);

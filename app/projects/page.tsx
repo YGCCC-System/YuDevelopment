@@ -1,18 +1,27 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import ProjectMap from '@/components/ProjectMap';
 import ProjectCards from '@/components/ProjectCards';
-import { getProjects } from '@/lib/content';
+import { getProjects, getSiteContent } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Projects',
 };
 
+// Splits "$90M" into { prefix:"$", count:"90", suffix:"M" } so the shared
+// count-up engine in v12-scroll.js can animate it (mirrors the homepage).
+function parseFig(value?: string): { count: string | null; prefix: string; suffix: string; text: string } {
+  const raw = String(value ?? '').trim();
+  const m = raw.match(/^([^\d]*)([\d.,]+)(.*)$/);
+  if (!m) return { count: null, prefix: '', suffix: '', text: raw };
+  return { count: m[2].replace(/,/g, ''), prefix: m[1], suffix: m[3], text: raw };
+}
+
 const css = `
   :root{
     --paper:#EFEDE6; --paper-2:#E5E2D8; --ink:#14161A; --ink-2:#2F3238; --ink-3:#61656D;
-    --rule:#C6C3B7; --accent:#1F3A5C; --accent-2:#6FA0C9; --accent-deep:#15283B;
+    --rule:#C6C3B7; --accent:#6E7B43; --accent-2:#8B9A5B; --accent-deep:#586235;
     --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
     --mono:"Geist Mono",ui-monospace,Menlo,monospace;
   }
@@ -33,11 +42,25 @@ const css = `
   @media (max-width:760px){ .nav{ padding:0 28px; } .nav .links{ display:none; } }
 
   /* section */
-  .projects{ padding:clamp(96px,12vw,150px) 0 clamp(120px,15vw,190px); }
+  .projects{ padding:clamp(48px,6vw,84px) 0 clamp(120px,15vw,190px); }
   .wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
+  .back-link{ display:inline-flex; align-items:center; gap:8px; margin-bottom:clamp(16px,1.8vw,22px);
+    font-family:var(--sans); font-weight:600; font-size:14px; color:#34383E; text-decoration:none; transition:color .2s; }
+  .back-link:hover{ color:#8A8E96; }
+  .back-link .arw{ font-size:17px; line-height:1; }
   .proj-head{ margin:0; max-width:24ch; font-family:var(--sans); font-weight:600;
-    font-size:clamp(22px,2.4vw,32px); line-height:1.12; letter-spacing:-0.022em; color:var(--ink); text-wrap:balance; }
+    font-size:clamp(34px,4vw,56px); line-height:1.08; letter-spacing:-0.022em; color:var(--ink); text-wrap:balance; }
   .rule{ height:1px; background:var(--rule); margin:clamp(18px,2.2vw,28px) 0 clamp(24px,3vw,38px); }
+
+  /* stats band — mirrors the homepage about-stats (count-up via v12-scroll.js) */
+  .about-stats{ padding:clamp(20px,3vw,40px) 0; }
+  .about-stats .statgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(24px,4vw,56px); }
+  .about-stats .stat{ text-align:left; }
+  .about-stats .fig{ font-family:var(--sans); font-weight:600; font-size:clamp(40px,4.4vw,62px);
+    line-height:1; letter-spacing:-0.03em; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .about-stats .lab{ margin-top:16px; font-family:var(--sans); font-size:clamp(16px,1.2vw,18px);
+    font-weight:400; letter-spacing:0; text-transform:none; color:var(--ink-3); }
+  @media (max-width:760px){ .about-stats .statgrid{ grid-template-columns:repeat(2,1fr); gap:32px; } }
 
   /* map placeholder */
   .map{ width:100%; aspect-ratio:21/8; background:var(--paper-2); overflow:hidden; }
@@ -79,7 +102,15 @@ const css = `
 `;
 
 export default async function ProjectsPage() {
-  const projects = await getProjects();
+  const [projects, content] = await Promise.all([getProjects(), getSiteContent()]);
+  const stats = content?.home?.statement?.stats?.length
+    ? content.home.statement.stats
+    : [
+        { label: 'Communities delivered', value: '9' },
+        { label: 'Homes delivered', value: '948' },
+        { label: 'Invested', value: '$90M' },
+        { label: 'Since', value: '2018' },
+      ];
 
   return (
     <>
@@ -89,10 +120,27 @@ export default async function ProjectsPage() {
 
       <section className="projects">
         <div className="wrap">
+          <a className="back-link" href="/"><span className="arw" aria-hidden="true">&larr;</span> Back</a>
           <h2 className="proj-head">Our Projects</h2>
           <div className="rule"></div>
 
-          <div className="map"><ProjectMap /></div>
+          <div className="about-stats">
+            <div className="statgrid">
+              {stats.map((s, i) => {
+                const f = parseFig(s.value);
+                return (
+                  <div className="stat" key={s._key || i}>
+                    {f.count !== null ? (
+                      <div className="fig" data-count={f.count} data-prefix={f.prefix} data-suffix={f.suffix} data-plain="1">{f.text}</div>
+                    ) : (
+                      <div className="fig">{f.text}</div>
+                    )}
+                    <div className="lab">{s.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           <div className="rule"></div>
 
@@ -101,20 +149,20 @@ export default async function ProjectsPage() {
               <ProjectCards projects={projects} />
             ) : (
               <>
-                <a className="pcard" href="#">
-                  <div className="pshot"><img src="/media/project-douglas.png" alt="Aerial view of a Yu Development community in Douglas, Georgia." /></div>
+                <a className="pcard" href="https://www.apartments.com/platform-douglas-douglas-ga/m0s6cwh/" target="_blank" rel="noopener noreferrer">
+                  <div className="pshot"><img loading="lazy" decoding="async" src="/media/project-douglas.png" alt="Aerial view of a Yu Development community in Douglas, Georgia." /></div>
                   <div className="pm"><span className="lcol"><span className="nm">Platform Douglas</span><span className="u">126 units</span></span><span className="loc">Douglas, GA</span></div>
                 </a>
-                <a className="pcard" href="#">
-                  <div className="pshot"><img src="/media/project-flint-river.png" alt="Aerial view of Platform Flint River in Bainbridge, Georgia." /></div>
+                <a className="pcard" href="https://www.apartments.com/platform-flint-river-bainbridge-ga/vy9r43f/" target="_blank" rel="noopener noreferrer">
+                  <div className="pshot"><img loading="lazy" decoding="async" src="/media/project-flint-river.png" alt="Aerial view of Platform Flint River in Bainbridge, Georgia." /></div>
                   <div className="pm"><span className="lcol"><span className="nm">Platform Flint River</span><span className="u">192 units</span></span><span className="loc">Bainbridge, GA</span></div>
                 </a>
-                <a className="pcard" href="#">
-                  <div className="pshot"><img src="/media/project-dothan.png" alt="Aerial view of Platform Dothan in Dothan, Alabama." /></div>
+                <a className="pcard" href="https://www.apartments.com/platform-dothan-dothan-al/xc8d3rp/" target="_blank" rel="noopener noreferrer">
+                  <div className="pshot"><img loading="lazy" decoding="async" src="/media/project-dothan.png" alt="Aerial view of Platform Dothan in Dothan, Alabama." /></div>
                   <div className="pm"><span className="lcol"><span className="nm">Platform Dothan</span><span className="u">208 units</span></span><span className="loc">Dothan, AL</span></div>
                 </a>
-                <a className="pcard" href="#">
-                  <div className="pshot"><img src="/media/project-americus.png" alt="Aerial view of Platform Americus in Americus, Georgia." /></div>
+                <a className="pcard" href="https://www.apartments.com/platform-americus-americus-ga/vmg3fke/" target="_blank" rel="noopener noreferrer">
+                  <div className="pshot"><img loading="lazy" decoding="async" src="/media/project-americus.png" alt="Aerial view of Platform Americus in Americus, Georgia." /></div>
                   <div className="pm"><span className="lcol"><span className="nm">Platform Americus</span><span className="u">80 units</span></span><span className="loc">Americus, GA</span></div>
                 </a>
               </>
@@ -124,6 +172,7 @@ export default async function ProjectsPage() {
       </section>
 
       <SiteFooter />
+      <Script src="/v12-scroll.js" strategy="afterInteractive" />
     </>
   );
 }
