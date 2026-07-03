@@ -9,32 +9,32 @@ type Service = { name: string; desc: string; image: string };
 const SERVICES: Service[] = [
   {
     name: 'Site Acquisition & Entitlements',
-    desc: 'We prioritize sites where housing demand is real and the approval path is clear. Our team works directly with landowners, brokers, and local jurisdictions to confirm feasibility early and keep projects moving without surprises.',
+    desc: 'We help identify and evaluate development sites with real potential. Our team reviews zoning, land use, density, utilities, access, market demand, and approval risks before major capital is committed. We also assist with rezoning, variances, special use permits, planning commission coordination, municipal approvals, and government agency communication.',
     image: '/media/svc-site-acquisition.jpg',
   },
   {
     name: 'Design & Drafting',
-    desc: 'Good design is not just looks, it is buildability and long-term performance. We keep plans efficient, code-ready, and aligned with construction and operations so the process stays smooth from permitting through delivery and beyond.',
+    desc: 'We coordinate the full design process needed to move a project from concept to permit-ready plans. This includes architectural design, civil engineering, structural engineering, MEP coordination, surveying, geotechnical coordination, and construction document management. Our goal is to keep the design team aligned so plans are complete, accurate, and ready for review.',
     image: '/media/svc-design-drafting.jpg',
   },
   {
     name: 'Project Financing',
-    desc: 'We structure deals based on real project performance that make sense for lenders, investors, and the project. Clear budgets. Disciplined capital stacks. Just real housing built to perform long term.',
+    desc: 'We help prepare projects for investor, lender, or capital partner review by organizing the key information needed to evaluate the deal. This includes feasibility findings, development strategy, preliminary budgets, project scope, timeline assumptions, entitlement status, and construction-ready plan requirements. The goal is to make the project clearer, more credible, and easier to finance.',
     image: '/media/svc-project-financing.jpg',
   },
   {
     name: 'Construction Execution',
-    desc: 'We are our own licensed general contractor. That means one team accountable for cost, schedule, and quality. Fewer handoffs, tighter oversight, and consistent standards from the first trade on-site to certificate of occupancy.',
+    desc: 'We support the transition from planning into construction by helping coordinate permit-ready drawing sets, consultant revisions, value engineering, project timelines, and execution planning. Our team helps make sure the project is properly organized before construction begins, reducing delays, confusion, and costly changes.',
     image: '/media/svc-construction.jpg',
   },
   {
     name: 'Operations',
-    desc: 'We lease and manage what we build. That keeps resident experience, maintenance standards, and operating costs disciplined, and it reinforces long-term accountability after the project is delivered.',
+    desc: 'We serve as an outsourced development management team for landowners, investors, and developers. Our work includes project management, consultant coordination, budget tracking, timeline management, design oversight, vendor communication, and development execution. We help keep the project moving while making sure the right people are accountable at each stage.',
     image: '/media/svc-operations.jpg',
   },
   {
     name: 'Asset Management',
-    desc: 'We track performance after delivery and make long-term decisions based on real operations, not short-term optics. The goal is durable communities that stay clean, stable, and well-run for years.',
+    desc: 'We provide strategic support for projects beyond the initial planning stage. This includes deal reviews, feasibility guidance, project strategy, entitlement planning, budget review, troubleshooting, and long-term development planning. We help owners and investors understand what is working, what needs attention, and how to protect the value of the project over time.',
     image: '/media/svc-asset-management.jpg',
   },
 ];

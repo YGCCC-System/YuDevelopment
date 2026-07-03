@@ -42,7 +42,7 @@ const css = `
   @media (max-width:760px){ .nav{ padding:0 28px; } .nav .links{ display:none; } }
 
   /* section */
-  .projects{ padding:clamp(48px,6vw,84px) 0 clamp(120px,15vw,190px); }
+  .projects{ padding:clamp(32px,4vw,60px) 0 clamp(120px,15vw,190px); }
   .wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
   .back-link{ display:inline-flex; align-items:center; gap:8px; margin-bottom:clamp(16px,1.8vw,22px);
     font-family:var(--sans); font-weight:600; font-size:14px; color:#34383E; text-decoration:none; transition:color .2s; }
@@ -73,7 +73,8 @@ const css = `
   .pcard .pshot img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
   .pcard:hover .pshot img{ transform:scale(1.04); }
   .pcard .pm{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-top:12px; }
-  .pcard .nm{ font-family:var(--sans); font-weight:600; font-size:18px; letter-spacing:-0.01em; color:var(--ink); }
+  .pcard .nm{ font-family:var(--sans); font-weight:600; font-size:18px; letter-spacing:-0.01em; color:var(--ink); transition:color .2s; }
+  .pcard:hover .nm{ color:var(--accent); }
   .pcard .lcol{ display:flex; flex-direction:column; }
   .pcard .lcol .u{ margin-top:6px; font-family:var(--sans); font-weight:400; font-size:14px; line-height:1.2; letter-spacing:0; color:var(--ink-3); font-variant-numeric:tabular-nums; }
   .pcard .loc{ display:inline-flex; align-items:center; gap:5px; font-family:var(--sans); font-size:14px; color:var(--ink-3); }
@@ -120,7 +121,6 @@ export default async function ProjectsPage() {
 
       <section className="projects">
         <div className="wrap">
-          <a className="back-link" href="/"><span className="arw" aria-hidden="true">&larr;</span> Back</a>
           <h2 className="proj-head">Our Projects</h2>
           <div className="rule"></div>
 

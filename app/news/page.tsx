@@ -31,7 +31,7 @@ const css = `
   @media (max-width:760px){ .nav{ padding:0 28px; } .nav .links{ display:none; } }
 
   /* section */
-  .news{ padding:clamp(96px,12vw,150px) 0 clamp(120px,15vw,190px); }
+  .news{ padding:clamp(48px,6vw,84px) 0 clamp(120px,15vw,190px); }
   .wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
   .news-head{ margin:0; max-width:24ch; font-family:var(--sans); font-weight:600;
     font-size:clamp(22px,2.4vw,32px); line-height:1.12; letter-spacing:-0.022em; color:var(--ink); text-wrap:balance; }
@@ -73,8 +73,24 @@ export default async function NewsPage() {
   const content = await getSiteContent();
   const news = content?.news;
   const heading = news?.title || 'News & Updates';
-  const originals = (news?.articles ?? []).filter((a) => a && a.title && String(a.title).trim());
-  // Featured external-source articles first, then the full original article list.
+  // Titles to hide from the CMS article list.
+  const HIDDEN = new Set(['Building where the jobs are growing fastest']);
+  // Attach a source website (screenshot + link) to each remaining CMS article,
+  // matched by a keyword in the title. Clicking the card image opens the source.
+  const SOURCES: { match: string; title: string; source: string; image: string; link: string }[] = [
+    { match: 'attainable', title: 'What HUD’s Fair Market Rents tell us about attainable pricing', source: 'HUD · Office of Policy Development & Research', image: '/media/news-rent.jpg', link: 'https://www.huduser.gov/portal/datasets/fmr.html' },
+    { match: 'working rents', title: 'Reading local wages: why we underwrite to working incomes', source: 'BLS · U.S. Bureau of Labor Statistics', image: '/media/news-wages.jpg', link: 'https://www.bls.gov/oes/' },
+    { match: 'underbuilt middle', title: 'The Southeast’s underbuilt middle, by the Census numbers', source: 'U.S. Census Bureau', image: '/media/news-housing.jpg', link: 'https://data.census.gov/' },
+    { match: 'decade-long', title: 'Where the region is growing, per BEA’s regional accounts', source: 'BEA · Bureau of Economic Analysis', image: '/media/news-gdp.jpg', link: 'https://www.bea.gov/data/economic-accounts/regional' },
+    { match: 'vertically integrated', title: 'Tracking rent and supply trends with CoStar market data', source: 'CoStar Group', image: '/media/news-cre.jpg', link: 'https://www.costar.com/' },
+  ];
+  const originals = (news?.articles ?? [])
+    .filter((a) => a && a.title && String(a.title).trim() && !HIDDEN.has(a.title.trim()))
+    .map((a) => {
+      const src = SOURCES.find((s) => (a.title || '').toLowerCase().includes(s.match));
+      return src ? { ...a, title: src.title, date: src.source, image: src.image, link: src.link } : a;
+    });
+  // Featured external-source articles first, then the remaining original articles.
   const list = [...FEATURED_NEWS, ...originals];
 
   return (

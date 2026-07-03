@@ -3,6 +3,7 @@ import Script from 'next/script';
 import ProjectCards from '@/components/ProjectCards';
 import { getSiteContent, projectImage, isVideoUrl, FEATURED_NEWS } from '@/lib/content';
 import ExpertiseTabs from '@/components/ExpertiseTabs';
+import SocialLinks from '@/components/SocialLinks';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Hero',
@@ -51,12 +52,12 @@ const css = `
   .hf-photo img,.hf-photo video{ width:100%; height:100%; object-fit:cover; display:block; }
 
   .hf-scrim{ position:absolute; inset:0; pointer-events:none; z-index:1; }
-  .s-bottom{ background:linear-gradient(180deg, rgba(8,12,18,.42) 0%, rgba(8,12,18,0) 24%, rgba(8,12,18,0) 46%, rgba(8,12,18,.66) 100%); }
+  .s-bottom{ background:linear-gradient(180deg, rgba(247,248,250,.60) 0%, rgba(247,248,250,.26) 16%, rgba(8,12,18,0) 40%, rgba(8,12,18,.5) 100%); }
 
   /* Nav ------------------------------------------------------- */
   .hf-nav{
     position:fixed; top:0; left:0; right:0; z-index:40;
-    display:flex; align-items:center; height:92px; padding:0 56px; color:#fff;
+    display:flex; align-items:center; height:92px; padding:0 56px; color:#0B1320;
     transition:background .3s ease, border-color .3s ease, color .3s ease;
     border-bottom:1px solid transparent;
   }
@@ -75,9 +76,9 @@ const css = `
     color:inherit; text-decoration:none; cursor:pointer;
   }
   .hf-links{ display:flex; align-items:center; gap:28px; margin-left:auto; font-size:15px; font-weight:500; }
-  .hf-links a{ position:relative; cursor:pointer; color:rgba(255,255,255,.86); text-decoration:none; transition:color .2s; }
-  .hf-links a:hover{ color:rgba(255,255,255,.55); }
-  .hf-links a.active{ color:#fff; }
+  .hf-links a{ position:relative; cursor:pointer; color:#0B1320; text-decoration:none; transition:color .2s; }
+  .hf-links a:hover{ color:rgba(11,19,32,.6); }
+  .hf-links a.active{ color:#0B1320; }
   /* Type ------------------------------------------------------ */
   .hf-eyebrow{
     font-family:var(--mono); font-size:12px; letter-spacing:0.16em;
@@ -85,12 +86,14 @@ const css = `
   }
   .hf-h1{
     font-weight:500; line-height:1.04; letter-spacing:-0.024em;
-    text-wrap:balance; margin:0; color:#fff;
+    text-wrap:balance; margin:0; color:#F7F8FA;
     font-size:clamp(40px,5vw,72px); max-width:18ch;
+    text-shadow:0 2px 16px rgba(8,12,18,.55), 0 1px 3px rgba(8,12,18,.5);
   }
   .hf-sub{
-    margin:10px 0 0; color:rgba(255,255,255,.9);
+    margin:10px 0 0; color:#F7F8FA;
     font-family:var(--sans); font-weight:400; font-size:clamp(18px,1.8vw,24px); line-height:1.45; letter-spacing:-0.005em;
+    text-shadow:0 2px 12px rgba(8,12,18,.55);
   }
 
   /* Scroll cue ------------------------------------------------ */
@@ -204,7 +207,7 @@ export default async function HomePage() {
   const cta = content?.home?.cta ?? {};
   const ctaTitle = cta.title || 'Building in your community, or interested in our work?';
   const ctaLabel = cta.linkLabel || 'Get in touch';
-  const ctaHref = cta.linkHref || 'mailto:hello@yudevelopment.com';
+  const ctaHref = '/contact';
 
   const brand = content?.brand ?? {};
   const brandName = brand.name || 'Yu Development';
@@ -242,9 +245,9 @@ export default async function HomePage() {
               <a href="/team" style={{ fontWeight: 600, fontSize: '14px' }}>Team</a>
               <a href="/projects" style={{ fontWeight: 600, fontSize: '14px' }}>Projects</a>
               <a href="#expertise" style={{ fontWeight: 600, fontSize: '14px' }}>Services</a>
-              <a href="#news" style={{ fontWeight: 600, fontSize: '14px' }}>News</a>
+              <a href="/news" style={{ fontWeight: 600, fontSize: '14px' }}>News</a>
               <a href="/investors" style={{ fontWeight: 600, fontSize: '14px' }}>Investors</a>
-              <a href="#contact" style={{ fontWeight: 600, fontSize: '14px' }}>Contact</a>
+              <a href="/contact" style={{ fontWeight: 600, fontSize: '14px' }}>Contact</a>
             </nav>
           </header>
 
@@ -380,6 +383,9 @@ export default async function HomePage() {
               );
             })}
           </div>
+          <div className="wrap" style={{ textAlign: 'center', marginTop: 'clamp(28px,3.5vw,44px)' }}>
+            <a href="/news" className="sec-link" style={{ textDecoration: 'none', borderBottom: 'none', color: '#6E7B43', fontWeight: 600 }}>See more →</a>
+          </div>
         </section>
 
         {/* ============================ 9 · CONTACT ============================ */}
@@ -400,22 +406,20 @@ export default async function HomePage() {
                 <p className="blurb">{brandTagline}</p>
               </div>
               <div className="col col-site">
-                <div className="site-links">
+                <div className="site-links" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <a href="/team">Team</a>
-                  <a href="#projects">Projects</a>
+                  <a href="/projects">Projects</a>
                   <a href="#expertise">Services</a>
-                  <a href="#news">News</a>
+                  <a href="/news">News</a>
                   <a href="/investors">Investors</a>
-                  <a href="#contact">Contact</a>
+                  <a href="/contact">Contact</a>
                 </div>
-              </div>
-              <div className="col col-careers">
-                <a href="#" className="foot-careers" style={{ fontSize: '18px', fontWeight: 700 }}>Careers&nbsp;&nearr;</a>
               </div>
               <div className="col col-office">
                 <p>{brandOffice}</p>
                 <p><a href={`mailto:${brandEmail}`}>{brandEmail}</a></p>
                 <p><a href={brandTel}>{brandPhone}</a></p>
+                <SocialLinks />
               </div>
             </div>
 
