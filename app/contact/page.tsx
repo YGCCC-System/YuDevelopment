@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const css = `
   :root{
     --paper:#EFEDE6; --paper-2:#E5E2D8; --ink:#14161A; --ink-2:#2F3238; --ink-3:#61656D;
-    --rule:#C6C3B7; --accent:#1F3A5C; --accent-2:#6FA0C9; --accent-deep:#0E2148; --link:#1A6DD2;
+    --rule:#C6C3B7; --accent:#6E7B43; --accent-2:#8B9A5B; --accent-deep:#586235; --link:#6E7B43;
     --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
     --mono:"Geist Mono",ui-monospace,Menlo,monospace;
   }

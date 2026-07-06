@@ -12,16 +12,17 @@
    ============================================================ */
 .about-band{
   background:#ffffff;
-  padding:clamp(120px,14vw,184px) 0 clamp(40px,5vw,64px);
+  padding:clamp(64px,8vw,110px) 0 clamp(40px,5vw,64px);
 }
 .about-band .about-rule:last-of-type{ margin-bottom:0; }
 .about-band .eyebrow{ margin-bottom:clamp(26px, 3vw, 38px); }
 .about-headline{
-  margin:0; max-width:24ch;
+  margin:0; max-width:none;
   font-family:var(--sans); font-weight:600;
-  font-size:clamp(28px, 3.2vw, 46px); line-height:1.12;
-  letter-spacing:-0.022em; color:var(--ink); text-wrap:balance;
+  font-size:clamp(28px, 3.2vw, 40px); line-height:1.12;
+  letter-spacing:-0.022em; color:var(--ink); white-space:nowrap;
 }
+@media (max-width:900px){ .about-headline{ white-space:normal; font-size:clamp(26px,5.2vw,34px); } }
 .about-headline .accent{ color:var(--accent); }
 
 .about-rule{
@@ -74,7 +75,7 @@
 .pill.ghost{ background:transparent; color:var(--ink); border:1px solid var(--rule); }
 .pill.ghost:hover{ background:rgba(20,22,26,.05); border-color:var(--ink-3); }
 .pill.lite{ background:#fff; color:var(--accent); }
-.pill.lite:hover{ background:#eaf1f8; }
+.pill.lite:hover{ background:#eef1e6; }
 
 .eyebrow{
   font-family:var(--mono); font-size:12px; letter-spacing:0.22em; text-transform:uppercase;
@@ -235,18 +236,20 @@
 /* Selected projects — aligned to the standard content wrap */
 #projects .wrap{ max-width:1280px; padding:0 clamp(28px,5vw,72px); }
 #projects .sec-head-row{ max-width:none; margin:0; padding:0; }
-.proj-grid{ margin-top:clamp(40px,5vw,60px); display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(24px,2.6vw,36px); }
-.proj-grid .pcard:first-child{ grid-column:1 / -1; }
-.proj-grid .pcard:first-child .pshot{ aspect-ratio:21/9; }
+.proj-grid{ margin-top:clamp(40px,5vw,60px); display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(28px,3vw,44px) clamp(24px,2.6vw,36px); }
+.proj-cta{ margin-top:clamp(32px,3.4vw,48px); text-align:center; }
+/* First card matches the rest — normal grid cell, 3:2 image (was a full-width 21:9 feature tile). */
 #projects{ padding-top:0; padding-bottom:clamp(36px,4vw,56px); }
-#projects .sec-h{ font-size:clamp(22px,2.4vw,34px); }
+#projects .sec-h{ font-size:clamp(28px,3.2vw,40px); line-height:1.12; letter-spacing:-0.022em; max-width:none; white-space:nowrap; }
+@media (max-width:900px){ #projects .sec-h{ white-space:normal; font-size:clamp(26px,5.2vw,34px); } }
 .pcard{ text-decoration:none; display:block; }
 .pcard image-slot{ display:block; width:100%; height:auto; aspect-ratio:3/2; }
 .pcard .pshot{ width:100%; aspect-ratio:3/2; overflow:hidden; }
 .pcard .pshot img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
 .pcard:hover .pshot img{ transform:scale(1.04); }
 .pcard .pm{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-top:12px; }
-.pcard .nm{ font-family:var(--sans); font-weight:600; font-size:18px; letter-spacing:-0.01em; color:var(--ink); }
+.pcard .nm{ font-family:var(--sans); font-weight:600; font-size:18px; letter-spacing:-0.01em; color:var(--ink); transition:color .2s; }
+.pcard:hover .nm{ color:var(--accent); }
 .pcard .lcol{ display:flex; flex-direction:column; }
 .pcard .lcol .u{ margin-top:6px; font-family:var(--sans); font-weight:400; font-size:14px; line-height:1.2; letter-spacing:0; color:var(--ink-3); font-variant-numeric:tabular-nums; }
 .pcard .txt .loc{ display:flex; align-items:center; gap:6px; margin-top:3px; }
@@ -254,7 +257,7 @@
 .pcard .loc .pin{ width:11px; height:11px; flex:none; color:var(--ink-3); margin-bottom:1px; }
 .pcard .credit{ margin-top:12px; font-family:var(--sans); font-size:15px; color:var(--ink-3); }
 .pcard .credit b{ color:var(--ink-2); font-weight:500; }
-@media (max-width:880px){ .proj-grid{ grid-template-columns:1fr; } .proj-grid .pcard:first-child{ grid-column:auto; } }
+@media (max-width:640px){ .proj-grid{ grid-template-columns:1fr; } }
 .pcard .pshot image-slot{ display:block; width:100%; height:100%; }
 @media (max-width:760px){ .proj-grid{ padding:0 28px; } }
 
@@ -286,7 +289,7 @@
 /* ============================================================
    7 · INSIGHTS — horizontal carousel
    ============================================================ */
-.insights{ background:var(--paper); padding:clamp(120px,14vw,184px) 0; }
+.insights{ background:var(--paper); padding:clamp(56px,7vw,96px) 0; }
 .insights .head{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px);
   display:grid; grid-template-columns:1fr auto; gap:30px; align-items:end; }
 .insights h2{ margin:0; font-family:var(--sans); font-weight:600; font-size:clamp(28px,3.4vw,48px);
@@ -361,7 +364,7 @@
 /* ============================================================
    LOCAL ECONOMY STATEMENT — navy band
    ============================================================ */
-.local-stmt{ background:#0E2148; color:#fff; padding:clamp(120px,14vw,184px) 0; }
+.local-stmt{ background:#586235; color:#fff; padding:clamp(120px,14vw,184px) 0; }
 .local-stmt .local-eyebrow{ margin-bottom:clamp(36px,4.5vw,60px); }
 .local-stmt .eyebrow{ color:var(--accent-2); }
 .local-stmt .eyebrow::before{ background:var(--accent-2); }

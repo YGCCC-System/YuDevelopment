@@ -1,6 +1,7 @@
 // Dark footer shared by the Projects / Team / News / Contact pages
 // (ported from the v12 homepage footer). Brand details come from the CMS.
 import { getSiteContent } from '@/lib/content';
+import SocialLinks from '@/components/SocialLinks';
 
 export default async function SiteFooter() {
   const content = await getSiteContent();
@@ -22,21 +23,20 @@ export default async function SiteFooter() {
             <p className="blurb">{tagline}</p>
           </div>
           <div className="col col-site">
-            <div className="site-links">
+            <div className="site-links" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <a href="/team">Team</a>
-              <a href="/#projects">Projects</a>
-              <a href="/#news">News</a>
+              <a href="/projects">Projects</a>
+              <a href="/#expertise">Services</a>
+              <a href="/news">News</a>
               <a href="/investors">Investors</a>
-              <a href="/#contact">Contact</a>
+              <a href="/contact">Contact</a>
             </div>
-          </div>
-          <div className="col col-careers">
-            <a href="#" className="foot-careers" style={{ fontSize: '18px', fontWeight: 700 }}>Careers&nbsp;&nearr;</a>
           </div>
           <div className="col col-office">
             <p>{office}</p>
             <p><a href={`mailto:${email}`}>{email}</a></p>
             <p><a href={telHref}>{phone}</a></p>
+            <SocialLinks />
           </div>
         </div>
 

@@ -9,10 +9,10 @@ export default function SiteNav({ active }: { active?: Section }) {
       <a className="wordmark" href="/">Yu Development</a>
       <nav className="links">
         <a href="/team" className={cls('team')}>Team</a>
-        <a href="/#projects">Projects</a>
-        <a href="/#news">News</a>
+        <a href="/projects" className={cls('projects')}>Projects</a>
+        <a href="/news" className={cls('news')}>News</a>
         <a href="/investors" className={cls('investors')}>Investors</a>
-        <a href="/#contact">Contact</a>
+        <a href="/contact" className={cls('contact')}>Contact</a>
       </nav>
     </header>
   );

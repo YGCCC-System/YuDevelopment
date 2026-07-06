@@ -1,25 +1,16 @@
 import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import { getSiteContent, projectImage, type Article } from '@/lib/content';
+import { getSiteContent, projectImage, FEATURED_NEWS } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: 'Yu Development — News',
 };
 
-const NEWS_FALLBACK: Article[] = [
-  { date: 'June 4, 2026', title: 'What “attainable” actually means in 2026' },
-  { date: 'May 14, 2026', title: 'Why we underwrite to working rents, not exit prices' },
-  { date: 'April 9, 2026', title: 'The Southeast’s underbuilt middle, by the numbers' },
-  { date: 'March 18, 2026', title: 'What a decade-long hold changes about design' },
-  { date: 'February 6, 2026', title: 'Vertically integrated, and why it matters here' },
-  { date: 'January 22, 2026', title: 'Building where the jobs are growing fastest' },
-];
-
 const css = `
   :root{
     --paper:#EFEDE6; --paper-2:#E5E2D8; --ink:#14161A; --ink-2:#2F3238; --ink-3:#61656D;
-    --rule:#C6C3B7; --accent:#1F3A5C; --accent-2:#6FA0C9; --accent-deep:#15283B;
+    --rule:#C6C3B7; --accent:#6E7B43; --accent-2:#8B9A5B; --accent-deep:#586235;
     --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
     --mono:"Geist Mono",ui-monospace,Menlo,monospace;
   }
@@ -40,7 +31,7 @@ const css = `
   @media (max-width:760px){ .nav{ padding:0 28px; } .nav .links{ display:none; } }
 
   /* section */
-  .news{ padding:clamp(96px,12vw,150px) 0 clamp(120px,15vw,190px); }
+  .news{ padding:clamp(48px,6vw,84px) 0 clamp(120px,15vw,190px); }
   .wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
   .news-head{ margin:0; max-width:24ch; font-family:var(--sans); font-weight:600;
     font-size:clamp(22px,2.4vw,32px); line-height:1.12; letter-spacing:-0.022em; color:var(--ink); text-wrap:balance; }
@@ -82,8 +73,25 @@ export default async function NewsPage() {
   const content = await getSiteContent();
   const news = content?.news;
   const heading = news?.title || 'News & Updates';
-  const articles = (news?.articles ?? []).filter((a) => a && a.title && String(a.title).trim());
-  const list = articles.length ? articles : NEWS_FALLBACK;
+  // Titles to hide from the CMS article list.
+  const HIDDEN = new Set(['Building where the jobs are growing fastest']);
+  // Attach a source website (screenshot + link) to each remaining CMS article,
+  // matched by a keyword in the title. Clicking the card image opens the source.
+  const SOURCES: { match: string; title: string; source: string; image: string; link: string }[] = [
+    { match: 'attainable', title: 'What HUD’s Fair Market Rents tell us about attainable pricing', source: 'HUD · Office of Policy Development & Research', image: '/media/news-rent.jpg', link: 'https://www.huduser.gov/portal/datasets/fmr.html' },
+    { match: 'working rents', title: 'Reading local wages: why we underwrite to working incomes', source: 'BLS · U.S. Bureau of Labor Statistics', image: '/media/news-wages.jpg', link: 'https://www.bls.gov/oes/' },
+    { match: 'underbuilt middle', title: 'The Southeast’s underbuilt middle, by the Census numbers', source: 'U.S. Census Bureau', image: '/media/news-housing.jpg', link: 'https://data.census.gov/' },
+    { match: 'decade-long', title: 'Where the region is growing, per BEA’s regional accounts', source: 'BEA · Bureau of Economic Analysis', image: '/media/news-gdp.jpg', link: 'https://www.bea.gov/data/economic-accounts/regional' },
+    { match: 'vertically integrated', title: 'Tracking rent and supply trends with CoStar market data', source: 'CoStar Group', image: '/media/news-cre.jpg', link: 'https://www.costar.com/' },
+  ];
+  const originals = (news?.articles ?? [])
+    .filter((a) => a && a.title && String(a.title).trim() && !HIDDEN.has(a.title.trim()))
+    .map((a) => {
+      const src = SOURCES.find((s) => (a.title || '').toLowerCase().includes(s.match));
+      return src ? { ...a, title: src.title, date: src.source, image: src.image, link: src.link } : a;
+    });
+  // Featured external-source articles first, then the remaining original articles.
+  const list = [...FEATURED_NEWS, ...originals];
 
   return (
     <>
@@ -102,8 +110,15 @@ export default async function NewsPage() {
               return (
                 <div className="ncard" key={a._key || i}>
                   {img ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                    a.link ? (
+                      <a href={a.link} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img loading="lazy" decoding="async" src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                      </a>
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img loading="lazy" decoding="async" src={img} alt={a.title || ''} style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }} />
+                    )
                   ) : (
                     <image-slot id={`news-${i + 1}`} shape="rect" placeholder="Article image"></image-slot>
                   )}
