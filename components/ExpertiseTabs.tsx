@@ -15,37 +15,37 @@ const GROUPS: { label: string; range: [number, number] }[] = [
 const SERVICES: Service[] = [
   {
     name: 'Consulting',
-    desc: 'We provide advisory support to landowners, investors, and developers who need clarity before committing capital. Our work includes feasibility reviews, highest-and-best-use analysis, market and site assessments, development strategy, budget and pro forma review, and risk evaluation. We help you understand whether a project makes sense — and how to structure it for the best outcome — before you move forward.',
+    desc: 'We offer full-scope development consulting for current and aspiring multifamily developers. Over the past decade we have completed 12 multifamily projects through the full development lifecycle. We can help take an idea from concept to construction, beginning with market research and site selection, and continuing all the way through selecting a general contractor.',
     image: '/media/svc-asset-management.jpg',
   },
   {
     name: 'Design & Drafting',
-    desc: 'We coordinate the full design process needed to move a project from concept to permit-ready plans. This includes architectural design, civil engineering, structural engineering, MEP coordination, surveying, geotechnical coordination, and construction document management. Our goal is to keep the design team aligned so plans are complete, accurate, and ready for review.',
+    desc: 'Our network of licensed architects and engineers spans all 50 states and delivers signed-and-sealed plans. Paired with in-house draftsmen who produce full architectural and engineering sets, including MEP and structural. This hybrid model cuts design cost and turnaround time by roughly half.',
     image: '/media/svc-design-drafting.jpg',
   },
   {
     name: 'Site Acquisition & Entitlements',
-    desc: 'We help identify and evaluate development sites with real potential. Our team reviews zoning, land use, density, utilities, access, market demand, and approval risks before major capital is committed. We also assist with rezoning, variances, special use permits, planning commission coordination, municipal approvals, and government agency communication.',
+    desc: 'Every project begins with the right site and a clear path through entitlements. We have led numerous multifamily rezonings and successful annexations, and after ten years in development we know exactly what to look for in a site built for multifamily.',
     image: '/media/svc-site-acquisition.jpg',
   },
   {
-    name: 'Project Financing',
-    desc: 'We help prepare projects for investor, lender, or capital partner review by organizing the key information needed to evaluate the deal. This includes feasibility findings, development strategy, preliminary budgets, project scope, timeline assumptions, entitlement status, and construction-ready plan requirements. The goal is to make the project clearer, more credible, and easier to finance.',
+    name: 'Material Sourcing',
+    desc: 'Our founder, George, spent 11 years manufacturing and importing across Asia. He applies that experience to source construction materials directly, lowering costs on our own developments, and on yours.',
     image: '/media/svc-project-financing.jpg',
   },
   {
     name: 'Construction Execution',
-    desc: 'We support the transition from planning into construction by helping coordinate permit-ready drawing sets, consultant revisions, value engineering, project timelines, and execution planning. Our team helps make sure the project is properly organized before construction begins, reducing delays, confusion, and costly changes.',
+    desc: 'Through our construction partners, Yu Development supports merchant build projects for clients who need a development team to take a project from concept through construction-ready execution. We help coordinate planning, design, budgeting, consultants, and construction oversight so the project can move from idea to finished product with a clear process and accountable management.',
     image: '/media/svc-construction.jpg',
   },
   {
-    name: 'Operations',
-    desc: 'We serve as an outsourced development management team for landowners, investors, and developers. Our work includes project management, consultant coordination, budget tracking, timeline management, design oversight, vendor communication, and development execution. We help keep the project moving while making sure the right people are accountable at each stage.',
+    name: 'Raising Capital',
+    desc: 'Yu Development supports capital raising by helping prepare financeable project packages, including feasibility, budgets, timelines, development strategy, and investor-ready materials. We also maintain private investor relationships and access to debt relationships that may help connect qualified projects with potential capital sources when needed.',
     image: '/media/svc-operations.jpg',
   },
   {
     name: 'Asset Management',
-    desc: 'We provide strategic support for projects beyond the initial planning stage. This includes deal reviews, feasibility guidance, project strategy, entitlement planning, budget review, troubleshooting, and long-term development planning. We help owners and investors understand what is working, what needs attention, and how to protect the value of the project over time.',
+    desc: 'After construction is completed, Yu Development can support long-term operations through asset and property management partners. This includes coordinating leasing strategy, property operations, reporting, performance tracking, maintenance oversight, and overall asset management to help the community remain stable, efficient, and well-managed.',
     image: '/media/svc-asset-management.jpg',
   },
 ];
@@ -92,14 +92,16 @@ export default function ExpertiseTabs() {
         /* Full-bleed related photo, 50% blur wash. Over-scaled so the blur's soft
            edges never reveal a gap. */
         .xp-bg{ position:absolute; inset:0; z-index:0; background-size:cover; background-position:center;
-          filter:blur(3px); transform:scale(1.05); }
-        .xp-overlay{ position:absolute; inset:0; z-index:1; background:rgba(239,237,230,.28); }
+          filter:blur(5px); transform:scale(1.06); }
+        /* Light veil, heavier on the left where the text sits, lighter on the right so the photo shows through. */
+        .xp-overlay{ position:absolute; inset:0; z-index:1;
+          background:linear-gradient(90deg, rgba(239,237,230,.75) 0%, rgba(239,237,230,.56) 45%, rgba(239,237,230,.3) 100%); }
         .xp-wrap{ position:relative; z-index:2; width:100%; max-width:1280px; margin:0 auto;
           padding:clamp(64px,11vh,140px) clamp(28px,5vw,72px); }
         .xp-group{ margin:0 0 clamp(30px,3.6vw,46px); }
         .xp-group-head{ margin:0 0 clamp(16px,1.8vw,24px); font-family:var(--serif,'Newsreader',Georgia,serif);
-          font-weight:700; font-size:clamp(40px,5.4vw,76px); line-height:1.0; letter-spacing:-0.015em; color:var(--ink);
-          text-shadow:0 1px 2px rgba(255,255,255,.5); }
+          font-weight:700; font-size:clamp(40px,3.8vw,52px); line-height:1.02; letter-spacing:-0.015em; color:var(--ink);
+          text-shadow:0 1px 3px rgba(247,248,250,.95), 0 0 20px rgba(247,248,250,.7); }
         .xp-tabs{ display:flex; flex-wrap:wrap; gap:16px 18px; }
         .xp-pill{ font-family:var(--sans); font-size:clamp(16px,1.3vw,20px); font-weight:500;
           color:var(--ink); background:#fff; border:1px solid rgba(255,255,255,.6); border-radius:999px;
@@ -109,7 +111,7 @@ export default function ExpertiseTabs() {
         .xp-pill.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
         .xp-desc{ margin:clamp(34px,4vw,54px) 0 0; max-width:60ch; font-family:var(--sans); font-weight:500;
           font-size:clamp(20px,1.8vw,28px); line-height:1.55; color:var(--ink);
-          text-shadow:0 1px 3px rgba(255,255,255,.7), 0 0 16px rgba(255,255,255,.4); }
+          text-shadow:0 1px 2px rgba(247,248,250,.95), 0 0 18px rgba(247,248,250,.85); }
       `}</style>
     </section>
   );

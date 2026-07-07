@@ -16,18 +16,18 @@ const css = `
   }
   *,*::before,*::after{ box-sizing:border-box; }
   html,body{ margin:0; overscroll-behavior:none; }
-  html{ background:#23262A; }
+  html{ background:#0E1626; }
   body{ background:var(--paper); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; min-height:100%; }
   a{ color:inherit; }
 
   /* nav — matches homepage (.hf-nav.navy scrolled state) */
-  .nav{ position:sticky; top:0; z-index:40; background:#fff;
-    display:flex; align-items:center; height:92px; padding:0 clamp(28px,5vw,56px); border-bottom:1px solid var(--rule); }
-  .nav .wordmark{ font-family:var(--sans); font-weight:600; font-size:18px; text-transform:uppercase; letter-spacing:0.24em; white-space:nowrap; color:#34383E; text-decoration:none; }
+  .nav{ position:sticky; top:0; z-index:40; background:#0E1626;
+    display:flex; align-items:center; height:92px; padding:0 clamp(28px,5vw,56px); border-bottom:1px solid rgba(255,255,255,.10); }
+  .nav .wordmark{ font-family:var(--sans); font-weight:600; font-size:18px; text-transform:uppercase; letter-spacing:0.24em; white-space:nowrap; color:#F7F8FA; text-decoration:none; }
   .nav .links{ display:flex; align-items:center; gap:28px; margin-left:auto; }
-  .nav .links a{ font-weight:600; font-size:14px; color:#34383E; text-decoration:none; transition:color .2s; }
-  .nav .links a:hover{ color:#8A8E96; }
-  .nav .links a.active{ color:var(--ink); }
+  .nav .links a{ font-weight:600; font-size:14px; color:rgba(247,248,250,.80); text-decoration:none; transition:color .2s; }
+  .nav .links a:hover{ color:#F7F8FA; }
+  .nav .links a.active{ color:#F7F8FA; }
   @media (max-width:760px){ .nav{ padding:0 28px; } .nav .links{ display:none; } }
 
   /* section */
@@ -58,7 +58,7 @@ const css = `
   @media (max-width:760px){ .split{ grid-template-columns:1fr; gap:44px; } .stats{ grid-template-columns:1fr 1fr; row-gap:clamp(28px,5vw,40px); } }
 
   /* footer (ported from v12) */
-  footer.v12foot{ --foot-bg:#23262A; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);
+  footer.v12foot{ --foot-bg:#0E1626; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);
     background:var(--foot-bg); color:var(--foot-text); border-top:1px solid var(--foot-line); padding:84px 0 28px; }
   footer.v12foot .foot-wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
   footer.v12foot .top{ display:flex; justify-content:space-between; align-items:flex-start; gap:40px; margin-bottom:56px; flex-wrap:wrap; }
@@ -101,7 +101,7 @@ export default async function InvestorsPage() {
             <div>
               <p className="lead">{intro}</p>
               <p className="lead">We underwrite to working rents, not exit prices, and own and operate the majority of our communities long term &mdash; aligning durable cash flow with the communities we serve.</p>
-              <div className="cta"><a href={mailHref}>Investor relations &rarr;</a></div>
+              <div className="cta"><a href="/contact">Investor relations &rarr;</a></div>
             </div>
             <div className="details">
               <div className="d">

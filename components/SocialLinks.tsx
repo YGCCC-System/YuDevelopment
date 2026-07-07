@@ -29,14 +29,16 @@ export default function SocialLinks() {
         <span className="dom">/youtube.com</span>
       </a>
       <style>{`
+        /* Left-align the whole footer contact column (overrides the per-page right-align) */
+        footer.v12foot .col-office{ text-align:left; }
         footer.v12foot .foot-social{ display:flex; flex-direction:column; align-items:flex-start;
-          gap:14px; margin-top:24px; width:max-content; margin-left:auto; }
+          gap:14px; margin-top:24px; }
         /* Mobile / tablet: stack the footer into one clean left-aligned column */
         @media (max-width:880px){
           footer.v12foot{ padding:60px 0 26px; }
           footer.v12foot .top{ flex-direction:column; gap:34px; margin-bottom:44px; }
           footer.v12foot .col-office{ text-align:left; }
-          footer.v12foot .foot-social{ margin-left:0; margin-top:18px; }
+          footer.v12foot .foot-social{ align-items:flex-start; margin-top:18px; }
           footer.v12foot .col .blurb{ max-width:42ch; }
           footer.v12foot .col-site .site-links{ display:flex !important; flex-direction:row !important; flex-wrap:wrap; gap:14px 28px; }
         }

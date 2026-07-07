@@ -59,7 +59,9 @@
 }
 @media (max-width:760px){
   .about-cols{ grid-template-columns:1fr; gap:24px; }
-  .about-stats .statgrid{ grid-template-columns:1fr; gap:32px; }
+  .about-stats .statgrid{ grid-template-columns:1fr 1fr; gap:clamp(30px,7vw,40px) 20px; }
+  .about-stats .fig{ font-size:clamp(34px,9vw,46px); }
+  .about-stats .lab{ margin-top:8px; font-size:14px; }
 }
 .wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
 
@@ -240,8 +242,8 @@
 .proj-cta{ margin-top:clamp(32px,3.4vw,48px); text-align:center; }
 /* First card matches the rest — normal grid cell, 3:2 image (was a full-width 21:9 feature tile). */
 #projects{ padding-top:0; padding-bottom:clamp(36px,4vw,56px); }
-#projects .sec-h{ font-size:clamp(28px,3.2vw,40px); line-height:1.12; letter-spacing:-0.022em; max-width:none; white-space:nowrap; }
-@media (max-width:900px){ #projects .sec-h{ white-space:normal; font-size:clamp(26px,5.2vw,34px); } }
+#projects .sec-h{ font-size:clamp(32px,3.6vw,52px); line-height:1.08; letter-spacing:-0.02em; max-width:none; white-space:nowrap; }
+@media (max-width:900px){ #projects .sec-h{ white-space:normal; font-size:clamp(40px,6vw,48px); } }
 .pcard{ text-decoration:none; display:block; }
 .pcard image-slot{ display:block; width:100%; height:auto; aspect-ratio:3/2; }
 .pcard .pshot{ width:100%; aspect-ratio:3/2; overflow:hidden; }
@@ -364,15 +366,25 @@
 /* ============================================================
    LOCAL ECONOMY STATEMENT — navy band
    ============================================================ */
-.local-stmt{ background:#586235; color:#fff; padding:clamp(120px,14vw,184px) 0; }
+.local-stmt{ background:#586235; color:#fff; padding:clamp(64px,8vh,120px) 0; }
 .local-stmt .local-eyebrow{ margin-bottom:clamp(36px,4.5vw,60px); }
 .local-stmt .eyebrow{ color:var(--accent-2); }
 .local-stmt .eyebrow::before{ background:var(--accent-2); }
 .local-stmt .local-line{ margin:0; max-width:20ch; font-family:var(--sans); font-weight:400;
   font-size:clamp(32px,4.6vw,64px); line-height:1.16; letter-spacing:-0.022em; color:#EFEDE6; text-wrap:balance; }
 .local-stmt .local-fig{ color:#6FA8E0; font-weight:600; font-size:1.12em; letter-spacing:-0.03em; font-variant-numeric:tabular-nums; }
+.local-stmt .local-grid{ display:grid; grid-template-columns:1fr 1.15fr; gap:clamp(40px,5vw,80px); align-items:stretch; }
+.local-stmt .local-grid .local-line{ max-width:22ch; align-self:center; }
+.local-stmt .local-media{ margin:0; }
+.local-stmt .local-media img{ width:100%; height:100%; min-height:460px; object-fit:cover; display:block;
+  border-radius:16px; box-shadow:0 26px 64px -30px rgba(0,0,0,.6); }
+@media (max-width:860px){
+  .local-stmt .local-grid{ grid-template-columns:1fr; gap:clamp(32px,6vw,44px); }
+  .local-stmt .local-grid .local-line{ max-width:24ch; }
+  .local-stmt .local-media img{ height:auto; min-height:0; max-height:360px; }
+}
 
-footer.v12foot{ --foot-bg:#23262A; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);
+footer.v12foot{ --foot-bg:#0E1626; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);
   background:var(--foot-bg); color:var(--foot-text); border-top:1px solid var(--foot-line); padding:84px 0 28px; }
 footer.v12foot .foot-wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
 footer.v12foot .top{ display:flex; justify-content:space-between; align-items:flex-start; gap:40px; margin-bottom:56px; flex-wrap:wrap; }

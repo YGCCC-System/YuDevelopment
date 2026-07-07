@@ -4,6 +4,7 @@ import ProjectCards from '@/components/ProjectCards';
 import { getSiteContent, projectImage, isVideoUrl, FEATURED_NEWS } from '@/lib/content';
 import ExpertiseTabs from '@/components/ExpertiseTabs';
 import SocialLinks from '@/components/SocialLinks';
+import HomeNav from '@/components/HomeNav';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Hero',
@@ -62,14 +63,14 @@ const css = `
     border-bottom:1px solid transparent;
   }
   .hf-nav.navy{
-    background:#ffffff;
-    border-bottom:2px solid #C6C3B7;
-    color:var(--nav-ink);
+    background:#0E1626;
+    border-bottom:1px solid rgba(255,255,255,.10);
+    color:#F7F8FA;
   }
-  .hf-nav.navy .hf-wordmark{ color:var(--nav-ink); }
-  .hf-nav.navy .hf-links a{ color:var(--nav-ink); }
-  .hf-nav.navy .hf-links a:hover{ color:#8A8E96; }
-  .hf-nav.navy .hf-links a.active{ color:var(--ink); }
+  .hf-nav.navy .hf-wordmark{ color:#F7F8FA; }
+  .hf-nav.navy .hf-links a{ color:rgba(247,248,250,.80); }
+  .hf-nav.navy .hf-links a:hover{ color:#F7F8FA; }
+  .hf-nav.navy .hf-links a.active{ color:#F7F8FA; }
   .hf-wordmark{
     font-weight:600; font-size:18px; text-transform:uppercase;
     letter-spacing:0.24em; white-space:nowrap;
@@ -79,6 +80,7 @@ const css = `
   .hf-links a{ position:relative; cursor:pointer; color:#0B1320; text-decoration:none; transition:color .2s; }
   .hf-links a:hover{ color:rgba(11,19,32,.6); }
   .hf-links a.active{ color:#0B1320; }
+  .hf-burger{ display:none; color:inherit; background:none; border:none; padding:0; }
   /* Type ------------------------------------------------------ */
   .hf-eyebrow{
     font-family:var(--mono); font-size:12px; letter-spacing:0.16em;
@@ -158,7 +160,14 @@ const css = `
   @media (max-width: 760px){
     .hf-nav{ padding:0 28px; }
     .hf-links{ display:none; }
-    .hf-bottom{ left:28px; right:28px; top:104px; flex-direction:column; align-items:flex-start; gap:24px; }
+    .hf-burger{ display:flex; flex-direction:column; justify-content:center; gap:5px; width:44px; height:44px; margin-left:auto; cursor:pointer; z-index:3; }
+    .hf-burger span{ display:block; width:24px; height:2px; border-radius:2px; background:currentColor; transition:transform .25s ease, opacity .2s ease; }
+    .hf-links.open{ display:flex; position:absolute; top:92px; left:0; right:0; flex-direction:column; align-items:stretch; gap:0; margin:0; padding:6px 0 10px; background:#0E1626; border-bottom:1px solid rgba(255,255,255,.10); box-shadow:0 24px 40px -22px rgba(0,0,0,.55); }
+    .hf-links.open a{ padding:15px 28px; color:#F7F8FA !important; }
+    .hf-burger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+    .hf-burger.open span:nth-child(2){ opacity:0; }
+    .hf-burger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+    .hf-bottom{ left:28px; right:28px; top:50%; transform:translateY(-50%); flex-direction:column; align-items:flex-start; gap:24px; }
     .hf-h1{ font-size:40px; max-width:18ch; }
     .hf-cue{ display:none; }
   }
@@ -187,6 +196,31 @@ const css = `
   /* Smooth in-page scrolling for the nav anchors, offset for the fixed nav. */
   html{ scroll-behavior:smooth; }
   #projects, #news, #contact{ scroll-margin-top:92px; }
+
+  /* Local economy band — text beside the photo (inline so it can't be cache-defeated). */
+  /* Vertical padding scales with screen HEIGHT (vh), so the band fits one screen on wide monitors. */
+  /* Projects heading — same scale as the Services group headings (inline so it can't be cache-defeated). */
+  #projects .sec-h{ font-size:clamp(32px,3.6vw,52px); line-height:1.08; letter-spacing:-0.02em; white-space:nowrap; }
+  @media (max-width:900px){ #projects .sec-h{ white-space:normal; font-size:clamp(40px,6vw,48px); } }
+  /* Mobile stats — 2×2 grid with hairline dividers instead of a plain stacked list. */
+  @media (max-width:760px){
+    .about-stats .statgrid{ grid-template-columns:1fr 1fr !important; gap:clamp(30px,7vw,40px) 20px !important; }
+    .about-stats .fig{ font-size:clamp(34px,9vw,46px); }
+    .about-stats .lab{ margin-top:8px; font-size:14px; }
+  }
+  .local-stmt{ padding:clamp(64px,8vh,120px) 0; }
+  .local-stmt .local-grid{ display:grid; grid-template-columns:1fr 1.15fr; gap:clamp(40px,5vw,80px); align-items:stretch; }
+  .local-stmt .local-grid .local-line{ max-width:22ch; align-self:center; }
+  .local-stmt .local-grid .local-line--statement{ font-size:clamp(23px,2.5vw,38px); line-height:1.32; letter-spacing:-0.014em; max-width:30ch; }
+  .local-stmt .local-media{ margin:0; }
+  .local-stmt .local-media img{ width:100%; height:100%; min-height:460px; object-fit:cover; display:block;
+    border-radius:16px; box-shadow:0 26px 64px -30px rgba(0,0,0,.6); }
+  @media (max-width:860px){
+    .local-stmt .local-grid{ grid-template-columns:1fr; gap:clamp(32px,6vw,44px); }
+    .local-stmt .local-grid .local-line{ max-width:24ch; }
+    .local-stmt .local-grid .local-line--statement{ max-width:none; }
+    .local-stmt .local-media img{ height:auto; min-height:0; max-height:360px; }
+  }
 `;
 
 export default async function HomePage() {
@@ -204,12 +238,11 @@ export default async function HomePage() {
 
   const statement = content?.home?.statement;
   const statementHeadline = statement?.headline || 'A housing partner for the Southeast’s growing cities.';
-  const statementParagraphs = statement?.paragraphs?.length
-    ? statement.paragraphs
-    : [
-        'Yu Development builds attainable rental housing in the Southeast’s fastest-growing, most underbuilt markets, with homes priced to what working families actually earn, in the places the jobs are.',
-        'We own and operate the majority of our communities long term.',
-      ];
+  // Overriding the CMS value (Sanity is read-only in this environment).
+  const statementParagraphs = [
+    'Yu Development develops attainable multifamily housing in middle-class towns across the Southeast, serving the missing middle and helping local workers live near the jobs and communities they support.',
+    'As long-term owner-operators, we remain invested in the quality, stability, and performance of each community after development is complete.',
+  ];
   const stats = statement?.stats?.length
     ? statement.stats
     : [
@@ -219,7 +252,8 @@ export default async function HomePage() {
         { label: 'Since', value: '2018' },
       ];
 
-  const projectsHeading = content?.home?.projectsHeading || 'Communities already in the ground.';
+  // Overriding the CMS value (Sanity is read-only in this environment).
+  const projectsHeading = 'Communities already built';
 
   const svc = content?.services ?? {};
   const svcLocalFig = parseFig(svc.localEconomyFigure || '64%');
@@ -264,17 +298,7 @@ export default async function HomePage() {
           </div>
           <div className="hf-scrim s-bottom"></div>
 
-          <header className="hf-nav">
-            <a className="hf-wordmark" href="#top">Yu Development</a>
-            <nav className="hf-links">
-              <a href="/team" style={{ fontWeight: 600, fontSize: '14px' }}>Team</a>
-              <a href="/projects" style={{ fontWeight: 600, fontSize: '14px' }}>Projects</a>
-              <a href="#expertise" style={{ fontWeight: 600, fontSize: '14px' }}>Services</a>
-              <a href="/news" style={{ fontWeight: 600, fontSize: '14px' }}>News</a>
-              <a href="/investors" style={{ fontWeight: 600, fontSize: '14px' }}>Investors</a>
-              <a href="/contact" style={{ fontWeight: 600, fontSize: '14px' }}>Contact</a>
-            </nav>
-          </header>
+          <HomeNav />
 
           <div className="hf-bottom">
             <div>
@@ -366,15 +390,14 @@ export default async function HomePage() {
 
         {/* ============================ LOCAL ECONOMY STATEMENT ============================ */}
         <section className="local-stmt" data-screen-label="Local economy">
-          <div className="wrap">
-            <p className="local-line">
-              {svcLocalFig.count !== null ? (
-                <span className="local-fig" data-count={svcLocalFig.count} data-suffix={svcLocalFig.suffix} style={{ fontSize: '69px' }}>{svcLocalFig.text}</span>
-              ) : (
-                <span className="local-fig" style={{ fontSize: '69px' }}>{svcLocalFig.text}</span>
-              )}{' '}
-              {svcLocalText}
+          <div className="wrap local-grid">
+            <p className="local-line local-line--statement" style={{ maxWidth: 'none' }}>
+              A strong local economy starts with housing that matches local wages. By creating attainable rental homes, communities can retain essential workers, support nearby employers, and keep more household spending close to home.
             </p>
+            <div className="local-media">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/media/local-economy.jpg" alt="Residents of a Southeast community on a downtown street — a nurse, a firefighter, shoppers, and a market vendor." loading="lazy" decoding="async" />
+            </div>
           </div>
         </section>
 
@@ -435,7 +458,7 @@ export default async function HomePage() {
                 <div className="site-links" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <a href="/team">Team</a>
                   <a href="/projects">Projects</a>
-                  <a href="#expertise">Services</a>
+                  <a href="/services">Services</a>
                   <a href="/news">News</a>
                   <a href="/investors">Investors</a>
                   <a href="/contact">Contact</a>
