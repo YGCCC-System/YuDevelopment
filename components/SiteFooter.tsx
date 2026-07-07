@@ -26,7 +26,7 @@ export default async function SiteFooter() {
             <div className="site-links" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <a href="/team">Team</a>
               <a href="/projects">Projects</a>
-              <a href="/#expertise">Services</a>
+              <a href="/services">Services</a>
               <a href="/news">News</a>
               <a href="/investors">Investors</a>
               <a href="/contact">Contact</a>
