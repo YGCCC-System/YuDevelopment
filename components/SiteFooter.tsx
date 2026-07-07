@@ -8,7 +8,7 @@ export default async function SiteFooter() {
   const brand = content?.brand ?? {};
   const name = brand.name || 'Yu Development';
   const tagline = brand.tagline || 'A private development firm building attainable rental housing across the Southeast United States.';
-  const email = brand.email || 'hello@yudevelopment.com';
+  const email = 'services@yudevelopment.com';
   const phone = brand.phone || '470-380-7339';
   const office = brand.office || 'Atlanta, Georgia';
   const copyright = brand.copyright || '© 2026 Yu Development, LLC';
@@ -45,8 +45,8 @@ export default async function SiteFooter() {
         <div className="legal">
           <span>{copyright}</span>
           <span className="legal-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
           </span>
         </div>
       </div>

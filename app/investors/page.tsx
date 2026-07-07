@@ -83,7 +83,7 @@ export default async function InvestorsPage() {
   const inv = content?.invest ?? {};
   const title = inv.title || 'Investors';
   const intro = inv.intro || 'Yu Development partners with mission-aligned capital to build and own attainable rental housing across the Southeast’s fastest-growing, most underbuilt markets.';
-  const email = inv.email || 'hello@yudevelopment.com';
+  const email = 'services@yudevelopment.com';
   const mailHref = `mailto:${email}?subject=Investor%20Relations`;
 
   return (
@@ -106,15 +106,15 @@ export default async function InvestorsPage() {
             <div className="details">
               <div className="d">
                 <h4>Strategy</h4>
-                <p>Attainable rental housing for households at ~72% of area median income, every unit under 80%.</p>
+                <p>We build for the backbone of our communities. Our strategy targets the critical &ldquo;Missing Middle&rdquo; of multifamily real estate&mdash;the hardworking individuals who earn too much to qualify for subsidized housing, yet are priced out of luxury rentals. By underwriting our portfolio to target an average household income of 72% of the Area Median Income (AMI)&mdash;with a ceiling under 80% AMI&mdash;we unlock an exceptionally stable, deeply underserved asset class.</p>
               </div>
               <div className="d">
                 <h4>Hold</h4>
-                <p>Long-term ownership and operation, underwritten to working rents.</p>
+                <p>Our goal is to hold and operate these assets long term by providing ownership and operations for our communities.</p>
               </div>
               <div className="d">
                 <h4>Footprint</h4>
-                <p>Georgia, Alabama, and the broader Southeast United States.</p>
+                <p>The broader Southeast United States.</p>
               </div>
               <div className="d">
                 <h4>Contact</h4>
