@@ -33,8 +33,11 @@ const css = `
   /* section */
   .contact{ padding:clamp(96px,12vw,150px) 0 clamp(120px,15vw,190px); }
   .wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
+  .contact-eyebrow{ margin:0 0 16px; font-family:var(--mono); font-size:12px; font-weight:500;
+    letter-spacing:0.28em; text-transform:uppercase; color:var(--accent); }
   .contact-head{ margin:0; max-width:24ch; font-family:var(--sans); font-weight:600;
-    font-size:clamp(22px,2.4vw,32px); line-height:1.12; letter-spacing:-0.022em; color:var(--ink); text-wrap:balance; }
+    font-size:clamp(30px,4vw,48px); line-height:1.08; letter-spacing:-0.025em; color:var(--ink); text-wrap:balance; }
+  .contact-accent{ width:56px; height:3px; background:var(--accent); border-radius:2px; margin:22px 0 0; }
   .rule{ height:1px; background:var(--rule); margin:clamp(18px,2.2vw,28px) 0 clamp(36px,4.5vw,60px); }
 
   .split{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(40px,6vw,96px); align-items:start; }
@@ -42,11 +45,20 @@ const css = `
   .cta{ margin-top:clamp(28px,3.4vw,42px); }
   .cta a{ display:inline-flex; align-items:center; gap:9px; color:var(--link); font-weight:500; font-size:clamp(22px,2.4vw,32px); letter-spacing:-0.01em; text-decoration:none; }
 
-  .details{ display:grid; gap:clamp(26px,3vw,38px); }
-  .d h4{ margin:0 0 9px; font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); font-weight:500; }
-  .d a, .d p{ margin:0; font-size:clamp(16px,1.3vw,18px); line-height:1.5; color:var(--ink-2); text-decoration:none; }
-  .d a{ color:var(--link); }
-  .d a:hover{ text-decoration:underline; }
+  .details-title{ margin:clamp(30px,3.6vw,46px) 0 0; font-family:var(--mono); font-size:12px;
+    letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); font-weight:500; }
+  .details{ display:grid; gap:clamp(24px,2.6vw,32px); margin-top:18px; }
+  .d{ position:relative; padding-left:34px; }
+  .d-num{ position:absolute; left:0; top:1px; font-family:var(--mono); font-size:12px;
+    letter-spacing:0.06em; color:var(--accent); font-weight:500; }
+  .clickup-form{ width:100%; height:452px; display:block; border:1px solid var(--rule);
+    border-radius:14px; background:#fff; box-shadow:0 18px 40px -24px rgba(20,22,26,.28); overflow:hidden; }
+  @media (max-width:760px){ .clickup-form{ height:500px; } }
+  .d h4{ margin:0 0 9px; font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink); font-weight:500; transition:color .2s ease; }
+  .d a, .d p{ margin:0; font-size:clamp(16px,1.3vw,18px); line-height:1.5; color:var(--ink); text-decoration:none; transition:color .2s ease; }
+  .d .hint{ margin:7px 0 0; font-size:13.5px; line-height:1.5; color:var(--ink-3); max-width:34ch; }
+  .d:hover h4, .d:hover a, .d:hover p{ color:var(--accent); }
+  .d:hover .hint{ color:var(--ink-3); }
 
   @media (max-width:760px){ .split{ grid-template-columns:1fr; gap:44px; } }
 
@@ -76,8 +88,7 @@ export default async function ContactPage() {
   const c = content?.contact ?? {};
   const title = c.title || 'Contact';
   const lead = c.lead || 'Whether you have a site, a partnership in mind, or a question about how we work, we’d like to hear from you.';
-  const linkLabel = c.linkLabel || 'Get in touch';
-  const email = c.email || 'hello@yudevelopment.com';
+  const email = 'services@yudevelopment.com';
   const phone = c.phone || '470-380-7339';
   const office = c.office || 'Atlanta, Georgia';
   const telHref = 'tel:+' + phone.replace(/[^0-9]/g, '');
@@ -90,27 +101,44 @@ export default async function ContactPage() {
 
       <section className="contact">
         <div className="wrap">
+          <p className="contact-eyebrow">Yu Development · Contact</p>
           <h2 className="contact-head">{title}</h2>
+          <div className="contact-accent"></div>
           <div className="rule"></div>
 
           <div className="split">
             <div>
               <p className="lead">{lead}</p>
-              <div className="cta"><a href={`mailto:${email}`}>{linkLabel} &rarr;</a></div>
+              <p className="details-title">Three ways to reach us</p>
+              <div className="details">
+                <div className="d">
+                  <span className="d-num">01</span>
+                  <h4>Email</h4>
+                  <a href={`mailto:${email}`}>{email}</a>
+                  <p className="hint">Best for detailed inquiries — we reply within one business day.</p>
+                </div>
+                <div className="d">
+                  <span className="d-num">02</span>
+                  <h4>Phone</h4>
+                  <a href={telHref}>{phone}</a>
+                  <p className="hint">Call us Monday–Friday, 9am–5pm ET.</p>
+                </div>
+                <div className="d">
+                  <span className="d-num">03</span>
+                  <h4>Office</h4>
+                  <p>{office}</p>
+                  <p className="hint">Visits by appointment — reach out before stopping by.</p>
+                </div>
+              </div>
             </div>
-            <div className="details">
-              <div className="d">
-                <h4>Email</h4>
-                <a href={`mailto:${email}`}>{email}</a>
-              </div>
-              <div className="d">
-                <h4>Phone</h4>
-                <a href={telHref}>{phone}</a>
-              </div>
-              <div className="d">
-                <h4>Office</h4>
-                <p>{office}</p>
-              </div>
+            <div>
+              <iframe
+                className="clickup-form"
+                src="https://forms.clickup.com/9017090351/f/8cqbr9f-79677/9OP9CMYCOV3AX5G7VH"
+                title="Contact form"
+                loading="lazy"
+                scrolling="no"
+              />
             </div>
           </div>
         </div>

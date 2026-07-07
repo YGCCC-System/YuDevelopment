@@ -48,7 +48,8 @@ const css = `
   .rule{ height:1px; background:var(--rule); margin:clamp(18px,2.2vw,28px) 0 clamp(24px,3vw,38px); }
 
   .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(56px,6vw,88px) clamp(24px,2.4vw,34px); }
-  .member .photo{ width:100%; aspect-ratio:1/1; background:var(--paper-2); overflow:hidden; }
+  .member .photo{ width:100%; aspect-ratio:1/1; background:var(--paper-2); overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .member .photo .soon{ font-family:var(--sans); font-size:clamp(14px,1.1vw,16px); font-weight:500; letter-spacing:0.02em; color:var(--ink-3); }
   .member .nm{ margin:24px 0 0; font-family:var(--sans); font-weight:600; font-size:clamp(18px,1.5vw,22px); letter-spacing:-0.01em; color:var(--ink); }
   .member .role{ margin:6px 0 0; font-family:var(--sans); font-weight:400; font-size:clamp(14px,1.1vw,16px); line-height:1.45; color:var(--ink-3); max-width:28ch; }
 
@@ -98,11 +99,13 @@ export default async function TeamPage() {
               const img = projectImage(m.image);
               return (
                 <div className="member" key={m._key || i}>
-                  <div className="photo" aria-hidden="true">
+                  <div className="photo">
                     {img ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img loading="lazy" decoding="async" src={img} alt={m.name || ''} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                    ) : null}
+                    ) : (
+                      <span className="soon">Coming soon</span>
+                    )}
                   </div>
                   <p className="nm">{m.name}</p>
                   <p className="role">{m.role}</p>

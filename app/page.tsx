@@ -95,6 +95,29 @@ const css = `
     font-family:var(--sans); font-weight:400; font-size:clamp(18px,1.8vw,24px); line-height:1.45; letter-spacing:-0.005em;
     text-shadow:0 2px 12px rgba(8,12,18,.55);
   }
+  .hf-cta{
+    position:relative; display:inline-flex; align-items:center; gap:9px; margin-top:clamp(24px,3vw,34px);
+    padding:15px 30px; background:#F7F8FA; color:#0B1320;
+    font-family:var(--sans); font-weight:600; font-size:15px; letter-spacing:0.02em;
+    border-radius:6px; text-decoration:none; cursor:pointer;
+    box-shadow:0 6px 22px rgba(8,12,18,.28);
+    transition:background .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  /* expanding ripple ring to draw the eye */
+  .hf-cta::before{
+    content:""; position:absolute; inset:0; border-radius:6px; pointer-events:none;
+    animation:ctaRing 2.8s ease-out infinite;
+  }
+  @keyframes ctaRing{
+    0%{ box-shadow:0 0 0 0 rgba(247,248,250,.5); }
+    70%{ box-shadow:0 0 0 16px rgba(247,248,250,0); }
+    100%{ box-shadow:0 0 0 0 rgba(247,248,250,0); }
+  }
+  .hf-cta .arw{ transition:transform .25s ease; }
+  .hf-cta:hover{ background:#fff; transform:translateY(-2px); box-shadow:0 10px 30px rgba(8,12,18,.34); }
+  .hf-cta:hover .arw{ transform:translateX(5px); }
+  .hf-cta:hover::before{ animation:none; }
+  @media (prefers-reduced-motion: reduce){ .hf-cta::before{ animation:none; } .hf-cta .arw{ transition:none; } }
 
   /* Scroll cue ------------------------------------------------ */
   .hf-cue{
@@ -127,8 +150,8 @@ const css = `
 
   /* Title cluster — anchored to the top, just under the nav ----- */
   .hf-bottom{
-    position:absolute; left:56px; right:56px; top:180px; z-index:2;
-    display:flex; align-items:flex-start; justify-content:space-between; gap:48px;
+    position:absolute; left:56px; right:56px; top:50%; transform:translateY(-50%); z-index:2;
+    display:flex; align-items:center; justify-content:flex-start; gap:48px;
   }
   .hf-bottom .hf-eyebrow{ margin-bottom:18px; }
 
@@ -175,7 +198,8 @@ export default async function HomePage() {
   const hero = content?.home?.hero;
   const heroBg = projectImage(hero?.backgroundImage) || '/media/hero.mp4';
   const heroIsVideo = isVideoUrl(heroBg);
-  const heroTitle = hero?.title || 'Housing that Works for Working People';
+  // Overriding the CMS value (Sanity is read-only in this environment).
+  const heroTitle = 'Housing that Works for the Working People';
   const heroSubtitle = hero?.subtitle || 'Attainable housing for the Southeast’s underbuilt markets.';
 
   const statement = content?.home?.statement;
@@ -205,14 +229,15 @@ export default async function HomePage() {
   const newsList = FEATURED_NEWS.slice(0, 3);
 
   const cta = content?.home?.cta ?? {};
-  const ctaTitle = cta.title || 'Building in your community, or interested in our work?';
+  // Overriding the CMS value (Sanity is read-only in this environment).
+  const ctaTitle = 'Need attainable housing in your community, or interested in our work?';
   const ctaLabel = cta.linkLabel || 'Get in touch';
   const ctaHref = '/contact';
 
   const brand = content?.brand ?? {};
   const brandName = brand.name || 'Yu Development';
   const brandTagline = brand.tagline || 'A private development firm building attainable rental housing across the Southeast United States.';
-  const brandEmail = brand.email || 'hello@yudevelopment.com';
+  const brandEmail = 'services@yudevelopment.com';
   const brandPhone = brand.phone || '470-380-7339';
   const brandOffice = brand.office || 'Atlanta, Georgia';
   const brandCopyright = brand.copyright || '© 2026 Yu Development, LLC';
@@ -255,6 +280,7 @@ export default async function HomePage() {
             <div>
               <h1 className="hf-h1">{heroTitle}</h1>
               <p className="hf-sub">{heroSubtitle}</p>
+              <a href="/contact" className="hf-cta">Get in touch <span className="arw">→</span></a>
             </div>
           </div>
         </div>
@@ -428,8 +454,8 @@ export default async function HomePage() {
             <div className="legal">
               <span>{brandCopyright}</span>
               <span className="legal-links">
-                <a href="#">Privacy</a>
-                <a href="#">Terms</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
               </span>
             </div>
           </div>

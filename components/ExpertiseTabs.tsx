@@ -6,16 +6,27 @@ import { useState } from 'react';
 
 type Service = { name: string; desc: string; image: string };
 
+// The six services split into two groups shown as separate labeled rows.
+const GROUPS: { label: string; range: [number, number] }[] = [
+  { label: 'Our Development Services', range: [0, 4] },
+  { label: 'Our Partner Services', range: [4, 7] },
+];
+
 const SERVICES: Service[] = [
   {
-    name: 'Site Acquisition & Entitlements',
-    desc: 'We help identify and evaluate development sites with real potential. Our team reviews zoning, land use, density, utilities, access, market demand, and approval risks before major capital is committed. We also assist with rezoning, variances, special use permits, planning commission coordination, municipal approvals, and government agency communication.',
-    image: '/media/svc-site-acquisition.jpg',
+    name: 'Consulting',
+    desc: 'We provide advisory support to landowners, investors, and developers who need clarity before committing capital. Our work includes feasibility reviews, highest-and-best-use analysis, market and site assessments, development strategy, budget and pro forma review, and risk evaluation. We help you understand whether a project makes sense — and how to structure it for the best outcome — before you move forward.',
+    image: '/media/svc-asset-management.jpg',
   },
   {
     name: 'Design & Drafting',
     desc: 'We coordinate the full design process needed to move a project from concept to permit-ready plans. This includes architectural design, civil engineering, structural engineering, MEP coordination, surveying, geotechnical coordination, and construction document management. Our goal is to keep the design team aligned so plans are complete, accurate, and ready for review.',
     image: '/media/svc-design-drafting.jpg',
+  },
+  {
+    name: 'Site Acquisition & Entitlements',
+    desc: 'We help identify and evaluate development sites with real potential. Our team reviews zoning, land use, density, utilities, access, market demand, and approval risks before major capital is committed. We also assist with rezoning, variances, special use permits, planning commission coordination, municipal approvals, and government agency communication.',
+    image: '/media/svc-site-acquisition.jpg',
   },
   {
     name: 'Project Financing',
@@ -47,22 +58,32 @@ export default function ExpertiseTabs() {
       <div className="xp-bg" style={{ backgroundImage: `url("${svc.image}")` }} aria-hidden="true" />
       <div className="xp-overlay" aria-hidden="true" />
       <div className="xp-wrap">
-        <h2 className="xp-head">Services</h2>
-        <div className="xp-tabs" role="tablist" aria-label="Services">
-          {SERVICES.map((s, i) => (
-            <button
-              key={s.name}
-              type="button"
-              role="tab"
-              aria-selected={i === active}
-              className={`xp-pill${i === active ? ' active' : ''}`}
-              onClick={() => setActive(i)}
-            >
-              {s.name}
-            </button>
-          ))}
-        </div>
-        <p className="xp-desc">{svc.desc}</p>
+        {GROUPS.map((g) => {
+          const activeInGroup = active >= g.range[0] && active < g.range[1];
+          return (
+            <div className="xp-group" key={g.label}>
+              <h2 className="xp-group-head">{g.label}</h2>
+              <div className="xp-tabs" role="tablist" aria-label={g.label}>
+                {SERVICES.slice(g.range[0], g.range[1]).map((s, j) => {
+                  const i = g.range[0] + j;
+                  return (
+                    <button
+                      key={s.name}
+                      type="button"
+                      role="tab"
+                      aria-selected={i === active}
+                      className={`xp-pill${i === active ? ' active' : ''}`}
+                      onClick={() => setActive(i)}
+                    >
+                      {s.name}
+                    </button>
+                  );
+                })}
+              </div>
+              {activeInGroup && <p className="xp-desc">{svc.desc}</p>}
+            </div>
+          );
+        })}
       </div>
 
       <style>{`
@@ -75,8 +96,9 @@ export default function ExpertiseTabs() {
         .xp-overlay{ position:absolute; inset:0; z-index:1; background:rgba(239,237,230,.28); }
         .xp-wrap{ position:relative; z-index:2; width:100%; max-width:1280px; margin:0 auto;
           padding:clamp(64px,11vh,140px) clamp(28px,5vw,72px); }
-        .xp-head{ margin:0 0 clamp(30px,3.4vw,48px); font-family:var(--serif,'Newsreader',Georgia,serif);
-          font-weight:700; font-size:clamp(46px,6vw,84px); line-height:1.0; letter-spacing:-0.015em; color:var(--ink);
+        .xp-group{ margin:0 0 clamp(30px,3.6vw,46px); }
+        .xp-group-head{ margin:0 0 clamp(16px,1.8vw,24px); font-family:var(--serif,'Newsreader',Georgia,serif);
+          font-weight:700; font-size:clamp(40px,5.4vw,76px); line-height:1.0; letter-spacing:-0.015em; color:var(--ink);
           text-shadow:0 1px 2px rgba(255,255,255,.5); }
         .xp-tabs{ display:flex; flex-wrap:wrap; gap:16px 18px; }
         .xp-pill{ font-family:var(--sans); font-size:clamp(16px,1.3vw,20px); font-weight:500;
