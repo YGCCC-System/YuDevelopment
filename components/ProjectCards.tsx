@@ -7,9 +7,9 @@ export default function ProjectCards({ projects }: { projects: Project[] }) {
   return (
     <>
       {projects.map((p, i) => {
-        const sub = p.units || p.scope || p.type || '';
         const alt = p.name + (p.location ? ` — ${p.location}` : '');
         const override = projectOverride(p.name);
+        const sub = p.units || p.scope || p.type || override?.units || '';
         const img = projectImage(p.image) || override?.image || '';
         const href = override?.link || '#';
         const external = /^https?:\/\//i.test(href);

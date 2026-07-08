@@ -34,7 +34,7 @@ const css = `
     letter-spacing:0.28em; text-transform:uppercase; color:var(--accent); }
   .legal-head{ margin:0; font-family:var(--sans); font-weight:600;
     font-size:clamp(30px,4vw,48px); line-height:1.08; letter-spacing:-0.025em; color:var(--ink); }
-  .legal-accent{ width:56px; height:3px; background:var(--accent); border-radius:2px; margin:22px 0 0; }
+  .legal-accent{ width:56px; height:3px; background:var(--accent); border-radius:0; margin:22px 0 0; }
   .legal-updated{ margin:16px 0 0; font-family:var(--mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-3); }
   .rule{ height:1px; background:var(--rule); margin:clamp(26px,3vw,40px) 0 clamp(30px,4vw,48px); }
 
@@ -44,7 +44,7 @@ const css = `
   .legal-body h2{ margin:0 0 12px; font-family:var(--sans); font-weight:600; position:relative;
     padding-left:16px; font-size:clamp(18px,1.8vw,22px); letter-spacing:-0.012em; color:var(--ink); }
   .legal-body h2::before{ content:""; position:absolute; left:0; top:0.18em; width:5px; height:5px;
-    border-radius:1px; background:var(--accent); }
+    border-radius:0; background:var(--accent); }
   .legal-body p{ margin:0 0 16px; font-size:clamp(15px,1.2vw,17px); line-height:1.62; color:var(--ink-2); max-width:66ch; }
   .legal-body ul{ margin:0 0 16px; padding-left:2px; list-style:none; }
   .legal-body li{ position:relative; padding-left:22px; font-size:clamp(15px,1.2vw,17px); line-height:1.62; color:var(--ink-2); max-width:64ch; margin:0 0 9px; }
@@ -52,7 +52,7 @@ const css = `
   .legal-body a{ color:var(--link); text-decoration:underline; text-underline-offset:2px; }
   .legal-body a:hover{ color:var(--accent-deep); }
   .legal-note{ margin-top:clamp(36px,4.5vw,56px); padding:18px 20px 18px 22px; border:1px solid var(--rule);
-    border-left:3px solid var(--accent); border-radius:12px; background:var(--paper-2); font-size:13.5px; line-height:1.55; color:var(--ink-3); }
+    border-left:3px solid var(--accent); border-radius:0; background:var(--paper-2); font-size:13.5px; line-height:1.55; color:var(--ink-3); }
 
   /* footer (ported from v12) */
   footer.v12foot{ --foot-bg:#0E1626; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);

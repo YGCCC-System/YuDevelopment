@@ -37,7 +37,7 @@ const css = `
     letter-spacing:0.28em; text-transform:uppercase; color:var(--accent); }
   .contact-head{ margin:0; max-width:24ch; font-family:var(--sans); font-weight:600;
     font-size:clamp(30px,4vw,48px); line-height:1.08; letter-spacing:-0.025em; color:var(--ink); text-wrap:balance; }
-  .contact-accent{ width:56px; height:3px; background:var(--accent); border-radius:2px; margin:22px 0 0; }
+  .contact-accent{ width:56px; height:3px; background:var(--accent); border-radius:0; margin:22px 0 0; }
   .rule{ height:1px; background:var(--rule); margin:clamp(18px,2.2vw,28px) 0 clamp(36px,4.5vw,60px); }
 
   .split{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(40px,6vw,96px); align-items:start; }
@@ -52,7 +52,7 @@ const css = `
   .d-num{ position:absolute; left:0; top:1px; font-family:var(--mono); font-size:12px;
     letter-spacing:0.06em; color:var(--accent); font-weight:500; }
   .clickup-form{ width:100%; height:520px; display:block; border:1px solid var(--rule);
-    border-radius:14px; background:#fff; box-shadow:0 18px 40px -24px rgba(20,22,26,.28); overflow:hidden; }
+    border-radius:0; background:#fff; box-shadow:0 18px 40px -24px rgba(20,22,26,.28); overflow:hidden; }
   @media (max-width:760px){ .clickup-form{ height:580px; } }
   .d h4{ margin:0 0 9px; font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink); font-weight:500; transition:color .2s ease; }
   .d a, .d p{ margin:0; font-size:clamp(16px,1.3vw,18px); line-height:1.5; color:var(--ink); text-decoration:none; transition:color .2s ease; }

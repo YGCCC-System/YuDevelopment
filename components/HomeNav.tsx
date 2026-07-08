@@ -12,6 +12,7 @@ const LINKS = [
   { href: '/news', label: 'News' },
   { href: '/investors', label: 'Investors' },
   { href: '/contact', label: 'Contact' },
+  { href: '/careers', label: 'Careers' },
 ];
 
 export default function HomeNav() {
@@ -30,7 +31,7 @@ export default function HomeNav() {
       </button>
       <nav className={`hf-links${open ? ' open' : ''}`}>
         {LINKS.map((l) => (
-          <a key={l.href} href={l.href} style={{ fontWeight: 600, fontSize: '14px' }} onClick={() => setOpen(false)}>
+          <a key={l.href} href={l.href} style={{ fontWeight: 600, fontSize: '14px' }}>
             {l.label}
           </a>
         ))}

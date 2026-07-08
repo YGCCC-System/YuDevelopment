@@ -14,6 +14,7 @@ const LINKS: { href: string; label: string; key?: Section }[] = [
   { href: '/news', label: 'News', key: 'news' },
   { href: '/investors', label: 'Investors', key: 'investors' },
   { href: '/contact', label: 'Contact', key: 'contact' },
+  { href: '/careers', label: 'Careers' },
 ];
 
 export default function SiteNav({ active }: { active?: Section }) {
@@ -36,7 +37,6 @@ export default function SiteNav({ active }: { active?: Section }) {
             key={l.href}
             href={l.href}
             className={active && l.key === active ? 'active' : undefined}
-            onClick={() => setOpen(false)}
           >
             {l.label}
           </a>
@@ -48,7 +48,7 @@ export default function SiteNav({ active }: { active?: Section }) {
         @media (max-width:760px){
           .nav .nav-burger{ display:flex; flex-direction:column; justify-content:center; gap:5px;
             width:44px; height:44px; margin-left:auto; padding:0; background:none; border:none; cursor:pointer; z-index:2; }
-          .nav .nav-burger span{ display:block; width:24px; height:2px; border-radius:2px;
+          .nav .nav-burger span{ display:block; width:24px; height:2px; border-radius:0;
             background:#F7F8FA; transition:transform .25s ease, opacity .2s ease; }
           .nav .nav-burger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
           .nav .nav-burger.open span:nth-child(2){ opacity:0; }

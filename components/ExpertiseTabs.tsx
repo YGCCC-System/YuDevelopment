@@ -104,7 +104,7 @@ export default function ExpertiseTabs() {
           text-shadow:0 1px 3px rgba(247,248,250,.95), 0 0 20px rgba(247,248,250,.7); }
         .xp-tabs{ display:flex; flex-wrap:wrap; gap:16px 18px; }
         .xp-pill{ font-family:var(--sans); font-size:clamp(16px,1.3vw,20px); font-weight:500;
-          color:var(--ink); background:#fff; border:1px solid rgba(255,255,255,.6); border-radius:999px;
+          color:var(--ink); background:#fff; border:1px solid rgba(255,255,255,.6); border-radius:0;
           padding:16px 32px; cursor:pointer; box-shadow:0 3px 16px rgba(20,22,26,.14);
           transition:background .2s ease, color .2s ease, transform .2s ease; }
         .xp-pill:hover{ transform:translateY(-1px); }
