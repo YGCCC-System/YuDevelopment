@@ -4,12 +4,13 @@
 // projects need a local image before they're set in the CMS. This map lets us
 // attach an image and/or an outbound link to a specific project by name until
 // that data lives in Sanity. Keyed by the project's name, lower-cased & trimmed.
-export type ProjectOverride = { image?: string; link?: string };
+export type ProjectOverride = { image?: string; link?: string; units?: string };
 
 const OVERRIDES: Record<string, ProjectOverride> = {
   'platform at osigian way': {
     image: '/media/platform-osigian-way.jpg',
     link: 'https://www.apartments.com/the-platform-at-osigian-way-warner-robins-ga/0xxj2c1/',
+    units: '120 units',
   },
   'platform douglas': {
     link: 'https://www.apartments.com/platform-douglas-douglas-ga/m0s6cwh/',

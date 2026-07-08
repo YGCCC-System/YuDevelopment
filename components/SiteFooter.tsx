@@ -30,6 +30,7 @@ export default async function SiteFooter() {
               <a href="/news">News</a>
               <a href="/investors">Investors</a>
               <a href="/contact">Contact</a>
+              <a href="/careers">Careers</a>
             </div>
           </div>
           <div className="col col-office">

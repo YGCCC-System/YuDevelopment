@@ -5,6 +5,7 @@ import { getSiteContent, projectImage, isVideoUrl, FEATURED_NEWS } from '@/lib/c
 import ExpertiseTabs from '@/components/ExpertiseTabs';
 import SocialLinks from '@/components/SocialLinks';
 import HomeNav from '@/components/HomeNav';
+import CountUp from '@/components/CountUp';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Hero',
@@ -101,13 +102,13 @@ const css = `
     position:relative; display:inline-flex; align-items:center; gap:9px; margin-top:clamp(24px,3vw,34px);
     padding:15px 30px; background:#F7F8FA; color:#0B1320;
     font-family:var(--sans); font-weight:600; font-size:15px; letter-spacing:0.02em;
-    border-radius:6px; text-decoration:none; cursor:pointer;
+    border-radius:0; text-decoration:none; cursor:pointer;
     box-shadow:0 6px 22px rgba(8,12,18,.28);
     transition:background .2s ease, transform .2s ease, box-shadow .2s ease;
   }
   /* expanding ripple ring to draw the eye */
   .hf-cta::before{
-    content:""; position:absolute; inset:0; border-radius:6px; pointer-events:none;
+    content:""; position:absolute; inset:0; border-radius:0; pointer-events:none;
     animation:ctaRing 2.8s ease-out infinite;
   }
   @keyframes ctaRing{
@@ -115,11 +116,26 @@ const css = `
     70%{ box-shadow:0 0 0 16px rgba(247,248,250,0); }
     100%{ box-shadow:0 0 0 0 rgba(247,248,250,0); }
   }
-  .hf-cta .arw{ transition:transform .25s ease; }
+  .hf-cta .arw{ display:inline-block; transition:transform .25s ease; animation:ctaNudge 1.9s ease-in-out infinite; }
+  @keyframes ctaNudge{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(6px); } }
+  .sec-link .arw{ display:inline-block; transition:transform .25s ease; animation:ctaNudge 1.9s ease-in-out infinite; }
+  .sec-link:hover .arw{ transform:translateX(8px); animation:none; }
+  @media (prefers-reduced-motion: reduce){ .sec-link .arw{ animation:none; transition:none; } }
+
+  /* "Who lives here" band on olive green — flip text to light for readability */
+  .who-olive .split2.build-2col .build-copy{ justify-content:flex-start; gap:clamp(28px,4vw,48px); padding-bottom:0; }
+  .who-olive .split2.build-2col .build-copy .sec-h{ color:#F7F8FA; }
+  .who-olive .about-rule{ background:rgba(255,255,255,.24); }
+  .who-olive .split2.build-2col .build-copy .build-note{ color:rgba(247,248,250,.80); }
+  .who-olive .who-label{ color:rgba(247,248,250,.72); }
+  .who-olive .who-fig{ color:#8FB0DF; }
+  .who-olive .who-figlab{ color:rgba(247,248,250,.82); }
+  .who-olive .split2.build-2col .who{ border-top-color:rgba(255,255,255,.24); }
+  .who-olive .split2.build-2col .who li{ color:#F7F8FA; border-bottom-color:rgba(255,255,255,.20); }
   .hf-cta:hover{ background:#fff; transform:translateY(-2px); box-shadow:0 10px 30px rgba(8,12,18,.34); }
-  .hf-cta:hover .arw{ transform:translateX(5px); }
+  .hf-cta:hover .arw{ transform:translateX(6px); animation:none; }
   .hf-cta:hover::before{ animation:none; }
-  @media (prefers-reduced-motion: reduce){ .hf-cta::before{ animation:none; } .hf-cta .arw{ transition:none; } }
+  @media (prefers-reduced-motion: reduce){ .hf-cta::before{ animation:none; } .hf-cta .arw{ transition:none; animation:none; } }
 
   /* Scroll cue ------------------------------------------------ */
   .hf-cue{
@@ -161,7 +177,7 @@ const css = `
     .hf-nav{ padding:0 28px; }
     .hf-links{ display:none; }
     .hf-burger{ display:flex; flex-direction:column; justify-content:center; gap:5px; width:44px; height:44px; margin-left:auto; cursor:pointer; z-index:3; }
-    .hf-burger span{ display:block; width:24px; height:2px; border-radius:2px; background:currentColor; transition:transform .25s ease, opacity .2s ease; }
+    .hf-burger span{ display:block; width:24px; height:2px; border-radius:0; background:currentColor; transition:transform .25s ease, opacity .2s ease; }
     .hf-links.open{ display:flex; position:absolute; top:92px; left:0; right:0; flex-direction:column; align-items:stretch; gap:0; margin:0; padding:6px 0 10px; background:#0E1626; border-bottom:1px solid rgba(255,255,255,.10); box-shadow:0 24px 40px -22px rgba(0,0,0,.55); }
     .hf-links.open a{ padding:15px 28px; color:#F7F8FA !important; }
     .hf-burger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
@@ -207,19 +223,6 @@ const css = `
     .about-stats .statgrid{ grid-template-columns:1fr 1fr !important; gap:clamp(30px,7vw,40px) 20px !important; }
     .about-stats .fig{ font-size:clamp(34px,9vw,46px); }
     .about-stats .lab{ margin-top:8px; font-size:14px; }
-  }
-  .local-stmt{ padding:clamp(64px,8vh,120px) 0; }
-  .local-stmt .local-grid{ display:grid; grid-template-columns:1fr 1.15fr; gap:clamp(40px,5vw,80px); align-items:stretch; }
-  .local-stmt .local-grid .local-line{ max-width:22ch; align-self:center; }
-  .local-stmt .local-grid .local-line--statement{ font-size:clamp(23px,2.5vw,38px); line-height:1.32; letter-spacing:-0.014em; max-width:30ch; }
-  .local-stmt .local-media{ margin:0; }
-  .local-stmt .local-media img{ width:100%; height:100%; min-height:460px; object-fit:cover; display:block;
-    border-radius:16px; box-shadow:0 26px 64px -30px rgba(0,0,0,.6); }
-  @media (max-width:860px){
-    .local-stmt .local-grid{ grid-template-columns:1fr; gap:clamp(32px,6vw,44px); }
-    .local-stmt .local-grid .local-line{ max-width:24ch; }
-    .local-stmt .local-grid .local-line--statement{ max-width:none; }
-    .local-stmt .local-media img{ height:auto; min-height:0; max-height:360px; }
   }
 `;
 
@@ -379,7 +382,7 @@ export default async function HomePage() {
               )}
             </div>
             <div className="proj-cta">
-              <a className="sec-link" href="/projects" style={{ borderBottom: 'none', textDecoration: 'none', color: '#6E7B43' }}>View full portfolio &rarr;</a>
+              <a className="sec-link" href="/projects" style={{ borderBottom: 'none', textDecoration: 'none', color: '#6E7B43' }}>View full portfolio <span className="arw">&rarr;</span></a>
             </div>
           </div>
         </section>
@@ -388,15 +391,31 @@ export default async function HomePage() {
         {/* ============================ SERVICES (full-page capability tabs) ============================ */}
         <ExpertiseTabs />
 
-        {/* ============================ LOCAL ECONOMY STATEMENT ============================ */}
-        <section className="local-stmt" data-screen-label="Local economy">
-          <div className="wrap local-grid">
-            <p className="local-line local-line--statement" style={{ maxWidth: 'none' }}>
-              A strong local economy starts with housing that matches local wages. By creating attainable rental homes, communities can retain essential workers, support nearby employers, and keep more household spending close to home.
-            </p>
-            <div className="local-media">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/media/local-economy.jpg" alt="Residents of a Southeast community on a downtown street — a nurse, a firefighter, shoppers, and a market vendor." loading="lazy" decoding="async" />
+        {/* ============================ WHO LIVES HERE ============================ */}
+        <section className="story paper who-olive" data-screen-label="Who lives here" style={{ background: '#586235', padding: 'clamp(72px,9vw,120px) 0' }}>
+          <div className="wrap">
+            <div className="split2 build-2col">
+              <div className="build-copy">
+                <div>
+                  <h2 className="sec-h" style={{ fontWeight: 500 }}>Rental communities, priced for the people who keep a city running.</h2>
+                  <div className="about-rule" style={{ margin: 'clamp(28px,3.5vw,44px) 0 0' }}></div>
+                </div>
+                <p className="build-note">Homes affordable to households earning around 72% of area median income, with every unit under 80%.</p>
+              </div>
+              <div className="fx-d1">
+                <div className="who-label">Who lives here</div>
+                <div className="who-stat">
+                  <CountUp className="who-fig" target={68} suffix="%" />
+                  <span className="who-figlab">essential workers</span>
+                </div>
+                <ul className="who">
+                  <li>Teachers &amp; school staff</li>
+                  <li>Nurses &amp; healthcare workers</li>
+                  <li>First responders &amp; public-safety workers</li>
+                  <li>Plant &amp; food-production workers</li>
+                  <li>Local workers &amp; their families</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
@@ -433,7 +452,7 @@ export default async function HomePage() {
             })}
           </div>
           <div className="wrap" style={{ textAlign: 'center', marginTop: 'clamp(28px,3.5vw,44px)' }}>
-            <a href="/news" className="sec-link" style={{ textDecoration: 'none', borderBottom: 'none', color: '#6E7B43', fontWeight: 600 }}>See more →</a>
+            <a href="/news" className="sec-link" style={{ textDecoration: 'none', borderBottom: 'none', color: '#6E7B43', fontWeight: 600 }}>See more <span className="arw">→</span></a>
           </div>
         </section>
 
@@ -442,7 +461,7 @@ export default async function HomePage() {
           <div className="wrap">
             <h2>{ctaTitle}</h2>
             <div className="cta">
-              <a className="sec-link" href={ctaHref} style={{ borderBottom: 'none', textDecoration: 'none', fontSize: 'clamp(22px,2.4vw,32px)', color: '#6E7B43' }}>{ctaLabel} &rarr;</a>
+              <a className="sec-link" href={ctaHref} style={{ borderBottom: 'none', textDecoration: 'none', fontSize: 'clamp(22px,2.4vw,32px)', color: '#6E7B43' }}>{ctaLabel} <span className="arw">&rarr;</span></a>
             </div>
           </div>
         </section>
@@ -462,6 +481,7 @@ export default async function HomePage() {
                   <a href="/news">News</a>
                   <a href="/investors">Investors</a>
                   <a href="/contact">Contact</a>
+                  <a href="/careers">Careers</a>
                 </div>
               </div>
               <div className="col col-office">

@@ -41,7 +41,12 @@ const css = `
   .lead{ margin:0; font-size:clamp(18px,1.5vw,22px); line-height:1.55; color:var(--ink-2); max-width:42ch; }
   .lead + .lead{ margin-top:clamp(16px,1.6vw,22px); }
   .cta{ margin-top:clamp(28px,3.4vw,42px); }
-  .cta a{ display:inline-flex; align-items:center; gap:9px; color:var(--link); font-weight:500; font-size:clamp(22px,2.4vw,32px); letter-spacing:-0.01em; text-decoration:none; }
+  .cta a{ display:inline-flex; align-items:center; gap:9px; color:var(--link); font-weight:500; font-size:clamp(22px,2.4vw,32px); letter-spacing:-0.01em; text-decoration:none; transition:color .2s ease; }
+  .cta a .arw{ display:inline-block; transition:transform .25s ease; animation:ctaNudge 1.9s ease-in-out infinite; }
+  .cta a:hover{ color:var(--accent-deep); }
+  .cta a:hover .arw{ transform:translateX(8px); animation:none; }
+  @keyframes ctaNudge{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(6px); } }
+  @media (prefers-reduced-motion: reduce){ .cta a .arw{ animation:none; transition:none; } }
 
   .details{ display:grid; gap:clamp(26px,3vw,38px); }
   .d h4{ margin:0 0 9px; font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); font-weight:500; }
@@ -101,7 +106,7 @@ export default async function InvestorsPage() {
             <div>
               <p className="lead">{intro}</p>
               <p className="lead">We underwrite to working rents, not exit prices, and own and operate the majority of our communities long term &mdash; aligning durable cash flow with the communities we serve.</p>
-              <div className="cta"><a href="/contact">Investor relations &rarr;</a></div>
+              <div className="cta"><a href="/contact">Investor relations <span className="arw">&rarr;</span></a></div>
             </div>
             <div className="details">
               <div className="d">
