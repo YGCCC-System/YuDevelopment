@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import './globals.css';
+import CookieConsent from '@/components/CookieConsent';
 
 export const metadata: Metadata = {
   title: 'Yu Development',
@@ -29,6 +30,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <CookieConsent />
         {/* Custom <image-slot> element + Sanity CMS hydration (and the
             Ctrl+Alt+. admin hotkey) — shared across every page. */}
         <Script src="/image-slot.js" strategy="afterInteractive" />

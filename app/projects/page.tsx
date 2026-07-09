@@ -3,6 +3,7 @@ import Script from 'next/script';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import ProjectCards from '@/components/ProjectCards';
+import ProjectMap from '@/components/ProjectMap';
 import { getProjects, getSiteContent } from '@/lib/content';
 
 export const metadata: Metadata = {
@@ -81,6 +82,25 @@ const css = `
   @media (max-width:880px){ .proj-grid{ grid-template-columns:1fr 1fr; } }
   @media (max-width:560px){ .proj-grid{ grid-template-columns:1fr; } }
 
+  /* Project locations map */
+  .proj-map{ width:100%; height:clamp(340px,40vw,540px); margin:0 0 clamp(40px,5vw,64px);
+    border:1px solid var(--rule); overflow:hidden; background:#0E1626; }
+  .mapbox-canvas{ width:100%; height:100%; }
+  .yu-pin{ background:none; border:none; }
+  .yu-pin svg{ filter:drop-shadow(0 4px 6px rgba(0,0,0,.4)); display:block; }
+  .leaflet-container{ font-family:var(--sans); background:#0E1626; }
+  .leaflet-popup-content-wrapper{ border-radius:0; padding:0; overflow:hidden; box-shadow:0 16px 40px -16px rgba(0,0,0,.5); }
+  .leaflet-popup-content{ margin:0 !important; width:220px !important; font-family:var(--sans); }
+  .yu-pop{ display:block; text-decoration:none; color:var(--ink); }
+  .yu-pop-img{ display:block; height:118px; background-size:cover; background-position:center; background-color:var(--paper-2); }
+  .yu-pop-body{ display:block; padding:11px 13px 13px; }
+  .yu-pop-name{ display:block; font-weight:600; font-size:14px; letter-spacing:-0.01em; color:var(--ink); transition:color .2s ease; }
+  .yu-pop-sub{ display:block; margin-top:3px; font-size:12.5px; color:var(--ink-3); }
+  .yu-pop-cta{ display:block; margin-top:9px; font-size:12.5px; font-weight:600; color:var(--accent); transition:color .2s ease; }
+  .yu-pop:hover .yu-pop-name{ color:var(--accent); }
+  .yu-pop:hover .yu-pop-cta{ color:var(--accent-deep); }
+  @media (max-width:760px){ .proj-map{ height:clamp(300px,62vw,420px); } }
+
   /* footer (ported from v12) */
   footer.v12foot{ --foot-bg:#0E1626; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);
     background:var(--foot-bg); color:var(--foot-text); border-top:1px solid var(--foot-line); padding:84px 0 28px; }
@@ -143,6 +163,8 @@ export default async function ProjectsPage() {
           </div>
 
           <div className="rule"></div>
+
+          <div className="proj-map"><ProjectMap /></div>
 
           <div className="proj-grid">
             {projects.length ? (
