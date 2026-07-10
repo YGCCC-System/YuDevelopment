@@ -109,7 +109,7 @@ export default async function ContactPage() {
           <div className="split">
             <div>
               <p className="lead">{lead}</p>
-              <p className="details-title">Three ways to reach us</p>
+              <p className="details-title">Four ways to reach us</p>
               <div className="details">
                 <div className="d">
                   <span className="d-num">01</span>
@@ -128,6 +128,12 @@ export default async function ContactPage() {
                   <h4>Office</h4>
                   <p>{office}</p>
                   <p className="hint">Visits by appointment — reach out before stopping by.</p>
+                </div>
+                <div className="d">
+                  <span className="d-num">04</span>
+                  <h4>Zoom</h4>
+                  <a href="/zoom" target="_blank" rel="noopener">yudevelopment.com/zoom</a>
+                  <p className="hint">Join our meeting room — you&rsquo;ll wait in the lobby until we let you in.</p>
                 </div>
               </div>
             </div>
