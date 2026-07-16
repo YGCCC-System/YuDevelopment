@@ -1,20 +1,22 @@
 import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import { getSiteContent, projectImage, withTeamPhotos, type Member } from '@/lib/content';
+import { getSiteContent, projectImage, type Member } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Team',
 };
 
-const TEAM_FALLBACK: Member[] = [
-  { name: 'George Yu', role: 'Founder & CEO' },
-  { name: 'Nathan Pritzker', role: 'Associate' },
+// Roster is set here in code (names + roles). No headshots — every member
+// shows "Coming soon" until photos are added.
+const TEAM: Member[] = [
+  { name: 'George Y', role: 'Founder & CEO' },
+  { name: 'Nathan P', role: 'Associate' },
   { name: 'Myka Hosmillo', role: 'Analyst' },
-  { name: 'Anaat Verma', role: 'Analyst' },
-  { name: 'Cedric Houston', role: 'Analyst' },
-  { name: 'Karol San Miguel', role: 'Project Manager' },
-  { name: 'Israela Joy Dagami', role: 'Project Manager' },
+  { name: 'Anaat V', role: 'Analyst' },
+  { name: 'Cedric H', role: 'Analyst' },
+  { name: 'Karol San M', role: 'Project Manager' },
+  { name: 'Israela Joy D', role: 'Project Manager' },
 ];
 
 const css = `
@@ -81,8 +83,7 @@ export default async function TeamPage() {
   const content = await getSiteContent();
   const people = content?.people;
   const heading = people?.title || 'Our Team';
-  const members = (people?.members ?? []).filter((m) => m && m.name && String(m.name).trim());
-  const list = withTeamPhotos(members.length ? members : TEAM_FALLBACK);
+  const list = TEAM;
 
   return (
     <>
