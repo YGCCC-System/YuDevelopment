@@ -3,10 +3,35 @@ import Script from 'next/script';
 import './globals.css';
 import CookieConsent from '@/components/CookieConsent';
 
+const SITE_URL = 'https://yudevelopment.com';
+const SITE_DESC =
+  'A private development firm building attainable rental housing across the Southeast United States.';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'Yu Development',
-  description:
-    'A private development firm building attainable rental housing across the Southeast United States.',
+  description: SITE_DESC,
+  openGraph: {
+    type: 'website',
+    url: SITE_URL,
+    siteName: 'Yu Development',
+    title: 'Yu Development',
+    description: SITE_DESC,
+    images: [
+      {
+        url: '/media/og-home.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Yu Development — attainable rental housing across the Southeast',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Yu Development',
+    description: SITE_DESC,
+    images: ['/media/og-home.jpg'],
+  },
 };
 
 export default function RootLayout({
