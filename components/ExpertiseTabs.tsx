@@ -55,8 +55,6 @@ export default function ExpertiseTabs() {
   const svc = SERVICES[active];
   return (
     <section className="xp-section" id="expertise" data-screen-label="Services">
-      <div className="xp-bg" style={{ backgroundImage: `url("${svc.image}")` }} aria-hidden="true" />
-      <div className="xp-overlay" aria-hidden="true" />
       <div className="xp-wrap">
         {GROUPS.map((g) => {
           const activeInGroup = active >= g.range[0] && active < g.range[1];
@@ -87,31 +85,23 @@ export default function ExpertiseTabs() {
       </div>
 
       <style>{`
-        /* Full-page section — full viewport height, content vertically centered. */
-        .xp-section{ position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; scroll-margin-top:92px; }
-        /* Full-bleed related photo, 50% blur wash. Over-scaled so the blur's soft
-           edges never reveal a gap. */
-        .xp-bg{ position:absolute; inset:0; z-index:0; background-size:cover; background-position:center;
-          filter:blur(5px); transform:scale(1.06); }
-        /* Light veil, heavier on the left where the text sits, lighter on the right so the photo shows through. */
-        .xp-overlay{ position:absolute; inset:0; z-index:1;
-          background:linear-gradient(90deg, rgba(239,237,230,.75) 0%, rgba(239,237,230,.56) 45%, rgba(239,237,230,.3) 100%); }
+        /* Sizes to its content with comfortable padding (photos removed). */
+        .xp-section{ position:relative; overflow:hidden; scroll-margin-top:92px; background:var(--paper); }
         .xp-wrap{ position:relative; z-index:2; width:100%; max-width:1280px; margin:0 auto;
-          padding:clamp(64px,11vh,140px) clamp(28px,5vw,72px); }
-        .xp-group{ margin:0 0 clamp(30px,3.6vw,46px); }
-        .xp-group-head{ margin:0 0 clamp(16px,1.8vw,24px); font-family:var(--serif,'Newsreader',Georgia,serif);
-          font-weight:700; font-size:clamp(40px,3.8vw,52px); line-height:1.02; letter-spacing:-0.015em; color:var(--ink);
-          text-shadow:0 1px 3px rgba(247,248,250,.95), 0 0 20px rgba(247,248,250,.7); }
-        .xp-tabs{ display:flex; flex-wrap:wrap; gap:16px 18px; }
-        .xp-pill{ font-family:var(--sans); font-size:clamp(16px,1.3vw,20px); font-weight:500;
-          color:var(--ink); background:#fff; border:1px solid rgba(255,255,255,.6); border-radius:0;
-          padding:16px 32px; cursor:pointer; box-shadow:0 3px 16px rgba(20,22,26,.14);
-          transition:background .2s ease, color .2s ease, transform .2s ease; }
-        .xp-pill:hover{ transform:translateY(-1px); }
+          padding:clamp(76px,10vh,132px) clamp(28px,5vw,72px); }
+        .xp-group{ margin:0 0 clamp(22px,2.6vw,34px); }
+        .xp-group:last-of-type{ margin-bottom:0; }
+        .xp-group-head{ margin:0 0 clamp(14px,1.5vw,20px); font-family:var(--serif,'Newsreader',Georgia,serif);
+          font-weight:700; font-size:clamp(36px,3.4vw,48px); line-height:1.02; letter-spacing:-0.015em; color:var(--ink); }
+        .xp-tabs{ display:flex; flex-wrap:wrap; gap:12px 14px; }
+        .xp-pill{ font-family:var(--sans); font-size:clamp(15px,1.2vw,18px); font-weight:500;
+          color:var(--ink); background:#fff; border:1px solid var(--rule); border-radius:0;
+          padding:13px 26px; cursor:pointer; box-shadow:0 3px 16px rgba(20,22,26,.08);
+          transition:background .2s ease, color .2s ease, transform .2s ease, border-color .2s ease; }
+        .xp-pill:hover{ transform:translateY(-1px); border-color:var(--ink-3); }
         .xp-pill.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
-        .xp-desc{ margin:clamp(34px,4vw,54px) 0 0; max-width:60ch; font-family:var(--sans); font-weight:500;
-          font-size:clamp(20px,1.8vw,28px); line-height:1.55; color:var(--ink);
-          text-shadow:0 1px 2px rgba(247,248,250,.95), 0 0 18px rgba(247,248,250,.85); }
+        .xp-desc{ margin:clamp(22px,2.6vw,34px) 0 0; max-width:62ch; font-family:var(--sans); font-weight:500;
+          font-size:clamp(18px,1.5vw,23px); line-height:1.5; color:var(--ink-2); }
       `}</style>
     </section>
   );
