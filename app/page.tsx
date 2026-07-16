@@ -8,7 +8,7 @@ import HomeNav from '@/components/HomeNav';
 import CountUp from '@/components/CountUp';
 
 export const metadata: Metadata = {
-  title: 'Yu Development — Hero',
+  title: 'Yu Development — Housing that Works for the Working People',
 };
 
 // Split a stat string like "$90M" / "948" / "68%" into the parts the count-up
