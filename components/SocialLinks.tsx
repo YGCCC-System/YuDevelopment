@@ -1,8 +1,8 @@
-// Social links for the footer — logo icon : domain text (Instagram, Facebook, YouTube).
+// Social links for the footer — logo icon : label text (Instagram, Facebook, LinkedIn).
 export default function SocialLinks() {
   return (
     <div className="foot-social">
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <a href="https://www.instagram.com/yudevelopment" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <span className="ico">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <rect x="2" y="2" width="20" height="20" rx="5" />
@@ -10,23 +10,23 @@ export default function SocialLinks() {
             <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none" />
           </svg>
         </span>
-        <span className="dom">/instagram.com</span>
+        <span className="dom">Instagram</span>
       </a>
-      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+      <a href="https://www.facebook.com/profile.php?id=61592021725366" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
         <span className="ico">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z" />
           </svg>
         </span>
-        <span className="dom">/facebook.com</span>
+        <span className="dom">Facebook</span>
       </a>
-      <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+      <a href="https://www.linkedin.com/company/yudevelopment" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
         <span className="ico">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M23.5 6.2a3 3 0 0 0-2.11-2.12C19.5 3.56 12 3.56 12 3.56s-7.5 0-9.39.52A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.11 2.12c1.89.52 9.39.52 9.39.52s7.5 0 9.39-.52a3 3 0 0 0 2.11-2.12A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6z" />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
           </svg>
         </span>
-        <span className="dom">/youtube.com</span>
+        <span className="dom">LinkedIn</span>
       </a>
       <style>{`
         /* Left-align the whole footer contact column (overrides the per-page right-align) */
