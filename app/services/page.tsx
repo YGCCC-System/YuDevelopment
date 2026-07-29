@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import ExpertiseTabs from '@/components/ExpertiseTabs';
+import DevelopmentSupportSection from '@/components/DevelopmentSupportSection';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Services',
@@ -57,6 +58,8 @@ export default function ServicesPage() {
       <SiteNav active="services" />
 
       <ExpertiseTabs />
+
+      <DevelopmentSupportSection />
 
       <SiteFooter />
     </>
