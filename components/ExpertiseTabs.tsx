@@ -3,8 +3,9 @@
 // "Services" — full-page section. Selectable pills swap the description and the
 // full-bleed blurred photo behind the whole page. Active pill is solid ink.
 import { useState } from 'react';
+import Link from 'next/link';
 
-type Service = { name: string; desc: string; image: string };
+type Service = { name: string; desc: string; image: string; link?: string };
 
 // The six services split into two groups shown as separate labeled rows.
 const GROUPS: { label: string; range: [number, number] }[] = [
@@ -17,6 +18,7 @@ const SERVICES: Service[] = [
     name: 'Consulting',
     desc: 'We offer full-scope development consulting for current and aspiring multifamily developers. Over the past decade we have completed 12 multifamily projects through the full development lifecycle. We can help take an idea from concept to construction, beginning with market research and site selection, and continuing all the way through selecting a general contractor.',
     image: '/media/svc-asset-management.jpg',
+    link: '/services/development-support',
   },
   {
     name: 'Design & Drafting',
@@ -78,7 +80,16 @@ export default function ExpertiseTabs() {
                   );
                 })}
               </div>
-              {activeInGroup && <p className="xp-desc">{svc.desc}</p>}
+              {activeInGroup && (
+                <>
+                  <p className="xp-desc">{svc.desc}</p>
+                  {svc.link && (
+                    <Link className="xp-more" href={svc.link}>
+                      Learn more <span className="xp-arrow">&rarr;</span>
+                    </Link>
+                  )}
+                </>
+              )}
             </div>
           );
         })}
@@ -102,6 +113,11 @@ export default function ExpertiseTabs() {
         .xp-pill.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
         .xp-desc{ margin:clamp(22px,2.6vw,34px) 0 0; max-width:62ch; font-family:var(--sans); font-weight:500;
           font-size:clamp(18px,1.5vw,23px); line-height:1.5; color:var(--ink-2); }
+        .xp-more{ display:inline-flex; align-items:center; gap:9px; margin-top:clamp(18px,2vw,26px);
+          font-family:var(--sans); font-weight:500; font-size:clamp(16px,1.3vw,19px); letter-spacing:-0.01em;
+          color:var(--accent,#6E7B43); text-decoration:none; }
+        .xp-more .xp-arrow{ transition:transform .25s ease; }
+        .xp-more:hover .xp-arrow{ transform:translateX(6px); }
       `}</style>
     </section>
   );
