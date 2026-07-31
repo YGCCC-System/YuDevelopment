@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import ProjectCards from '@/components/ProjectCards';
 import { getSiteContent, projectImage, isVideoUrl, FEATURED_NEWS } from '@/lib/content';
-import ExpertiseTabs from '@/components/ExpertiseTabs';
+import ServicesSwitch from '@/components/ServicesSwitch';
 import SocialLinks from '@/components/SocialLinks';
 import HomeNav from '@/components/HomeNav';
 import CountUp from '@/components/CountUp';
@@ -388,8 +388,8 @@ export default async function HomePage() {
         </section>
 
         {/* ============================ WHO LIVES HERE / BUILD ============================ */}
-        {/* ============================ SERVICES (full-page capability tabs) ============================ */}
-        <ExpertiseTabs />
+        {/* ============================ SERVICES (two-option switcher: Development / Development Support) ============================ */}
+        <ServicesSwitch home />
 
         {/* ============================ WHO LIVES HERE ============================ */}
         <section className="story paper who-olive" data-screen-label="Who lives here" style={{ background: '#586235', padding: 'clamp(72px,9vw,120px) 0' }}>
