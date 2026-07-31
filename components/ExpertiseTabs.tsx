@@ -8,7 +8,7 @@ type Service = { name: string; desc: string; image: string };
 
 // The six services split into two groups shown as separate labeled rows.
 const GROUPS: { label: string; range: [number, number] }[] = [
-  { label: 'Our Development Services', range: [0, 4] },
+  { label: 'Our Services', range: [0, 4] },
   { label: 'Our Partner Services', range: [4, 7] },
 ];
 
