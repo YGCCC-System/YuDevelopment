@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import ServicesSwitch from '@/components/ServicesSwitch';
+import ExpertiseTabs from '@/components/ExpertiseTabs';
 
 export const metadata: Metadata = {
   title: 'Yu Development — Services',
@@ -56,7 +56,7 @@ export default function ServicesPage() {
 
       <SiteNav active="services" />
 
-      <ServicesSwitch />
+      <ExpertiseTabs />
 
       <SiteFooter />
     </>
