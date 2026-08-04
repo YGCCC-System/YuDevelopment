@@ -79,6 +79,12 @@ export default function ExpertiseTabs() {
                 })}
               </div>
               {activeInGroup && <p className="xp-desc">{svc.desc}</p>}
+              {activeInGroup && svc.name === 'Design & Drafting' && (
+                <div className="xp-audience-links">
+                  <a href="/services/architects">For architects →</a>
+                  <a href="/services/engineers">For engineers →</a>
+                </div>
+              )}
             </div>
           );
         })}
@@ -102,6 +108,10 @@ export default function ExpertiseTabs() {
         .xp-pill.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
         .xp-desc{ margin:clamp(22px,2.6vw,34px) 0 0; max-width:62ch; font-family:var(--sans); font-weight:500;
           font-size:clamp(18px,1.5vw,23px); line-height:1.5; color:var(--ink-2); }
+        .xp-audience-links{ display:flex; gap:24px; margin-top:16px; }
+        .xp-audience-links a{ font-family:var(--sans); font-weight:600; font-size:15px; color:var(--ink);
+          text-decoration:underline; text-underline-offset:3px; }
+        .xp-audience-links a:hover{ color:var(--accent-deep); }
       `}</style>
     </section>
   );
