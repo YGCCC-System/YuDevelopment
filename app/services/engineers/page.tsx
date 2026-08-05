@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
+import MinimalNav from '@/components/services/MinimalNav';
 import HeroVideo from '@/components/services/HeroVideo';
 import TownsMarquee from '@/components/services/TownsMarquee';
 import RecentWork from '@/components/services/RecentWork';
@@ -78,7 +78,7 @@ export default function EngineersServicesPage() {
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
-      <SiteNav active="services" />
+      <MinimalNav />
 
       <HeroVideo videoUrl="https://youtu.be/j1UwsrADhS0" />
       <TownsMarquee />

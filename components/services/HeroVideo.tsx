@@ -62,6 +62,10 @@ export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-design-dra
         <h1 className="svc-hero-header">Never turn down projects you don’t have capacity for.</h1>
         <p className="svc-hero-subhead">We take on the work that takes up 80% of your time but only results in 20% of the pay.</p>
 
+        <a href="#schedule" className="svc-btn svc-btn-light">
+          Schedule a call <span aria-hidden="true">→</span>
+        </a>
+
         <div className="svc-video-frame">
           {embedUrl && playing ? (
             <iframe
@@ -91,20 +95,16 @@ export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-design-dra
             </>
           )}
         </div>
-
-        <a href="#schedule" className="svc-btn svc-btn-light">
-          Schedule a call <span aria-hidden="true">→</span>
-        </a>
       </div>
 
       <style>{`
-        .svc-hero-video{ background:#0E1626; padding:96px 0 56px; }
+        .svc-hero-video{ background:#0E1626; padding:64px 0 48px; }
         .svc-center{ text-align:center; }
         .svc-hero-header{ margin:0 auto; max-width:780px; font-family:var(--serif,'Newsreader',Georgia,serif); font-weight:700;
-          font-size:clamp(30px,4.4vw,48px); line-height:1.1; letter-spacing:-0.015em; color:#fff; }
-        .svc-hero-subhead{ margin:16px auto 0; max-width:560px; font-family:var(--sans); font-size:clamp(15px,1.4vw,18px);
+          font-size:clamp(26px,3.8vw,44px); line-height:1.1; letter-spacing:-0.015em; color:#fff; }
+        .svc-hero-subhead{ margin:14px auto 0; max-width:560px; font-family:var(--sans); font-size:clamp(15px,1.4vw,18px);
           line-height:1.5; color:rgba(247,248,250,.78); }
-        .svc-video-frame{ position:relative; margin:36px auto 0; max-width:960px; aspect-ratio:16/9; width:100%; overflow:hidden;
+        .svc-video-frame{ position:relative; margin:28px auto 0; max-width:820px; aspect-ratio:16/9; width:100%; overflow:hidden;
           border-radius:6px; border:1px solid rgba(255,255,255,.14); box-shadow:0 28px 70px -30px rgba(0,0,0,.65); }
         .svc-video-poster{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.78; }
         .svc-video-el{ position:absolute; inset:0; width:100%; height:100%; border:none; }
@@ -118,7 +118,7 @@ export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-design-dra
         .svc-video-play:hover .svc-play-circle{ transform:scale(1.05); }
         .svc-video-badge{ padding:6px 16px; border-radius:999px; background:rgba(0,0,0,.6); color:#fff;
           font-family:var(--sans); font-size:14px; font-weight:500; }
-        .svc-btn{ display:inline-flex; align-items:center; gap:8px; margin-top:32px; padding:15px 30px;
+        .svc-btn{ display:inline-flex; align-items:center; gap:8px; margin-top:24px; padding:15px 30px;
           border-radius:999px; font-family:var(--sans); font-weight:600; font-size:16px; text-decoration:none;
           transition:transform .2s ease, background .2s ease; }
         .svc-btn-light{ background:#fff; color:var(--ink); }
