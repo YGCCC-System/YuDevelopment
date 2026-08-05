@@ -4,8 +4,8 @@ import SiteFooter from '@/components/SiteFooter';
 import HeroVideo from '@/components/services/HeroVideo';
 import TownsMarquee from '@/components/services/TownsMarquee';
 import RecentWork from '@/components/services/RecentWork';
-import DifferenceSplit from '@/components/services/DifferenceSplit';
 import ServiceOfferings from '@/components/services/ServiceOfferings';
+import Testimonials from '@/components/services/Testimonials';
 import WhyUs from '@/components/services/WhyUs';
 import ProcessSteps from '@/components/services/ProcessSteps';
 import ServicesFAQ from '@/components/services/ServicesFAQ';
@@ -80,11 +80,11 @@ export default function EngineersServicesPage() {
 
       <SiteNav active="services" />
 
-      <HeroVideo />
+      <HeroVideo videoUrl="https://youtu.be/j1UwsrADhS0" />
       <TownsMarquee />
       <RecentWork audience="engineers" />
-      <DifferenceSplit />
       <ServiceOfferings />
+      <Testimonials />
       <WhyUs />
       <ProcessSteps />
       <ServicesFAQ />

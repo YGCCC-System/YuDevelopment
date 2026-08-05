@@ -4,9 +4,44 @@ import { useState } from 'react';
 import { Play } from 'lucide-react';
 
 interface HeroVideoProps {
-  /* Left undefined for now, pass a real mp4/embed URL once the video is in hand. */
+  /* Any normal YouTube or Vimeo URL (watch, youtu.be, or vimeo.com link).
+     Left undefined for now, pass the real link once the video is uploaded. */
   videoUrl?: string;
   posterSrc?: string;
+}
+
+/* Extracts the YouTube video ID from any common URL format. */
+function getYouTubeId(url: string): string | null {
+  try {
+    const u = new URL(url);
+    if (u.hostname === 'youtu.be') return u.pathname.slice(1) || null;
+    if (u.hostname.includes('youtube.com')) {
+      if (u.pathname.startsWith('/embed/')) return u.pathname.split('/embed/')[1] || null;
+      return u.searchParams.get('v');
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/* Normalizes a YouTube/Vimeo watch URL into an embeddable player URL. */
+function toEmbedUrl(url: string): string | null {
+  const ytId = getYouTubeId(url);
+  /* cc_load_policy=0 avoids forcing captions on; YouTube doesn't offer a hard
+     "always off" override since that would break viewers who rely on them,
+     so if captions still show it's a per-video default set in YouTube Studio. */
+  if (ytId) return `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&cc_load_policy=0`;
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('vimeo.com')) {
+      const id = u.pathname.split('/').filter(Boolean).pop();
+      return id ? `https://player.vimeo.com/video/${id}?autoplay=1` : null;
+    }
+  } catch {
+    return null;
+  }
+  return null;
 }
 
 /*
@@ -15,6 +50,11 @@ interface HeroVideoProps {
 */
 export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-design-drafting.jpg' }: HeroVideoProps) {
   const [playing, setPlaying] = useState(false);
+  const embedUrl = videoUrl ? toEmbedUrl(videoUrl) : null;
+  const ytId = videoUrl ? getYouTubeId(videoUrl) : null;
+  /* hqdefault is guaranteed to exist for every YouTube upload; maxresdefault
+     isn't always generated and silently falls back to a tiny gray image. */
+  const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : posterSrc;
 
   return (
     <section className="svc-hero-video">
@@ -23,25 +63,30 @@ export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-design-dra
         <p className="svc-hero-subhead">We take on the work that takes up 80% of your time but only results in 20% of the pay.</p>
 
         <div className="svc-video-frame">
-          {videoUrl && playing ? (
-            // eslint-disable-next-line jsx-a11y/media-has-caption
-            <video src={videoUrl} controls autoPlay className="svc-video-el" />
+          {embedUrl && playing ? (
+            <iframe
+              src={embedUrl}
+              className="svc-video-el"
+              title="Yu Development project walkthrough"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+            />
           ) : (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={posterSrc} alt="Yu Development project walkthrough" className="svc-video-poster" />
+              <img src={thumbnail} alt="Yu Development project walkthrough" className="svc-video-poster" />
               <div className="svc-video-overlay" />
               <button
                 type="button"
-                aria-label={videoUrl ? 'Play video' : 'Video coming soon'}
-                disabled={!videoUrl}
-                onClick={() => videoUrl && setPlaying(true)}
+                aria-label={embedUrl ? 'Play video' : 'Video coming soon'}
+                disabled={!embedUrl}
+                onClick={() => embedUrl && setPlaying(true)}
                 className="svc-video-play"
               >
                 <span className="svc-play-circle">
                   <Play size={30} style={{ marginLeft: 3 }} fill="currentColor" />
                 </span>
-                {!videoUrl && <span className="svc-video-badge">Video coming soon</span>}
+                {!embedUrl && <span className="svc-video-badge">Video coming soon</span>}
               </button>
             </>
           )}
@@ -62,7 +107,7 @@ export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-design-dra
         .svc-video-frame{ position:relative; margin:36px auto 0; max-width:960px; aspect-ratio:16/9; width:100%; overflow:hidden;
           border-radius:6px; border:1px solid rgba(255,255,255,.14); box-shadow:0 28px 70px -30px rgba(0,0,0,.65); }
         .svc-video-poster{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.78; }
-        .svc-video-el{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+        .svc-video-el{ position:absolute; inset:0; width:100%; height:100%; border:none; }
         .svc-video-overlay{ position:absolute; inset:0; background:rgba(0,0,0,.28); }
         .svc-video-play{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
           justify-content:center; gap:14px; background:none; border:none; cursor:pointer; }
