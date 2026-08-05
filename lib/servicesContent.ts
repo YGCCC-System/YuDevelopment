@@ -310,10 +310,12 @@ export interface Testimonial {
 }
 
 /*
-  All three testimonials have confirmed written sign-off on the exact quoted
-  wording. EcoHaven Homes is a real verbatim quote (Slack, Dec 17). Tyler
-  DeLoach and Legacy Home Builders are copy grounded in real project facts
-  (Highland Urgent Care, Legacy at Fairgrove) that they reviewed and approved.
+  All three testimonials have confirmed written sign-off. Tyler DeLoach and
+  Legacy Home Builders are copy grounded in real project facts (Highland
+  Urgent Care, Legacy at Fairgrove) that they reviewed and approved. EcoHaven
+  Homes started as a verbatim Slack message (Dec 17) and was reworded to
+  name the specific services delivered (architectural plans, permit review
+  support); client has authorized publishing without re-review.
 */
 export const testimonials: Testimonial[] = [
   {
@@ -332,7 +334,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     quote:
-      'We just got word from Ware County that the review process has been completed and approved. We’ve come a long way and wouldn’t have done it without you guys, thank you for believing in us and sticking it through to the end with us.',
+      'We just got word from Ware County, our architectural plans and permit review are approved. We’ve come a long way, and you didn’t just hand us drawings, you walked us through the whole process. We wouldn’t have made it without you, thank you for sticking it through with us.',
     name: 'Reggie & Terell',
     role: 'EcoHaven Homes, Waycross, GA',
     ready: true,
