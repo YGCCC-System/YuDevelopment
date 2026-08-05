@@ -58,6 +58,11 @@ export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-hero-poste
   return (
     <section className="svc-hero-video">
       <div className="svc-wrap svc-center">
+        <div className="svc-brand">
+          <span className="svc-brand-mark">YD</span>
+          <span className="svc-brand-word">Yu Development</span>
+        </div>
+
         <h1 className="svc-hero-header">Never turn down projects you don’t have capacity for.</h1>
         <p className="svc-hero-subhead">We take on the work that takes up 80% of your time but only results in 20% of the pay.</p>
 
@@ -97,8 +102,14 @@ export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-hero-poste
       </div>
 
       <style>{`
-        .svc-hero-video{ background:#0E1626; padding:64px 0 48px; }
+        .svc-hero-video{ background:#0E1626; padding:48px 0 48px; }
         .svc-center{ text-align:center; }
+        .svc-brand{ display:inline-flex; align-items:center; gap:12px; margin:0 auto 28px; }
+        .svc-brand-mark{ display:inline-flex; align-items:center; justify-content:center; flex:none;
+          width:34px; height:34px; border:1px solid rgba(247,248,250,.55); border-radius:6px;
+          font-family:var(--sans); font-weight:700; font-size:13px; letter-spacing:0.01em; color:#F7F8FA; }
+        .svc-brand-word{ font-family:var(--sans); font-weight:600; font-size:16px; text-transform:uppercase;
+          letter-spacing:0.24em; white-space:nowrap; color:#F7F8FA; }
         .svc-hero-header{ margin:0 auto; max-width:780px; font-family:var(--serif,'Newsreader',Georgia,serif); font-weight:700;
           font-size:clamp(26px,3.8vw,44px); line-height:1.1; letter-spacing:-0.015em; color:#fff; }
         .svc-hero-subhead{ margin:14px auto 0; max-width:560px; font-family:var(--sans); font-size:clamp(15px,1.4vw,18px);

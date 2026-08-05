@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import SiteFooter from '@/components/SiteFooter';
-import MinimalNav from '@/components/services/MinimalNav';
 import ClarityAnalytics from '@/components/services/ClarityAnalytics';
 import HeroVideo from '@/components/services/HeroVideo';
 import TownsMarquee from '@/components/services/TownsMarquee';
@@ -30,11 +29,6 @@ const css = `
   html{ background:#0E1626; }
   body{ background:var(--paper); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; min-height:100%; }
   a{ color:inherit; }
-
-  /* nav — navy panel to match the footer */
-  .nav{ position:sticky; top:0; z-index:40; background:#0E1626;
-    display:flex; align-items:center; justify-content:center; height:56px; padding:0 clamp(28px,5vw,56px); border-bottom:1px solid rgba(255,255,255,.10); }
-  @media (max-width:760px){ .nav{ padding:0 28px; } }
 
   /* footer (ported from v12) */
   footer.v12foot{ --foot-bg:#0E1626; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);
@@ -74,8 +68,6 @@ export default function ArchitectsServicesPage() {
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <ClarityAnalytics />
-
-      <MinimalNav />
 
       <HeroVideo videoUrl="https://youtu.be/j1UwsrADhS0" />
       <TownsMarquee />
