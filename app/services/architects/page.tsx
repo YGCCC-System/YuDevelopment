@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import SiteFooter from '@/components/SiteFooter';
 import MinimalNav from '@/components/services/MinimalNav';
+import ClarityAnalytics from '@/components/services/ClarityAnalytics';
 import HeroVideo from '@/components/services/HeroVideo';
 import TownsMarquee from '@/components/services/TownsMarquee';
 import RecentWork from '@/components/services/RecentWork';
@@ -77,6 +78,7 @@ export default function ArchitectsServicesPage() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
+      <ClarityAnalytics />
 
       <MinimalNav />
 
