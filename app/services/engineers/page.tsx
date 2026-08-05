@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import ServiceHero from '@/components/services/ServiceHero';
-import VideoShowcase from '@/components/services/VideoShowcase';
+import HeroVideo from '@/components/services/HeroVideo';
+import TownsMarquee from '@/components/services/TownsMarquee';
+import RecentWork from '@/components/services/RecentWork';
+import DifferenceSplit from '@/components/services/DifferenceSplit';
 import ServiceOfferings from '@/components/services/ServiceOfferings';
 import WhyUs from '@/components/services/WhyUs';
-import ServiceCaseStudies from '@/components/services/ServiceCaseStudies';
-import PlanLibrary from '@/components/services/PlanLibrary';
 import ProcessSteps from '@/components/services/ProcessSteps';
 import ServicesFAQ from '@/components/services/ServicesFAQ';
 import CalendlyEmbed from '@/components/services/CalendlyEmbed';
@@ -14,7 +14,7 @@ import CalendlyEmbed from '@/components/services/CalendlyEmbed';
 export const metadata: Metadata = {
   title: 'Subcontracted Structural, Civil & MEP Engineering Services for Engineers',
   description:
-    'Backlog piling up? Yu Development provides licensed structural, civil, MEP, drafting, and architectural services, sign, stamp and seal included, as an extension of your firm.',
+    'A Southeast multifamily developer renting out the in-house team behind its own communities: licensed structural, civil, MEP, drafting, and architectural support for the projects you don’t have capacity for.',
 };
 
 const css = `
@@ -80,16 +80,12 @@ export default function EngineersServicesPage() {
 
       <SiteNav active="services" />
 
-      <ServiceHero
-        eyebrow="For Engineers"
-        headline="Overloaded on calcs? Bring us in before the deadline does."
-        subhead="When structural, civil, or MEP scope is stacking up faster than your firm can stamp it, Yu Development picks up the overflow: coordinated, licensed, and ready to submit."
-      />
-      <VideoShowcase />
-      <ServiceOfferings audience="engineers" />
+      <HeroVideo />
+      <TownsMarquee />
+      <RecentWork audience="engineers" />
+      <DifferenceSplit />
+      <ServiceOfferings />
       <WhyUs />
-      <ServiceCaseStudies audience="engineers" />
-      <PlanLibrary />
       <ProcessSteps />
       <ServicesFAQ />
       <CalendlyEmbed ctaHeadline="Tell us what’s on your plate" />
