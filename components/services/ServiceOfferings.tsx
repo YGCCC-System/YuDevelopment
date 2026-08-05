@@ -1,13 +1,8 @@
 import { Check } from 'lucide-react';
-import { serviceOfferings, type Audience } from '@/lib/servicesContent';
+import { serviceOfferings } from '@/lib/servicesContent';
 
-export default function ServiceOfferings({ audience }: { audience: Audience }) {
-  /* Architects already own the architecture, they need the disciplines
-     around it covered, not the architecture itself handed back to them. */
-  const offerings =
-    audience === 'architects'
-      ? serviceOfferings.filter((o) => o.title !== 'Architectural')
-      : serviceOfferings;
+export default function ServiceOfferings() {
+  const offerings = serviceOfferings;
 
   return (
     <section className="svc-section">

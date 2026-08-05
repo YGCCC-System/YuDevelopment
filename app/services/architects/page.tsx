@@ -1,20 +1,20 @@
 import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import ServiceHero from '@/components/services/ServiceHero';
-import VideoShowcase from '@/components/services/VideoShowcase';
+import HeroVideo from '@/components/services/HeroVideo';
+import TownsMarquee from '@/components/services/TownsMarquee';
+import RecentWork from '@/components/services/RecentWork';
+import DifferenceSplit from '@/components/services/DifferenceSplit';
 import ServiceOfferings from '@/components/services/ServiceOfferings';
 import WhyUs from '@/components/services/WhyUs';
-import ServiceCaseStudies from '@/components/services/ServiceCaseStudies';
-import PlanLibrary from '@/components/services/PlanLibrary';
 import ProcessSteps from '@/components/services/ProcessSteps';
 import ServicesFAQ from '@/components/services/ServicesFAQ';
 import CalendlyEmbed from '@/components/services/CalendlyEmbed';
 
 export const metadata: Metadata = {
-  title: 'Subcontracted Drafting, Structural & Engineering Services for Architects',
+  title: 'Subcontracted Drafting, Architectural & Engineering Services for Architects',
   description:
-    'Overloaded studio? Yu Development provides licensed drafting, structural, civil, and MEP services, sign, stamp and seal included, so you can stay focused on the architecture.',
+    'A Southeast multifamily developer renting out the in-house team behind its own communities: licensed drafting, architectural, structural, civil, and MEP support for the projects you don’t have capacity for.',
 };
 
 const css = `
@@ -80,16 +80,12 @@ export default function ArchitectsServicesPage() {
 
       <SiteNav active="services" />
 
-      <ServiceHero
-        eyebrow="For Architects"
-        headline="Buried in redlines? Let us take the next set off your desk."
-        subhead="When the pipeline is full and the team isn’t, Yu Development plugs in as a licensed extension of your studio. We handle drafting, structural, civil, and MEP so you can stay focused on the architecture."
-      />
-      <VideoShowcase />
-      <ServiceOfferings audience="architects" />
+      <HeroVideo />
+      <TownsMarquee />
+      <RecentWork audience="architects" />
+      <DifferenceSplit />
+      <ServiceOfferings />
       <WhyUs />
-      <ServiceCaseStudies audience="architects" />
-      <PlanLibrary />
       <ProcessSteps />
       <ServicesFAQ />
       <CalendlyEmbed ctaHeadline="Tell us what’s on your plate" />

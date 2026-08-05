@@ -268,3 +268,35 @@ export const servicesFAQ: FAQItem[] = [
 ];
 
 export const CALENDLY_URL = 'https://calendly.com/justdoyu/introcall';
+
+/* All communities currently published in the live portfolio (queried directly
+   from Sanity, not the marketing-doc "nine communities" figure, which doesn't
+   match what's actually live). Update this list as new projects publish. */
+export const townsPermitted = [
+  'Douglas, GA',
+  'Dothan, AL',
+  'Warner Robins, GA',
+  'Bainbridge, GA',
+  'Americus, GA',
+  'Dublin, GA',
+];
+
+export interface DifferenceRow {
+  label: string;
+}
+
+export const differenceOther: DifferenceRow[] = [
+  { label: 'Offshore or multi-state, generic code knowledge' },
+  { label: 'No local jurisdiction experience' },
+  { label: 'Has never carried a project through entitlement' },
+  { label: 'Competes on hourly rate, and nothing else' },
+  { label: 'Will never send you work' },
+];
+
+export const differenceUs: DifferenceRow[] = [
+  { label: 'Atlanta-based, your time zone, your phone call' },
+  { label: 'Permitted in Douglas, Bainbridge, Warner Robins & Dothan' },
+  { label: '948 homes of our own through the full development cycle' },
+  { label: 'Competes on judgment, not price' },
+  { label: 'We have our own pipeline, and we hire locally' },
+];
