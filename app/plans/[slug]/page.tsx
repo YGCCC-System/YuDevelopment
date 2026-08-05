@@ -1,21 +1,19 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
-import HeroVideo from '@/components/services/HeroVideo';
-import TownsMarquee from '@/components/services/TownsMarquee';
-import RecentWork from '@/components/services/RecentWork';
-import ServiceOfferings from '@/components/services/ServiceOfferings';
-import Testimonials from '@/components/services/Testimonials';
-import WhyUs from '@/components/services/WhyUs';
-import ProcessSteps from '@/components/services/ProcessSteps';
-import ServicesFAQ from '@/components/services/ServicesFAQ';
-import CalendlyEmbed from '@/components/services/CalendlyEmbed';
+import { getPlanBySlug, allPlanSlugs } from '@/lib/servicesContent';
 
-export const metadata: Metadata = {
-  title: 'Subcontracted Drafting, Architectural & Engineering Services for Architects',
-  description:
-    'A Southeast multifamily developer renting out the in-house team behind its own communities: licensed drafting, architectural, structural, civil, and MEP support for the projects you don’t have capacity for.',
-};
+export function generateStaticParams() {
+  return allPlanSlugs().map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const plan = getPlanBySlug(slug);
+  if (!plan) return { title: 'Plan set' };
+  return { title: `${plan.data.title} — Yu Development` };
+}
 
 const css = `
   :root{
@@ -30,7 +28,6 @@ const css = `
   body{ background:var(--paper); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; min-height:100%; }
   a{ color:inherit; }
 
-  /* nav — navy panel to match the footer */
   .nav{ position:sticky; top:0; z-index:40; background:#0E1626;
     display:flex; align-items:center; height:92px; padding:0 clamp(28px,5vw,56px); border-bottom:1px solid rgba(255,255,255,.10); }
   .nav .wordmark{ font-family:var(--sans); font-weight:600; font-size:18px; text-transform:uppercase; letter-spacing:0.24em; white-space:nowrap; color:#F7F8FA; text-decoration:none; }
@@ -40,7 +37,6 @@ const css = `
   .nav .links a.active{ color:#F7F8FA; }
   @media (max-width:760px){ .nav{ padding:0 28px; } .nav .links{ display:none; } }
 
-  /* footer (ported from v12) */
   footer.v12foot{ --foot-bg:#0E1626; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);
     background:var(--foot-bg); color:var(--foot-text); border-top:1px solid var(--foot-line); padding:84px 0 28px; }
   footer.v12foot .foot-wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
@@ -58,37 +54,68 @@ const css = `
   footer.v12foot .legal a:hover{ color:var(--foot-bright); }
   footer.v12foot .legal-links a{ display:inline; margin-left:24px; }
 
-  /* shared section building blocks for the services sub-pages */
-  .svc-wrap{ max-width:1280px; margin:0 auto; padding:0 clamp(28px,5vw,72px); }
-  .svc-section{ padding:clamp(56px,7vw,88px) 0; }
-  .svc-section-alt{ background:var(--paper-2); }
-  .svc-dark{ background:#0E1626; }
-  .svc-dark .svc-h2{ color:#fff; }
-  .svc-dark .svc-lede{ color:rgba(247,248,250,.72); }
-  .svc-h2{ margin:0; font-family:var(--serif,'Newsreader',Georgia,serif); font-weight:700;
-    font-size:clamp(28px,3vw,38px); letter-spacing:-0.01em; color:var(--ink); }
-  .svc-lede{ margin:10px 0 0; max-width:640px; font-family:var(--sans); font-size:16px; line-height:1.5; color:var(--ink-2); }
-  .svc-link{ display:inline-flex; align-items:center; gap:6px; margin-top:14px; font-family:var(--sans);
-    font-size:13.5px; font-weight:600; color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
-  .svc-link:hover{ color:var(--accent-deep); }
+  .pv-wrap{ max-width:1000px; margin:0 auto; padding:56px clamp(28px,5vw,72px) 96px; }
+  .pv-eyebrow{ font-family:var(--sans); font-size:11px; font-weight:600; letter-spacing:0.13em; text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  .pv-title{ margin:0; font-family:var(--serif,'Newsreader',Georgia,serif); font-weight:700; font-size:clamp(28px,3.6vw,42px); color:var(--ink); }
+  .pv-desc{ margin:14px 0 0; max-width:70ch; font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--ink-2); }
+  .pv-tag-row{ margin-top:16px; display:flex; flex-wrap:wrap; gap:6px; }
+  .pv-tag{ padding:4px 11px; border-radius:999px; background:var(--paper-2); font-family:var(--sans); font-size:11px; font-weight:500; color:var(--ink-2); }
+  .pv-actions{ margin-top:24px; display:flex; flex-wrap:wrap; gap:12px; }
+  .pv-btn{ display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:999px; font-family:var(--sans);
+    font-weight:600; font-size:14px; text-decoration:none; transition:background .2s ease; }
+  .pv-btn-primary{ background:var(--ink); color:#fff; }
+  .pv-btn-primary:hover{ background:var(--ink-2); }
+  .pv-btn-ghost{ background:#fff; color:var(--ink); border:1px solid var(--rule); }
+  .pv-btn-ghost:hover{ background:var(--paper-2); }
+  .pv-frame{ margin-top:32px; width:100%; height:82vh; min-height:520px; border:1px solid var(--rule); border-radius:4px; overflow:hidden; background:#fff; }
+  .pv-frame iframe{ width:100%; height:100%; border:none; }
+  .pv-fallback{ margin-top:12px; font-family:var(--sans); font-size:13px; color:var(--ink-3); }
 `;
 
-export default function ArchitectsServicesPage() {
+export default async function PlanViewerPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const plan = getPlanBySlug(slug);
+  if (!plan) notFound();
+
+  const pdfPath = plan.kind === 'case-study' ? plan.data.planPdfPath : plan.data.pdfPath;
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
-
       <SiteNav active="services" />
 
-      <HeroVideo videoUrl="https://youtu.be/j1UwsrADhS0" />
-      <TownsMarquee />
-      <RecentWork audience="architects" />
-      <ServiceOfferings />
-      <Testimonials />
-      <WhyUs />
-      <ProcessSteps />
-      <ServicesFAQ />
-      <CalendlyEmbed ctaHeadline="Tell us what’s on your plate" />
+      <div className="pv-wrap">
+        <p className="pv-eyebrow">{plan.kind === 'case-study' ? 'Case study' : 'Concept plan set'}</p>
+        <h1 className="pv-title">{plan.data.title}</h1>
+
+        {plan.kind === 'case-study' ? (
+          <>
+            <p className="pv-desc">{plan.data.projectType}</p>
+            <p className="pv-desc">{plan.data.summary}</p>
+            <div className="pv-tag-row">
+              {plan.data.servicesProvided.map((tag) => (
+                <span key={tag} className="pv-tag">{tag}</span>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="pv-desc">{plan.data.description}</p>
+        )}
+
+        <div className="pv-actions">
+          <a href={pdfPath} target="_blank" rel="noopener noreferrer" className="pv-btn pv-btn-primary">
+            Open full PDF in a new tab
+          </a>
+          <a href="/services/architects#schedule" className="pv-btn pv-btn-ghost">
+            Schedule a call
+          </a>
+        </div>
+
+        <div className="pv-frame">
+          <iframe src={pdfPath} title={`${plan.data.title} plan set`} />
+        </div>
+        <p className="pv-fallback">If the preview doesn’t load on your device, use “Open full PDF in a new tab” above.</p>
+      </div>
 
       <SiteFooter />
     </>

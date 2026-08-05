@@ -269,6 +269,25 @@ export const servicesFAQ: FAQItem[] = [
 
 export const CALENDLY_URL = 'https://calendly.com/justdoyu/introcall';
 
+export type PlanPageData =
+  | { kind: 'case-study'; data: CaseStudy }
+  | { kind: 'plan-set'; data: PlanSet };
+
+/* Looks up a case study or concept plan set by slug for the /plans/[slug]
+   branded viewer page, so plan links stay on yudevelopment.com instead of
+   pointing straight at a raw PDF file. */
+export function getPlanBySlug(slug: string): PlanPageData | null {
+  const cs = caseStudies.find((c) => c.slug === slug);
+  if (cs) return { kind: 'case-study', data: cs };
+  const ps = planLibrary.find((p) => p.slug === slug);
+  if (ps) return { kind: 'plan-set', data: ps };
+  return null;
+}
+
+export function allPlanSlugs(): string[] {
+  return [...caseStudies.map((c) => c.slug), ...planLibrary.map((p) => p.slug)];
+}
+
 /* All communities currently published in the live portfolio (queried directly
    from Sanity, not the marketing-doc "nine communities" figure, which doesn't
    match what's actually live). Update this list as new projects publish. */
@@ -281,22 +300,41 @@ export const townsPermitted = [
   'Dublin, GA',
 ];
 
-export interface DifferenceRow {
-  label: string;
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  /* Set false to render a "pending" placeholder card instead of a quote,
+     for testimonials that don't have real source material yet. */
+  ready: boolean;
 }
 
-export const differenceOther: DifferenceRow[] = [
-  { label: 'Offshore or multi-state, generic code knowledge' },
-  { label: 'No local jurisdiction experience' },
-  { label: 'Has never carried a project through entitlement' },
-  { label: 'Competes on hourly rate, and nothing else' },
-  { label: 'Will never send you work' },
-];
-
-export const differenceUs: DifferenceRow[] = [
-  { label: 'Atlanta-based, your time zone, your phone call' },
-  { label: 'Permitted in Douglas, Bainbridge, Warner Robins & Dothan' },
-  { label: '948 homes of our own through the full development cycle' },
-  { label: 'Competes on judgment, not price' },
-  { label: 'We have our own pipeline, and we hire locally' },
+/*
+  All three testimonials have confirmed written sign-off on the exact quoted
+  wording. EcoHaven Homes is a real verbatim quote (Slack, Dec 17). Tyler
+  DeLoach and Legacy Home Builders are copy grounded in real project facts
+  (Highland Urgent Care, Legacy at Fairgrove) that they reviewed and approved.
+*/
+export const testimonials: Testimonial[] = [
+  {
+    quote:
+      'Our urgent care build was stuck. The architectural and structural plans hadn’t come through and the architect kept pushing the date. Yu Development stepped in, turned around a coordinated set, architectural, structural, and MEP, faster and for less than we’d been quoted, and we finally got the build finished. I got back to what I do best, building, and the clinic’s open today because of it.',
+    name: 'Tyler DeLoach',
+    role: 'General Contractor, Port Wentworth, GA',
+    ready: true,
+  },
+  {
+    quote:
+      'We needed a full stamped set for a 15-unit townhome community and didn’t have the bandwidth to coordinate five different consultants ourselves. Yu Development delivered the whole package, architectural, structural, plumbing, electrical, and HVAC, as one coordinated set, on schedule and ready for permit.',
+    name: 'Legacy Home Builders',
+    role: 'Developer, Conover, NC',
+    ready: true,
+  },
+  {
+    quote:
+      'We just got word from Ware County that the review process has been completed and approved. We’ve come a long way and wouldn’t have done it without you guys, thank you for believing in us and sticking it through to the end with us.',
+    name: 'Reggie & Terell',
+    role: 'EcoHaven Homes, Waycross, GA',
+    ready: true,
+  },
 ];

@@ -35,16 +35,13 @@ export default function RecentWork({ audience }: { audience: Audience }) {
                 <p className="svc-case-summary">{cs.summary}</p>
                 <p className="svc-case-outcome">{cs.outcome}</p>
 
-                <a href={cs.planPdfPath} target="_blank" rel="noopener noreferrer" className="svc-link">
-                  <FileText size={15} /> View full plan set (PDF)
+                <a href={`/plans/${cs.slug}`} target="_blank" rel="noopener noreferrer" className="svc-link">
+                  <FileText size={15} /> View full plan set
                 </a>
               </div>
             </article>
           ))}
         </div>
-
-        <h3 className="svc-h3-sub">Concept plan sets</h3>
-        <p className="svc-lede">Full sets you can open right now, so you can see the level of detail before you commit to a project.</p>
 
         <div className="svc-plan-grid">
           {planLibrary.map((plan) => (
@@ -54,8 +51,8 @@ export default function RecentWork({ audience }: { audience: Audience }) {
               <div className="svc-plan-body">
                 <h3 className="svc-offer-title">{plan.title}</h3>
                 <p className="svc-offer-desc">{plan.description}</p>
-                <a href={plan.pdfPath} target="_blank" rel="noopener noreferrer" className="svc-link">
-                  <FileText size={15} /> View full plan set (PDF)
+                <a href={`/plans/${plan.slug}`} target="_blank" rel="noopener noreferrer" className="svc-link">
+                  <FileText size={15} /> View full plan set
                 </a>
               </div>
             </div>
@@ -83,9 +80,7 @@ export default function RecentWork({ audience }: { audience: Audience }) {
         .svc-case-summary{ margin-top:12px; font-family:var(--sans); font-size:14px; line-height:1.5; color:var(--ink-2); }
         .svc-case-outcome{ margin-top:8px; font-family:var(--sans); font-size:14px; font-weight:600; color:var(--ink); }
 
-        .svc-h3-sub{ margin:52px 0 0; font-family:var(--serif,'Newsreader',Georgia,serif); font-weight:700;
-          font-size:22px; color:var(--ink); }
-        .svc-plan-grid{ margin-top:20px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+        .svc-plan-grid{ margin-top:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
         @media (max-width:820px){ .svc-plan-grid{ grid-template-columns:1fr; } }
         .svc-plan-card{ background:#fff; border:1px solid var(--rule); overflow:hidden; }
         .svc-plan-image{ display:block; width:100%; height:160px; object-fit:contain; background:#fff; padding:8px; }
