@@ -48,13 +48,12 @@ function toEmbedUrl(url: string): string | null {
   The video leads, not a pain-point headline: a real track record establishes
   trust faster than "here's your problem" copy does.
 */
-export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-design-drafting.jpg' }: HeroVideoProps) {
+export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-hero-poster.jpg' }: HeroVideoProps) {
   const [playing, setPlaying] = useState(false);
   const embedUrl = videoUrl ? toEmbedUrl(videoUrl) : null;
-  const ytId = videoUrl ? getYouTubeId(videoUrl) : null;
-  /* hqdefault is guaranteed to exist for every YouTube upload; maxresdefault
-     isn't always generated and silently falls back to a tiny gray image. */
-  const thumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : posterSrc;
+  /* A real frame pulled from the video and upscaled looks sharper than
+     YouTube's own auto-generated (and heavily compressed) hqdefault thumbnail. */
+  const thumbnail = posterSrc;
 
   return (
     <section className="svc-hero-video">
