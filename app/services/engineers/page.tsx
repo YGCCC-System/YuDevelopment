@@ -33,13 +33,8 @@ const css = `
 
   /* nav — navy panel to match the footer */
   .nav{ position:sticky; top:0; z-index:40; background:#0E1626;
-    display:flex; align-items:center; height:92px; padding:0 clamp(28px,5vw,56px); border-bottom:1px solid rgba(255,255,255,.10); }
-  .nav .wordmark{ font-family:var(--sans); font-weight:600; font-size:18px; text-transform:uppercase; letter-spacing:0.24em; white-space:nowrap; color:#F7F8FA; text-decoration:none; }
-  .nav .links{ display:flex; align-items:center; gap:28px; margin-left:auto; }
-  .nav .links a{ font-weight:600; font-size:14px; color:rgba(247,248,250,.80); text-decoration:none; transition:color .2s; }
-  .nav .links a:hover{ color:#F7F8FA; }
-  .nav .links a.active{ color:#F7F8FA; }
-  @media (max-width:760px){ .nav{ padding:0 28px; } .nav .links{ display:none; } }
+    display:flex; align-items:center; justify-content:center; height:56px; padding:0 clamp(28px,5vw,56px); border-bottom:1px solid rgba(255,255,255,.10); }
+  @media (max-width:760px){ .nav{ padding:0 28px; } }
 
   /* footer (ported from v12) */
   footer.v12foot{ --foot-bg:#0E1626; --foot-line:rgba(255,255,255,.14); --foot-bright:#FFFFFF; --foot-text:rgba(255,255,255,.74); --foot-muted:rgba(255,255,255,.52);
