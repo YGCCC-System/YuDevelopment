@@ -73,7 +73,7 @@ export default function LandownersServicesPage() {
       <HeroVideo
         videoUrl="https://youtu.be/j1UwsrADhS0"
         headline="Turn your land into a permit-ready plan."
-        subhead="We are an Atlanta based developer with our own licensed team of draftsmen, architects, civil, structural, and MEP engineers, so we can take your land from an idea to a stamped, submittal-ready set without you managing five different consultants."
+        subhead="We are an Atlanta based developer with our own licensed design team, so your land goes from idea to a stamped, permit-ready set without juggling five consultants."
       />
       <TownsMarquee />
       <RecentWork
