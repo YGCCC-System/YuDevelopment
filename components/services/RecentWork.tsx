@@ -1,14 +1,22 @@
 import { FileText } from 'lucide-react';
 import { caseStudiesFor, planLibrary, type Audience } from '@/lib/servicesContent';
 
-export default function RecentWork({ audience }: { audience: Audience }) {
+interface RecentWorkProps {
+  audience: Audience;
+  lede?: string;
+}
+
+export default function RecentWork({
+  audience,
+  lede = 'A sample of plan sets we’ve produced and stamped for partner firms, plus full concept sets you can browse before you send us a project.',
+}: RecentWorkProps) {
   const studies = caseStudiesFor(audience);
 
   return (
     <section className="svc-section">
       <div className="svc-wrap">
         <h2 className="svc-h2">Recent work</h2>
-        <p className="svc-lede">A sample of plan sets we’ve produced and stamped for partner firms, plus full concept sets you can browse before you send us a project.</p>
+        <p className="svc-lede">{lede}</p>
 
         <div className="svc-case-grid">
           {studies.map((cs) => (

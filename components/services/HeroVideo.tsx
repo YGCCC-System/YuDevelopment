@@ -8,6 +8,8 @@ interface HeroVideoProps {
      Left undefined for now, pass the real link once the video is uploaded. */
   videoUrl?: string;
   posterSrc?: string;
+  headline?: string;
+  subhead?: string;
 }
 
 /* Extracts the YouTube video ID from any common URL format. */
@@ -48,7 +50,12 @@ function toEmbedUrl(url: string): string | null {
   The video leads, not a pain-point headline: a real track record establishes
   trust faster than "here's your problem" copy does.
 */
-export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-hero-poster.jpg' }: HeroVideoProps) {
+export default function HeroVideo({
+  videoUrl,
+  posterSrc = '/media/svc-hero-poster.jpg',
+  headline = 'Never turn down projects you don’t have capacity for.',
+  subhead = 'We take on the work that takes up 80% of your time but only results in 20% of the pay.',
+}: HeroVideoProps) {
   const [playing, setPlaying] = useState(false);
   const embedUrl = videoUrl ? toEmbedUrl(videoUrl) : null;
   /* A real frame pulled from the video and upscaled looks sharper than
@@ -63,8 +70,8 @@ export default function HeroVideo({ videoUrl, posterSrc = '/media/svc-hero-poste
           <span className="svc-brand-word">Yu Development</span>
         </div>
 
-        <h1 className="svc-hero-header">Never turn down projects you don’t have capacity for.</h1>
-        <p className="svc-hero-subhead">We take on the work that takes up 80% of your time but only results in 20% of the pay.</p>
+        <h1 className="svc-hero-header">{headline}</h1>
+        <p className="svc-hero-subhead">{subhead}</p>
 
         <a href="#schedule" className="svc-btn svc-btn-light">
           Schedule a call <span aria-hidden="true">→</span>

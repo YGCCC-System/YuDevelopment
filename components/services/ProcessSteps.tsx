@@ -1,13 +1,13 @@
-import { processSteps } from '@/lib/servicesContent';
+import { processSteps, type ProcessStep } from '@/lib/servicesContent';
 
-export default function ProcessSteps() {
+export default function ProcessSteps({ steps = processSteps }: { steps?: ProcessStep[] }) {
   return (
     <section className="svc-section svc-dark">
       <div className="svc-wrap">
         <h2 className="svc-h2">How it works</h2>
 
         <div className="svc-process-grid">
-          {processSteps.map((s) => (
+          {steps.map((s) => (
             <div key={s.step} className="svc-process-card">
               <span className="svc-process-num">{s.step}</span>
               <h3 className="svc-process-title">{s.title}</h3>

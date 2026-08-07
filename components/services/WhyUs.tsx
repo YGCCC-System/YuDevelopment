@@ -1,13 +1,18 @@
-import { whyUs } from '@/lib/servicesContent';
+import { whyUs, type Differentiator } from '@/lib/servicesContent';
 
-export default function WhyUs() {
+interface WhyUsProps {
+  items?: Differentiator[];
+  heading?: string;
+}
+
+export default function WhyUs({ items = whyUs, heading = 'Why firms hand us the overflow' }: WhyUsProps) {
   return (
     <section className="svc-section svc-section-alt">
       <div className="svc-wrap">
-        <h2 className="svc-h2">Why firms hand us the overflow</h2>
+        <h2 className="svc-h2">{heading}</h2>
 
         <div className="svc-why-grid">
-          {whyUs.map((item) => {
+          {items.map((item) => {
             const Icon = item.icon;
             return (
               <div key={item.title} className="svc-why-card">

@@ -1,16 +1,22 @@
 import { Check } from 'lucide-react';
-import { serviceOfferings } from '@/lib/servicesContent';
+import { serviceOfferings, type ServiceOffering } from '@/lib/servicesContent';
 
-export default function ServiceOfferings() {
-  const offerings = serviceOfferings;
+interface ServiceOfferingsProps {
+  offerings?: ServiceOffering[];
+  heading?: string;
+  lede?: string;
+}
 
+export default function ServiceOfferings({
+  offerings = serviceOfferings,
+  heading = 'One team, every discipline',
+  lede = 'We work as your subcontracted plan-production arm. Pick up one discipline or hand us the whole set, everything is coordinated in-house and stamped before it goes out the door.',
+}: ServiceOfferingsProps) {
   return (
     <section className="svc-section">
       <div className="svc-wrap">
-        <h2 className="svc-h2">One team, every discipline</h2>
-        <p className="svc-lede">
-          We work as your subcontracted plan-production arm. Pick up one discipline or hand us the whole set, everything is coordinated in-house and stamped before it goes out the door.
-        </p>
+        <h2 className="svc-h2">{heading}</h2>
+        <p className="svc-lede">{lede}</p>
 
         <div className="svc-offer-grid">
           {offerings.map((o) => {
