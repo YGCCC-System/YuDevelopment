@@ -9,7 +9,18 @@ import { CALENDLY_URL } from '@/lib/servicesContent';
   event itself: Calendly renders its own booking form, so the embed can't
   inject questions that aren't configured on the event.
 */
-export default function CalendlyEmbed({ ctaHeadline }: { ctaHeadline: string }) {
+interface CalendlyEmbedProps {
+  ctaHeadline: string;
+  questions?: string[];
+}
+
+const DEFAULT_QUESTIONS = [
+  'What’s your specialty?',
+  'What does your workload look like right now?',
+  'What’s the biggest problem you’re trying to solve?',
+];
+
+export default function CalendlyEmbed({ ctaHeadline, questions = DEFAULT_QUESTIONS }: CalendlyEmbedProps) {
   return (
     <section id="schedule" className="svc-section svc-dark">
       <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
@@ -19,9 +30,9 @@ export default function CalendlyEmbed({ ctaHeadline }: { ctaHeadline: string }) 
         <p className="svc-lede-dark">Before we hop on a call, we’ll ask a few quick questions so we show up ready to help:</p>
 
         <div className="svc-qual-row">
-          <div className="svc-qual-item">What’s your specialty?</div>
-          <div className="svc-qual-item">What does your workload look like right now?</div>
-          <div className="svc-qual-item">What’s the biggest problem you’re trying to solve?</div>
+          {questions.map((q) => (
+            <div key={q} className="svc-qual-item">{q}</div>
+          ))}
         </div>
 
         <div className="calendly-inline-widget svc-calendly-widget" data-url={CALENDLY_URL} style={{ minWidth: '320px', height: '700px' }} />

@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { servicesFAQ } from '@/lib/servicesContent';
+import { servicesFAQ, type FAQItem } from '@/lib/servicesContent';
 
-export default function ServicesFAQ() {
+export default function ServicesFAQ({ faq = servicesFAQ }: { faq?: FAQItem[] }) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
@@ -13,7 +13,7 @@ export default function ServicesFAQ() {
         <h2 className="svc-h2">Frequently asked questions</h2>
 
         <ul className="svc-faq-list">
-          {servicesFAQ.map((f, i) => {
+          {faq.map((f, i) => {
             const isOpen = i === open;
             return (
               <li key={f.q} className="svc-faq-item">

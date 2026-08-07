@@ -1,11 +1,11 @@
 import { Quote } from 'lucide-react';
 import { testimonials } from '@/lib/servicesContent';
 
-export default function Testimonials() {
+export default function Testimonials({ heading = 'What partner firms say' }: { heading?: string }) {
   return (
     <section className="svc-section svc-section-alt">
       <div className="svc-wrap">
-        <h2 className="svc-h2">What partner firms say</h2>
+        <h2 className="svc-h2">{heading}</h2>
 
         <div className="svc-testi-grid">
           {testimonials.map((t) => (

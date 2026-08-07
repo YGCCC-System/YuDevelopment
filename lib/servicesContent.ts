@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react';
 import { PenTool, Building2, Layers, Map, Wrench, Stamp } from 'lucide-react';
 
-export type Audience = 'architects' | 'engineers';
+export type Audience = 'architects' | 'engineers' | 'developers' | 'landowners';
 
 export interface ServiceOffering {
   title: string;
@@ -81,6 +81,77 @@ export const serviceOfferings: ServiceOffering[] = [
   },
 ];
 
+/* Same six disciplines, reworded for developers and landowners hiring us
+   directly for their own project instead of firms subcontracting overflow. */
+export const serviceOfferingsDirect: ServiceOffering[] = [
+  {
+    icon: PenTool,
+    title: 'Drafting',
+    description:
+      'Clean, construction-ready drawing sets for your project: floor plans, elevations, sections, and details, produced in-house and turned around fast.',
+    details: [
+      'Floor plans, elevations, sections & details',
+      'Revisions turned around by the same team, not a new vendor',
+      'Millwork, stair, bath & kitchen enlarged details',
+    ],
+  },
+  {
+    icon: Building2,
+    title: 'Architectural',
+    description:
+      'Full architectural design and documentation, from concept through permit-ready construction documents, for your land or development.',
+    details: [
+      'Schematic design through construction documents',
+      'Code research & jurisdiction-specific compliance',
+      'Multi-unit / multi-building coordination',
+    ],
+  },
+  {
+    icon: Layers,
+    title: 'Structural',
+    description:
+      'Framing, foundation, and load-bearing design and calculations, coordinated directly with your architectural set so nothing gets lost between disciplines.',
+    details: [
+      'Framing plans, foundation design & load calculations',
+      'Fire-rated & tenant-separation wall assemblies',
+      'Coordinated directly against the architectural set',
+    ],
+  },
+  {
+    icon: Map,
+    title: 'Civil',
+    description:
+      'Site plans, grading and drainage, utility layout, and erosion control: the site-level engineering that keeps your project moving through municipal review.',
+    details: [
+      'Site plans, grading & drainage design',
+      'Utility layout & erosion/sediment control',
+      'Zoning, parcel & vicinity documentation for submittal',
+    ],
+  },
+  {
+    icon: Wrench,
+    title: 'MEP',
+    description:
+      'Mechanical, electrical, and plumbing design coordinated against your architectural and structural drawings, sized and routed to pass review the first time.',
+    details: [
+      'HVAC/AHU sizing, duct layout & equipment schedules',
+      'Power, lighting & panel schedules',
+      'Plumbing riser diagrams & fixture layouts, code-compliant',
+    ],
+  },
+  {
+    icon: Stamp,
+    title: 'Sign, Stamp & Seal',
+    description:
+      'Licensed professional review and stamping across every discipline we touch, so what you submit for permit is ready to go, not a first draft.',
+    details: [
+      'Licensed review across architectural, structural & MEP',
+      'Sealed sets ready for permit submittal',
+      'One point of contact for every discipline in your set',
+    ],
+  },
+];
+
 export interface Differentiator {
   icon: LucideIcon;
   title: string;
@@ -114,6 +185,34 @@ export const whyUs: Differentiator[] = [
   },
 ];
 
+/* For developers and landowners hiring us directly, not firms subcontracting overflow. */
+export const whyUsDirect: Differentiator[] = [
+  {
+    icon: PenTool,
+    title: 'One team, one point of contact',
+    description:
+      'Drafting, architectural, structural, civil, and MEP handled in-house and coordinated internally. You talk to one project lead instead of managing five different consultants.',
+  },
+  {
+    icon: Stamp,
+    title: 'Licensed sign, stamp & seal',
+    description:
+      'Every discipline we touch is reviewed and sealed by a licensed professional before it goes out the door: submittal-ready, not a first draft.',
+  },
+  {
+    icon: Building2,
+    title: 'Real projects, not templates',
+    description:
+      'Every case study on this page is a plan set we actually produced, and full sets are available to view so you can see the level of detail before you commit.',
+  },
+  {
+    icon: Layers,
+    title: 'We’re developers, not just designers',
+    description:
+      'We build our own multifamily communities across the Southeast. We know what it takes to get a project from raw land through permit to a finished building, because we’ve done it ourselves.',
+  },
+];
+
 export interface CaseStudy {
   slug: string;
   title: string;
@@ -139,7 +238,7 @@ export const caseStudies: CaseStudy[] = [
     outcome: 'Full stamped set delivered, sealed by our architect of record and ready for permit submittal.',
     imagePath: '/images/case-studies/legacy-at-fairgrove.png',
     planPdfPath: '/plans/legacy-at-fairgrove.pdf',
-    audience: ['architects', 'engineers'],
+    audience: ['architects', 'engineers', 'developers', 'landowners'],
   },
   {
     slug: 'four-haven-apartments',
@@ -152,7 +251,7 @@ export const caseStudies: CaseStudy[] = [
     outcome: 'Complete permit set issued, coordinated across seven disciplines in a single package.',
     imagePath: '/images/case-studies/four-haven-apartments.png',
     planPdfPath: '/plans/four-haven-apartments.pdf',
-    audience: ['architects', 'engineers'],
+    audience: ['architects', 'engineers', 'developers', 'landowners'],
   },
   {
     slug: 'highland-urgent-care',
@@ -165,7 +264,7 @@ export const caseStudies: CaseStudy[] = [
     outcome: 'Coordinated MEP design package produced for permit review, sized and routed against the existing architectural drawings.',
     imagePath: '/images/case-studies/highland-urgent-care.png',
     planPdfPath: '/plans/highland-urgent-care-mep.pdf',
-    audience: ['engineers'],
+    audience: ['engineers', 'developers', 'landowners'],
   },
 ];
 
@@ -235,10 +334,88 @@ export const processSteps: ProcessStep[] = [
   },
 ];
 
+/* For developers and landowners hiring us directly for their own project. */
+export const processStepsDirect: ProcessStep[] = [
+  {
+    step: '01',
+    title: 'Tell us about your project',
+    description: 'Send over your land or project: location, what you’re hoping to build, and any plans or surveys you already have.',
+  },
+  {
+    step: '02',
+    title: 'We scope it and quote it',
+    description: 'We review what you’ve sent, confirm which disciplines you need, and come back with a firm scope and price.',
+  },
+  {
+    step: '03',
+    title: 'We draft, coordinate & stamp',
+    description: 'One internal team handles every discipline in scope, coordinated against each other before anything is sealed.',
+  },
+  {
+    step: '04',
+    title: 'You get a permit-ready set',
+    description: 'A complete, stamped plan set lands in your hands, ready for permit submittal, not another round of redlines.',
+  },
+];
+
 export interface FAQItem {
   q: string;
   a: string;
 }
+
+export const developersFAQ: FAQItem[] = [
+  {
+    q: 'Do you handle permitting, or just the drawings?',
+    a: 'We produce the full submittal-ready set, drafting through sign, stamp & seal, scoped against the specific jurisdiction’s requirements so it is built to pass review the first time. We do not file the permit application on your behalf, but the set is ready to go the moment you or your GC submits it.',
+  },
+  {
+    q: 'Can you work alongside my general contractor?',
+    a: 'Yes. We coordinate directly with your GC on scope, drawings, and any field changes that come up during construction. You stay the point of contact and we plug in as your design team.',
+  },
+  {
+    q: 'What if I already have some plans started?',
+    a: 'We can pick up where another firm left off, review what exists, and take it through to a coordinated, stamped set. Send over what you have and we will scope from there.',
+  },
+  {
+    q: 'How fast can a set turn around?',
+    a: 'It depends on scope and how many disciplines are involved. We give you a firm date once we have scoped the project, not a generic promise.',
+  },
+  {
+    q: 'What areas do you work in?',
+    a: 'We are based in Atlanta and our team is licensed to sign and stamp across multiple states in the Southeast. Tell us where the project is and we will confirm before you commit.',
+  },
+  {
+    q: 'Do you only do multifamily?',
+    a: 'Multifamily is our core, since it is what we develop ourselves, but we also handle single-family, commercial, and mixed-use projects.',
+  },
+];
+
+export const landownersFAQ: FAQItem[] = [
+  {
+    q: 'I do not have any plans yet, just land. Can you still help?',
+    a: 'Yes, that is a common starting point. We can walk through what is realistic for the site, put together a concept, and take it through to a full stamped set.',
+  },
+  {
+    q: 'How do I know what I am even allowed to build?',
+    a: 'Zoning and site constraints are part of what we scope up front, civil and site plan work is one of our in-house disciplines, so we can tell you early what is realistic before you spend on a full design.',
+  },
+  {
+    q: 'Do you help with permitting?',
+    a: 'We produce the full submittal-ready set, stamped and sealed, built to pass review the first time. We do not file the application on your behalf, but the set is ready to go the moment you or your builder submits it.',
+  },
+  {
+    q: 'Do you build the project too, or just design it?',
+    a: 'Our core business is design and engineering. We are also a multifamily developer and general contractor ourselves, so if building is something you want to talk through, we are happy to have that conversation.',
+  },
+  {
+    q: 'How fast can this move?',
+    a: 'It depends on scope and site complexity. We give you a firm date once we have scoped your land, not a generic promise.',
+  },
+  {
+    q: 'What if I am not sure I want to build, just exploring options?',
+    a: 'That is a fine place to start. Tell us about the land and what you are weighing, and we can help you understand what is realistic before you commit to anything.',
+  },
+];
 
 export const servicesFAQ: FAQItem[] = [
   {
