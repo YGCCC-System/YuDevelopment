@@ -10,13 +10,12 @@ export const metadata: Metadata = {
 // Roster is set here in code (names + roles). No headshots — every member
 // shows "Coming soon" until photos are added.
 const TEAM: Member[] = [
-  { name: 'George Y', role: 'Founder & CEO' },
-  { name: 'Nathan P', role: 'Associate' },
+  { name: 'George Y', role: 'Founder & CEO', image: '/media/team-george.jpg' },
+  { name: 'Demir Dumanlar', role: 'Operations Lead', image: '/media/team-demir.webp' },
   { name: 'Myka Hosmillo', role: 'Analyst' },
-  { name: 'Anaat V', role: 'Analyst' },
-  { name: 'Cedric H', role: 'Analyst' },
+  { name: 'Anant V', role: 'Analyst' },
   { name: 'Karol San M', role: 'Project Manager' },
-  { name: 'Israela Joy D', role: 'Project Manager' },
+  { name: 'Lizzy Loren Jangao', role: 'Accounting' },
 ];
 
 const css = `
